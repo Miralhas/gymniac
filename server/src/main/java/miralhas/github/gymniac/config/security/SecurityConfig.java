@@ -80,7 +80,7 @@ public class SecurityConfig {
 							"/api/auth/forgot-password",
 							"/api/auth/reset-password/*"
 					).permitAll();
-//					authz.requestMatchers(HttpMethod.GET, "/**").permitAll();
+					authz.requestMatchers(HttpMethod.GET, "/**").permitAll();
 					authz.anyRequest().authenticated();
 				})
 				.build();
