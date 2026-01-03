@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.input.MuscleGroupInput;
 import miralhas.github.gymniac.api.dto_mapper.MuscleGroupMapper;
 import miralhas.github.gymniac.domain.exception.ExerciseAlreadyExistsException;
+import miralhas.github.gymniac.domain.exception.MuscleGroupAlreadyExistsException;
 import miralhas.github.gymniac.domain.exception.MuscleGroupNotFoundException;
 import miralhas.github.gymniac.domain.model.Exercise;
 import miralhas.github.gymniac.domain.model.MuscleGroup;
@@ -70,7 +71,7 @@ public class MuscleGroupService {
 
 	private void validateSlug(String slug) {
 		var exists = muscleGroupRepository.checkIfSlugAlreadyExists(slug);
-		if (exists) throw new ExerciseAlreadyExistsException(
+		if (exists) throw new MuscleGroupAlreadyExistsException(
 				errorMessages.get("exercise.alreadyExists.slug", slug)
 		);
 	}
