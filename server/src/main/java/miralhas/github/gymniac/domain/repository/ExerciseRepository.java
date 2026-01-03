@@ -1,20 +1,20 @@
 package miralhas.github.gymniac.domain.repository;
 
 import miralhas.github.gymniac.domain.model.Exercise;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
+public interface ExerciseRepository extends JpaRepository<Exercise, Long>, JpaSpecificationExecutor<Exercise> {
 
-	@Query("SELECT e from Exercise e " +
-			"LEFT JOIN FETCH e.muscleGroup mg " +
-			"LEFT JOIN FETCH e.submitter s " +
-			"LEFT JOIN FETCH s.roles"
-	)
-	List<Exercise> findAll();
+	@EntityGraph(attributePaths = {"muscleGroup", "submitter"})
+	Page<Exercise> findAll(Specification<Exercise> spec, Pageable pageable);
 
 	@Query("SELECT e from Exercise e where e.slug = :slug")
 	Optional<Exercise> findBySlug(String slug);

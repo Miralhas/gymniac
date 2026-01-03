@@ -4,14 +4,17 @@ package miralhas.github.gymniac.api.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.ExerciseDTO;
+import miralhas.github.gymniac.api.dto.PageDTO;
+import miralhas.github.gymniac.api.dto.filter.ExerciseFilter;
 import miralhas.github.gymniac.api.dto.input.ExerciseInput;
 import miralhas.github.gymniac.api.dto.input.UpdateExerciseInput;
 import miralhas.github.gymniac.api.dto_mapper.ExerciseMapper;
 import miralhas.github.gymniac.domain.service.ExerciseService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +26,11 @@ public class ExerciseController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<ExerciseDTO> getAllExercises() {
-		var exercises = exerciseService.findAll();
-		return exerciseMapper.toCollectionResponse(exercises);
+	public PageDTO<ExerciseDTO> getAllExercises(
+			@PageableDefault(size = 10, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
+			ExerciseFilter filter
+	) {
+		return exerciseService.findAll(pageable, filter);
 	}
 
 	@GetMapping("/{slug}")

@@ -1,6 +1,9 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.ExerciseDTO;
+import miralhas.github.gymniac.api.dto.PageDTO;
+import miralhas.github.gymniac.api.dto.filter.ExerciseFilter;
 import miralhas.github.gymniac.api.dto.input.ExerciseInput;
 import miralhas.github.gymniac.api.dto.input.UpdateExerciseInput;
 import miralhas.github.gymniac.api.dto_mapper.ExerciseMapper;
@@ -10,6 +13,9 @@ import miralhas.github.gymniac.domain.model.Exercise;
 import miralhas.github.gymniac.domain.repository.ExerciseRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import miralhas.github.gymniac.domain.utils.ValidateAuthorization;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -27,8 +33,11 @@ public class ExerciseService {
 	private final MuscleGroupService muscleGroupService;
 	private final ValidateAuthorization validateAuthorization;
 
-	public List<Exercise> findAll() {
-		return exerciseRepository.findAll();
+	public PageDTO<ExerciseDTO> findAll(Pageable pageable, ExerciseFilter filter) {
+		Page<Exercise> exercisePage = exerciseRepository.findAll(filter.toSpecification(), pageable);
+		List<ExerciseDTO> exerciseDTOS = exerciseMapper.toCollectionResponse(exercisePage.getContent());
+		var pageImpl = new PageImpl<>(exerciseDTOS, pageable, exercisePage.getTotalElements());
+		return new PageDTO<>(pageImpl);
 	}
 
 	public Exercise findByIdOrException(Long id) {
