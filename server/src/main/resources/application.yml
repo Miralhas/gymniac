@@ -16,12 +16,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+      org:
+        hibernate:
+          flushMode: COMMIT
 
 # Authentication Tokens
 authentication:
   token:
     access-token:
       expiration-time: 86400 # 1 day (In seconds)
-#      expiration-time: 315576000 # 10 years (In seconds)
     refresh-token:
       expiration-time: 604800 # One Week (In seconds)

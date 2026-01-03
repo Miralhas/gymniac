@@ -2,6 +2,7 @@ package miralhas.github.gymniac.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import miralhas.github.gymniac.domain.model.auth.User;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
@@ -38,6 +39,10 @@ public class Exercise implements Serializable {
 	@JoinColumn(nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private MuscleGroup muscleGroup;
+
+	@JoinColumn(nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User submitter;
 
 	public void generateSlug() {
 		this.slug = SLG.slugify(name);
