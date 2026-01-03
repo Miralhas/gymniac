@@ -6,14 +6,13 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 @Entity
-public class MuscleGroups implements Serializable {
+@RequiredArgsConstructor
+public class MuscleGroup implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -28,6 +27,13 @@ public class MuscleGroups implements Serializable {
 	@Column(nullable = false)
 	private String name;
 
+	@OneToMany(
+			mappedBy = "muscleGroup",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<Exercise> exercises = new ArrayList<>();
+
 	@Override
 	public final boolean equals(Object o) {
 		if (this == o) return true;
@@ -35,7 +41,7 @@ public class MuscleGroups implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		MuscleGroups that = (MuscleGroups) o;
+		MuscleGroup that = (MuscleGroup) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 

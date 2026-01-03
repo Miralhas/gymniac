@@ -7,7 +7,6 @@ import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.repository.UserRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
