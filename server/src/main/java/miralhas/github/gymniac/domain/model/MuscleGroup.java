@@ -6,15 +6,13 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-
-import static miralhas.github.gymniac.ServerApplication.SLG;
+import java.util.*;
 
 @Getter
 @Setter
 @Entity
 @RequiredArgsConstructor
-public class Exercise implements Serializable {
+public class MuscleGroup implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -23,25 +21,18 @@ public class Exercise implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String name;
-
 	@Column(nullable = false, unique = true)
 	private String slug;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
+	@Column(nullable = false)
+	private String name;
 
-	@Column(nullable = true)
-	private String videoHowTo;
-
-	@JoinColumn(nullable = false)
-	@ManyToOne(fetch = FetchType.LAZY)
-	private MuscleGroup muscleGroup;
-
-	public void generateSlug() {
-		this.slug = SLG.slugify(name);
-	}
+	@OneToMany(
+			mappedBy = "muscleGroup",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<Exercise> exercises = new ArrayList<>();
 
 	@Override
 	public final boolean equals(Object o) {
@@ -50,8 +41,8 @@ public class Exercise implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		Exercise exercise = (Exercise) o;
-		return getId() != null && Objects.equals(getId(), exercise.getId());
+		MuscleGroup that = (MuscleGroup) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
 	@Override
