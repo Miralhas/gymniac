@@ -8,6 +8,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
+import static miralhas.github.gymniac.ServerApplication.SLG;
+
 @Getter
 @Setter
 @Entity
@@ -33,6 +35,10 @@ public class MuscleGroup implements Serializable {
 			orphanRemoval = true
 	)
 	private List<Exercise> exercises = new ArrayList<>();
+
+	public void generateSlug() {
+		this.slug = SLG.slugify(name);
+	}
 
 	@Override
 	public final boolean equals(Object o) {

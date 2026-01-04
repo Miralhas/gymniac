@@ -2,10 +2,14 @@ package miralhas.github.gymniac.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import miralhas.github.gymniac.domain.model.auth.User;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import static miralhas.github.gymniac.ServerApplication.SLG;
@@ -35,9 +39,21 @@ public class Exercise implements Serializable {
 	@Column(nullable = true)
 	private String videoHowTo;
 
+	@CreationTimestamp
+	@Column(nullable = true)
+	private OffsetDateTime createdAt;
+
+	@UpdateTimestamp
+	@Column(nullable = true)
+	private OffsetDateTime updatedAt;
+
 	@JoinColumn(nullable = false)
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private MuscleGroup muscleGroup;
+
+	@JoinColumn(nullable = false)
+	@ManyToOne
+	private User submitter;
 
 	public void generateSlug() {
 		this.slug = SLG.slugify(name);

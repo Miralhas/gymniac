@@ -3,6 +3,7 @@ package miralhas.github.gymniac.domain.model.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import miralhas.github.gymniac.domain.model.Exercise;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -52,6 +54,13 @@ public class User implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
 	private Set<Role> roles;
+
+	@OneToMany(
+			mappedBy = "submitter",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<Exercise> exercises = new ArrayList<>();
 
 //	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private Image image;
