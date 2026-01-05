@@ -1,8 +1,10 @@
-package miralhas.github.gymniac.domain.model.workout_plan;
+package miralhas.github.gymniac.domain.model.workout;
+
 
 import jakarta.persistence.*;
-import lombok.*;
-import miralhas.github.gymniac.domain.model.auth.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
@@ -14,13 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static miralhas.github.gymniac.ServerApplication.SLG;
-
+@Entity
 @Getter
 @Setter
-@Entity
 @RequiredArgsConstructor
-public class WorkoutPlan implements Serializable {
+public class Workout implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -29,14 +29,8 @@ public class WorkoutPlan implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String name;
-
 	@Column(columnDefinition = "TEXT")
-	private String description;
-
-	@Column(nullable = false, unique = true)
-	private String slug;
+	private String note;
 
 	@CreationTimestamp
 	@Column(nullable = true)
@@ -47,18 +41,12 @@ public class WorkoutPlan implements Serializable {
 	private OffsetDateTime updatedAt;
 
 	@OneToMany(
-			mappedBy = "workoutPlan",
+			mappedBy = "workout",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true
 	)
-	private List<Routine> routines = new ArrayList<>();
+	private List<WorkoutExercise> exercises = new ArrayList<>();
 
-	@ManyToOne
-	private User user;
-
-	public void generateSlug() {
-		this.slug = SLG.slugify(name);
-	}
 
 	@Override
 	public final boolean equals(Object o) {
@@ -67,8 +55,8 @@ public class WorkoutPlan implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		WorkoutPlan workoutPlan = (WorkoutPlan) o;
-		return getId() != null && Objects.equals(getId(), workoutPlan.getId());
+		Workout that = (Workout) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
 	@Override
