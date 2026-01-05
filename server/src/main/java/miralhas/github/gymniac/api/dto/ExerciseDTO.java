@@ -11,6 +11,6 @@ public record ExerciseDTO(
 		OffsetDateTime createdAt,
 		OffsetDateTime updatedAt,
 		MuscleGroupDTO muscleGroup,
-		UserDTO submitter
+		UserSummaryDTO submitter
 ) {
 }

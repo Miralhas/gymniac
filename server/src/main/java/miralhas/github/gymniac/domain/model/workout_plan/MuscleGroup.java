@@ -1,16 +1,12 @@
-package miralhas.github.gymniac.domain.model;
+package miralhas.github.gymniac.domain.model.workout_plan;
 
 import jakarta.persistence.*;
 import lombok.*;
-import miralhas.github.gymniac.domain.model.auth.User;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
-import java.util.Objects;
+import java.util.*;
 
 import static miralhas.github.gymniac.ServerApplication.SLG;
 
@@ -18,7 +14,7 @@ import static miralhas.github.gymniac.ServerApplication.SLG;
 @Setter
 @Entity
 @RequiredArgsConstructor
-public class Exercise implements Serializable {
+public class MuscleGroup implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -27,33 +23,18 @@ public class Exercise implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String name;
-
 	@Column(nullable = false, unique = true)
 	private String slug;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
+	@Column(nullable = false)
+	private String name;
 
-	@Column(nullable = true)
-	private String videoHowTo;
-
-	@CreationTimestamp
-	@Column(nullable = true)
-	private OffsetDateTime createdAt;
-
-	@UpdateTimestamp
-	@Column(nullable = true)
-	private OffsetDateTime updatedAt;
-
-	@JoinColumn(nullable = false)
-	@ManyToOne
-	private MuscleGroup muscleGroup;
-
-	@JoinColumn(nullable = false)
-	@ManyToOne
-	private User submitter;
+	@OneToMany(
+			mappedBy = "muscleGroup",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<Exercise> exercises = new ArrayList<>();
 
 	public void generateSlug() {
 		this.slug = SLG.slugify(name);
@@ -66,8 +47,8 @@ public class Exercise implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		Exercise exercise = (Exercise) o;
-		return getId() != null && Objects.equals(getId(), exercise.getId());
+		MuscleGroup that = (MuscleGroup) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
 	@Override

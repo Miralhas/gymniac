@@ -3,7 +3,8 @@ package miralhas.github.gymniac.domain.model.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
@@ -61,6 +62,13 @@ public class User implements Serializable {
 			orphanRemoval = true
 	)
 	private List<Exercise> exercises = new ArrayList<>();
+
+	@OneToMany(
+			mappedBy = "user",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
 //	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private Image image;

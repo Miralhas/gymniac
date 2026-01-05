@@ -1,6 +1,6 @@
 package miralhas.github.gymniac.domain.repository;
 
-import miralhas.github.gymniac.domain.model.MuscleGroup;
+import miralhas.github.gymniac.domain.model.workout_plan.MuscleGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

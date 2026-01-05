@@ -24,9 +24,9 @@ public class ValidateAuthorization {
 		);
 	}
 
-	public void validate(User imageOwner) {
+	public void validate(User resourceOwner) {
 		var currentUser = getCurrentUser();
-		if (currentUser.isAdmin() || currentUser.equals(imageOwner)) return;
+		if (currentUser.isAdmin() || currentUser.equals(resourceOwner)) return;
 		throw new AccessDeniedException(errorMessages.get("AbstractAccessDecisionManager.accessDenied"));
 	}
 }
