@@ -1,6 +1,6 @@
 package miralhas.github.gymniac.api.dto.filter;
 
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import org.springframework.data.jpa.domain.Specification;
 
 import static miralhas.github.gymniac.infrastructure.ExerciseSpec.muscleGroupIs;

@@ -9,7 +9,7 @@ import miralhas.github.gymniac.api.dto.input.UpdateExerciseInput;
 import miralhas.github.gymniac.api.dto_mapper.ExerciseMapper;
 import miralhas.github.gymniac.domain.exception.ExerciseAlreadyExistsException;
 import miralhas.github.gymniac.domain.exception.ExerciseNotFoundException;
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import miralhas.github.gymniac.domain.repository.ExerciseRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import miralhas.github.gymniac.domain.utils.ValidateAuthorization;
@@ -48,7 +48,7 @@ public class ExerciseService {
 
 	public Exercise findBySlugOrException(String slug) {
 		return exerciseRepository.findBySlug(slug).orElseThrow(() ->
-				new ExerciseNotFoundException(errorMessages.get("exercise.notFound.id", slug))
+				new ExerciseNotFoundException(errorMessages.get("exercise.notFound.slug", slug))
 		);
 	}
 

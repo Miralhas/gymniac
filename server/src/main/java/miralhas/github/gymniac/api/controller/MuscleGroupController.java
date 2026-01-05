@@ -22,13 +22,13 @@ public class MuscleGroupController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<MuscleGroupDTO> findAllMuscleGroups() {
+	public List<MuscleGroupDTO> getAllMuscleGroups() {
 		return muscleGroupMapper.toCollectionResponse(muscleGroupService.findAll());
 	}
 
 	@GetMapping("/{slug}")
 	@ResponseStatus(HttpStatus.OK)
-	public MuscleGroupDTO findMuscleGroupBySlug(@PathVariable String slug) {
+	public MuscleGroupDTO getMuscleGroupBySlug(@PathVariable String slug) {
 		return muscleGroupMapper.toResponse(muscleGroupService.findBySlug(slug));
 	}
 

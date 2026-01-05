@@ -1,7 +1,7 @@
 package miralhas.github.gymniac.infrastructure;
 
 import lombok.experimental.UtilityClass;
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import org.springframework.data.jpa.domain.Specification;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -22,8 +22,8 @@ public class ExerciseSpec {
 		return (root, query, builder) -> {
 			if (!hasText(muscleGroup)) return null;
 			var muscleGroupJoin = root.join("muscleGroup");
-			var predicate = muscleGroupJoin.get("slug");
-			return builder.equal(predicate, muscleGroup);
+			var predicate = builder.lower(muscleGroupJoin.get("slug"));
+			return builder.equal(predicate, muscleGroup.toLowerCase());
 		};
 	}
 

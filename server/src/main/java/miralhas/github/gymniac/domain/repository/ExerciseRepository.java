@@ -1,6 +1,6 @@
 package miralhas.github.gymniac.domain.repository;
 
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

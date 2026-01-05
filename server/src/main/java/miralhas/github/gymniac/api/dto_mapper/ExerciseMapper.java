@@ -3,7 +3,7 @@ package miralhas.github.gymniac.api.dto_mapper;
 import miralhas.github.gymniac.api.dto.ExerciseDTO;
 import miralhas.github.gymniac.api.dto.input.ExerciseInput;
 import miralhas.github.gymniac.api.dto.input.UpdateExerciseInput;
-import miralhas.github.gymniac.domain.model.Exercise;
+import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
