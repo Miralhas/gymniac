@@ -7,6 +7,7 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class WorkoutExercise implements Serializable {
 		cascade = CascadeType.ALL,
 		orphanRemoval = true
 	)
-	private List<ExerciseSets> sets;
+	private List<ExerciseSet> sets = new ArrayList<>();
 
 	@ManyToOne
 	private Workout workout;

@@ -15,7 +15,7 @@ import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
 import miralhas.github.gymniac.domain.repository.RoutineExerciseRepository;
 import miralhas.github.gymniac.domain.repository.RoutineRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
-import miralhas.github.gymniac.domain.utils.ValidateAuthorization;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,7 +33,7 @@ public class RoutineService {
 	private final RoutineExerciseMapper routineExerciseMapper;
 	private final RoutineExerciseRepository routineExerciseRepository;
 	private final ErrorMessages errorMessages;
-	private final ValidateAuthorization validateAuthorization;
+	private final AuthUtils authUtils;
 
 	public Routine findByIdOrException(Long id) {
 		return routineRepository.findById(id).orElseThrow(
@@ -74,7 +74,7 @@ public class RoutineService {
 
 	@Transactional
 	public Routine update(Routine routine, UpdateRoutineInput input) {
-		validateAuthorization.validate(routine.getWorkoutPlan().getUser());
+		authUtils.validate(routine.getWorkoutPlan().getUser());
 
 		routineMapper.update(input, routine);
 		return routineRepository.save(routine);
@@ -83,7 +83,7 @@ public class RoutineService {
 	@Transactional
 	public void delete(Long id) {
 		var routine = findByIdOrException(id);
-		validateAuthorization.validate(routine.getWorkoutPlan().getUser());
+		authUtils.validate(routine.getWorkoutPlan().getUser());
 
 		routineRepository.deleteById(id);
 	}
@@ -91,7 +91,7 @@ public class RoutineService {
 	@Transactional
 	public void updateRoutineExercise(UpdateRoutineExerciseInput input, RoutineExercise routineExercise) {
 		var workoutPlan = routineExercise.getRoutine().getWorkoutPlan();
-		validateAuthorization.validate(workoutPlan.getUser());
+		authUtils.validate(workoutPlan.getUser());
 
 		routineExerciseMapper.update(input, routineExercise);
 
@@ -107,7 +107,7 @@ public class RoutineService {
 	public void deleteRoutineExercise(Long id) {
 		var routineExercise = findRoutineExerciseByIdOrException(id);
 		var workoutPlan = routineExercise.getRoutine().getWorkoutPlan();
-		validateAuthorization.validate(workoutPlan.getUser());
+		authUtils.validate(workoutPlan.getUser());
 
 		routineExerciseRepository.deleteById(id);
 	}

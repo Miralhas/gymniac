@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import miralhas.github.gymniac.domain.model.auth.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
@@ -40,13 +41,15 @@ public class Workout implements Serializable {
 	@Column(nullable = true)
 	private OffsetDateTime updatedAt;
 
+	@ManyToOne
+	private User user;
+
 	@OneToMany(
 			mappedBy = "workout",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true
 	)
 	private List<WorkoutExercise> exercises = new ArrayList<>();
-
 
 	@Override
 	public final boolean equals(Object o) {

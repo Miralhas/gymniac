@@ -11,11 +11,13 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+@With
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class ExerciseSets implements Serializable {
+public class ExerciseSet implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -48,7 +50,7 @@ public class ExerciseSets implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		ExerciseSets that = (ExerciseSets) o;
+		ExerciseSet that = (ExerciseSet) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
