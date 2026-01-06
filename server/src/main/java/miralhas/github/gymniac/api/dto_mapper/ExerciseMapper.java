@@ -1,6 +1,7 @@
 package miralhas.github.gymniac.api.dto_mapper;
 
 import miralhas.github.gymniac.api.dto.ExerciseDTO;
+import miralhas.github.gymniac.api.dto.ExerciseSummaryDTO;
 import miralhas.github.gymniac.api.dto.input.ExerciseInput;
 import miralhas.github.gymniac.api.dto.input.UpdateExerciseInput;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
@@ -25,6 +26,9 @@ public interface ExerciseMapper {
 	Exercise fromInput(ExerciseInput input);
 
 	ExerciseDTO toResponse(Exercise exercise);
+
+	@Mapping(target = "muscleGroup", source = "muscleGroup.name")
+	ExerciseSummaryDTO toSummaryResponse(Exercise exercise);
 
 	List<ExerciseDTO> toCollectionResponse(List<Exercise> exercises);
 

@@ -3,13 +3,11 @@ package miralhas.github.gymniac.api.dto;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public record WorkoutPlanDTO(
+public record WorkoutDTO(
 		Long id,
-		String name,
 		OffsetDateTime createdAt,
-		String slug,
-		String description,
-		List<RoutineDTO> routines,
-		UserSummaryDTO user
+		OffsetDateTime updatedAt,
+		List<WorkoutExerciseDTO> exercises,
+		String note
 ) {
 }

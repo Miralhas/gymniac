@@ -12,7 +12,7 @@ import miralhas.github.gymniac.domain.exception.WorkoutPlanNotFoundException;
 import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
 import miralhas.github.gymniac.domain.repository.WorkoutPlanRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
-import miralhas.github.gymniac.domain.utils.ValidateAuthorization;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class WorkoutPlanService {
 	private final WorkoutPlanRepository workoutPlanRepository;
 	private final ErrorMessages errorMessages;
 	private final RoutineService routineService;
-	private final ValidateAuthorization validateAuthorization;
+	private final AuthUtils authUtils;
 
 	public PageDTO<WorkoutPlanSummaryDTO> findAll(Pageable pageable) {
 		Page<WorkoutPlan> workoutPlansPage = workoutPlanRepository.findAll(pageable);
@@ -61,7 +61,7 @@ public class WorkoutPlanService {
 
 	@Transactional
 	public WorkoutPlan save(WorkoutPlanInput input) {
-		var user = validateAuthorization.getCurrentUser();
+		var user = authUtils.getCurrentUser();
 		var workoutPlan = workoutPlanMapper.fromInput(input);
 		workoutPlan.setUser(user);
 		workoutPlan.generateSlug();
@@ -77,7 +77,7 @@ public class WorkoutPlanService {
 	@Transactional
 	public WorkoutPlan update(UpdateWorkoutPlanInput input, WorkoutPlan workoutPlan) {
 		var owner = workoutPlan.getUser();
-		validateAuthorization.validate(owner);
+		authUtils.validate(owner);
 
 		var currentName = workoutPlan.getName();
 		workoutPlanMapper.update(input, workoutPlan);
@@ -93,7 +93,7 @@ public class WorkoutPlanService {
 		var workoutPlan = findByIdOrException(id);
 
 		var owner = workoutPlan.getUser();
-		validateAuthorization.validate(owner);
+		authUtils.validate(owner);
 
 		workoutPlanRepository.deleteById(id);
 	}

@@ -12,7 +12,7 @@ import miralhas.github.gymniac.domain.exception.ExerciseNotFoundException;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import miralhas.github.gymniac.domain.repository.ExerciseRepository;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
-import miralhas.github.gymniac.domain.utils.ValidateAuthorization;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class ExerciseService {
 	private final ErrorMessages errorMessages;
 	private final ExerciseMapper exerciseMapper;
 	private final MuscleGroupService muscleGroupService;
-	private final ValidateAuthorization validateAuthorization;
+	private final AuthUtils authUtils;
 
 	public PageDTO<ExerciseDTO> findAll(Pageable pageable, ExerciseFilter filter) {
 		Page<Exercise> exercisePage = exerciseRepository.findAll(filter.toSpecification(), pageable);
@@ -55,7 +55,7 @@ public class ExerciseService {
 	@Transactional
 	public Exercise save(ExerciseInput input) {
 		var muscleGroup = muscleGroupService.findBySlug(input.muscleGroup());
-		var user = validateAuthorization.getCurrentUser();
+		var user = authUtils.getCurrentUser();
 		var exercise = exerciseMapper.fromInput(input);
 
 		exercise.setSubmitter(user);
