@@ -8,12 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidateAuthorization {
+public class AuthUtils {
 
 	private final UserService userService;
 	private final ErrorMessages errorMessages;
 
-	public ValidateAuthorization(@Lazy UserService userService, ErrorMessages errorMessages) {
+	public AuthUtils(@Lazy UserService userService, ErrorMessages errorMessages) {
 		this.userService = userService;
 		this.errorMessages = errorMessages;
 	}
