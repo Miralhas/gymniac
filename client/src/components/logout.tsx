@@ -23,13 +23,13 @@ const Logout = () => {
       ) : (
         <div className="space-x-2">
           <button
-            className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50"
+            className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40"
             onClick={handleLogout}
           >
             Logout
           </button>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/a"}>A</Link>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/b"}>B</Link>
+          <Link className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40" href={"/a"}>A</Link>
+          <Link className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40" href={"/b"}>B</Link>
         </div>
       )}
     </div>

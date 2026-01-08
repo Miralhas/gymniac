@@ -20,7 +20,7 @@ import { loginSchema } from "@/lib/schemas/login-schema";
 import { ApiError } from "@/service/api-error";
 import { useLoginMutation } from "@/service/authentication/mutations/use-login-mutation";
 import { useForm, useStore } from "@tanstack/react-form";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, MoveLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -62,10 +62,13 @@ const LoginForm = () => {
   const store = useStore(form.store);
 
   return (
-    <Card className="w-full max-w-md gap-2 pb-4 z-999 relative rounded-sm">
+    <Card className="w-full max-w-md gap-2 py-4 z-999 relative rounded-sm">
       <CardHeader>
-        <CardTitle>
-          <h1 className="text-center text-2xl font-semibold ">Sign In</h1>
+        <CardTitle className="">
+          <Button variant="link" className="text-foreground hover:text-primary duration-200 ease-in-out transition-colors" asChild size="icon-sm">
+            <Link href="/" ><MoveLeftIcon className="size-5.5" /></Link>
+          </Button>
+          <h1 className="text-center text-2xl font-semibold leading-2">Sign In</h1>
         </CardTitle>
         <CardDescription className="sr-only">Please fill in your details below</CardDescription>
         {errorDetail && (
@@ -134,7 +137,7 @@ const LoginForm = () => {
               }}
             </form.Field>
             <Field orientation="vertical">
-              <Button type="submit" form="login-form" disabled={store.isPristine || isPending}>
+              <Button type="submit" variant="cool" form="login-form" disabled={store.isPristine || isPending}>
                 {isPending ? <span className="animate-pulse">Logging in...</span> : "Login"}
               </Button>
             </Field>
