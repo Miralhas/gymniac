@@ -25,15 +25,11 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build-time arguments
-ARG APP_URL
 ARG NEXT_PUBLIC_BASE_URL
-ARG PUBLIC_KEY
 
 
 # Runtime environment variables
-ENV APP_URL=${APP_URL}
 ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-ENV PUBLIC_KEY=${PUBLIC_KEY}
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
