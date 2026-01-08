@@ -1,24 +1,46 @@
 'use client'
 
+import { loginAction, logoutAction } from "@/service/authentication/actions/login-action";
+import { userKeys } from "@/service/user/queries/query-keys";
 import { useGetAuthState } from "@/service/user/queries/use-get-current-user";
-import { AuthState } from "@/types/auth";
+import { AuthState, LoginResponse } from "@/types/auth";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
+import { unknown } from "zod";
 import { createContext } from "./create-context";
 
 type AuthActions = {
-  authState: AuthState | undefined;
+  authState: AuthState | null;
   isLoading: boolean;
+  logout: () => Promise<void>;
+  login: (data: LoginResponse) => Promise<void>;
 }
 
 const { ContextProvider, useContext } = createContext<AuthActions>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const authStateQuery = useGetAuthState();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const logout = async () => {
+    await logoutAction();
+    await queryClient.invalidateQueries({ queryKey: userKeys.all });
+  }
+
+  const login = async (data: LoginResponse) => {
+    await loginAction(unknown, data);
+    await authStateQuery.refetch();
+    router.push("/");
+  }
 
   return (
     <ContextProvider value={{
-      authState: authStateQuery.data,
-      isLoading: authStateQuery.isLoading
+      login,
+      logout,
+      authState: authStateQuery.data!,
+      isLoading: authStateQuery.isLoading,
     }}>
       {children}
     </ContextProvider>

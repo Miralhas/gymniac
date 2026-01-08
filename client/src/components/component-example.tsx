@@ -49,6 +49,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { BluetoothIcon, PlusIcon } from "lucide-react"
 import { useAuthContext } from "@/contexts/auth-context"
+import ThemeToggler from "./theme-toggler"
 
 export function ComponentExample() {
   return (
@@ -64,6 +65,7 @@ function CardExample() {
 
   return (
     <Example title="Card" className="items-center justify-center">
+      <ThemeToggler />
       <Card className="relative w-full max-w-sm overflow-hidden pt-0">
         <div className="bg-primary absolute inset-0 z-30 aspect-video opacity-50 mix-blend-color" />
         <img
@@ -88,6 +90,9 @@ function CardExample() {
                 Show Dialog
               </Button>
             </AlertDialogTrigger>
+            <Button>
+              Cool Variant
+            </Button>
             <AlertDialogContent size="sm">
               <AlertDialogHeader>
                 <AlertDialogMedia>

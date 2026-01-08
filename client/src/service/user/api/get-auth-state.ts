@@ -5,10 +5,10 @@ import Cookies from 'js-cookie';
 
 export const getAuthState = async () => {
   const accessToken = Cookies.get(ACCESS_TOKEN_COOKIE_NAME);
-  if (!accessToken) return undefined;
+  if (!accessToken) return null;
   
   const user = decrypt(accessToken);
-  if (!user) return undefined;
+  if (!user) return null;
 
   const authState: AuthState = {
     user,

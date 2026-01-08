@@ -27,12 +27,12 @@ export type AuthState = {
 };
 
 export type CustomJwtPayload = {
-  iss?: string;
-  sub?: string;
-  aud?: string | string[];
-  jti?: string;
-  nbf?: number;
-  exp?: number;
-  iat?: number;
-  user?: User;
+  iss: string;
+  sub: string;
+  aud: string | string[];
+  jti: string;
+  nbf: number;
+  exp: number;
+  iat: number;
+  user: User;
 }

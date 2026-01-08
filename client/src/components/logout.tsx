@@ -1,19 +1,26 @@
 'use client'
-import { logoutAction } from "@/service/authentication/actions/login-action";
+
+import { useAuthContext } from "@/contexts/auth-context";
 import Link from "next/link";
 import ThemeToggler from "./theme-toggler";
 
-const Logout = ({ token }: { token?: string }) => {
-  const isAuthenticated = !!token;
+const Logout = () => {
+  const { authState, isLoading, logout } = useAuthContext();
 
   const handleLogout = async () => {
-    await logoutAction();
+    await logout();
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <ThemeToggler />
-      {isAuthenticated ? (
+      {(!authState || isLoading) ? (
+        <div className="space-x-2">
+          <Link href={"/login"}>Login</Link>
+          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/a"}>A</Link>
+          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/b"}>B</Link>
+        </div>
+      ) : (
         <div className="space-x-2">
           <button
             className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50"
@@ -21,12 +28,6 @@ const Logout = ({ token }: { token?: string }) => {
           >
             Logout
           </button>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/a"}>A</Link>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/b"}>B</Link>
-        </div>
-      ) : (
-        <div className="space-x-2">
-          <Link href={"/login"}>Login</Link>
           <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/a"}>A</Link>
           <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/b"}>B</Link>
         </div>
