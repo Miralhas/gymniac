@@ -15,7 +15,7 @@ const Logout = () => {
         <Link href="/signup">Sign Up</Link>
       </Button>
       <Button variant="cool" asChild>
-        <Link href="/a">Example</Link>
+        <Link href="/example">Example</Link>
       </Button>
     </div>
   )

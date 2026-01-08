@@ -5,6 +5,8 @@ import { refreshTokenRequest } from "@/service/authentication/api/refresh-token"
 import { LoginResponse } from "@/types/auth";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "./constants";
+import { decryptUser } from "./decrypt-jwt";
+import { cache } from "react";
 
 type Tokens = {
   accessToken?: string;
@@ -63,3 +65,10 @@ export const refreshTokens = async (refreshToken: string) => {
     await deleteSession();
   }
 }
+
+export const getCurrentUser = cache(async () => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value;
+  const user = decryptUser(accessToken);
+  return user
+})

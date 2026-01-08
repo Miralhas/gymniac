@@ -1,7 +1,7 @@
 import { ComponentExample } from "@/components/component-example"
 
-const APage = () => {
+const ExamplePage = () => {
   return <ComponentExample />
 }
 
-export default APage;
+export default ExamplePage;
