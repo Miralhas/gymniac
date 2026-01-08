@@ -1,3 +1,7 @@
+'server-only'
+
+import { ApiError } from "@/service/api-error";
+import { refreshTokenRequest } from "@/service/authentication/api/refresh-token";
 import { LoginResponse } from "@/types/auth";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "./constants";
@@ -5,13 +9,17 @@ import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "./constants
 type Tokens = {
   accessToken?: string;
   refreshToken?: string;
+  hasRefreshToken: boolean;
+  hasAccessToken: boolean;
 }
 
 export const getAuthTokens = async (): Promise<Tokens> => {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE_NAME)?.value;
   const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE_NAME)?.value;
-  return { accessToken, refreshToken };
+  const hasAccessToken = !!accessToken;
+  const hasRefreshToken = !!refreshToken;
+  return { accessToken, refreshToken, hasAccessToken, hasRefreshToken };
 }
 
 export const createSession = async (data: LoginResponse) => {
@@ -41,4 +49,17 @@ export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete(ACCESS_TOKEN_COOKIE_NAME);
   cookieStore.delete(REFRESH_TOKEN_COOKIE_NAME);
+}
+
+export const refreshTokens = async (refreshToken: string) => {
+  try {
+    const response = await refreshTokenRequest(refreshToken);
+    await deleteSession();
+    await createSession(response);
+  } catch (err) {
+    if (err instanceof ApiError) {
+      console.log(err.detail);
+    }
+    await deleteSession();
+  }
 }

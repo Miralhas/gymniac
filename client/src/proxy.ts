@@ -1,35 +1,17 @@
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { ApiError } from "./service/api-error";
-import { refreshTokenRequest } from "./service/authentication/api/refresh-token";
-import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "./utils/constants";
-import { createSession, deleteSession } from "./utils/session";
+import { getAuthTokens, refreshTokens } from "./utils/session";
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  const accessToken = (await cookies()).get(ACCESS_TOKEN_COOKIE_NAME)?.value;
-  const refreshToken = (await cookies()).get(REFRESH_TOKEN_COOKIE_NAME)?.value;
+  const { hasAccessToken, hasRefreshToken, refreshToken } = await getAuthTokens();
 
-  const hasAccessToken = !!accessToken;
-  const hasRefreshToken = !!refreshToken;
-
+  // Access Token expired and user has the refresh token stored in cookies.
   if (!hasAccessToken && hasRefreshToken) {
-    // Needs to refresh accessToken
-    try {
-      const response = await refreshTokenRequest(refreshToken);
-      await deleteSession();
-      await createSession(response);
-    } catch (err) {
-      if (err instanceof ApiError) {
-        console.log(err.detail);
-      }
-      await deleteSession();
-    }
+    await refreshTokens(refreshToken!);
   }
 
   return NextResponse.next()
-
 }
 
 export const config = {
