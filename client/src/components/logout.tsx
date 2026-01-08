@@ -1,37 +1,22 @@
 'use client'
 
-import { useAuthContext } from "@/contexts/auth-context";
 import Link from "next/link";
+import AuthButton from "./authentication/auth-button";
 import ThemeToggler from "./theme-toggler";
+import { Button } from "./ui/button";
 
 const Logout = () => {
-  const { authState, isLoading, logout } = useAuthContext();
-
-  const handleLogout = async () => {
-    await logout();
-  }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black gap-x-2">
       <ThemeToggler />
-      {(!authState || isLoading) ? (
-        <div className="space-x-2">
-          <Link href={"/login"}>Login</Link>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/a"}>A</Link>
-          <Link className="cursor-pointer py-1 px-4 border border-emerald-700 rounded-sm bg-emerald-900/50" href={"/b"}>B</Link>
-        </div>
-      ) : (
-        <div className="space-x-2">
-          <button
-            className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-          <Link className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40" href={"/a"}>A</Link>
-          <Link className="cursor-pointer py-1 px-4 border border-primary/80 rounded-sm bg-primary/40" href={"/b"}>B</Link>
-        </div>
-      )}
+      <AuthButton />
+      <Button variant="cool" asChild>
+        <Link href="/signup">Sign Up</Link>
+      </Button>
+      <Button variant="cool" asChild>
+        <Link href="/a">Example</Link>
+      </Button>
     </div>
   )
 }

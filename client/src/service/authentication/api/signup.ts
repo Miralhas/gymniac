@@ -1,11 +1,11 @@
 import { env } from "@/env";
-import { LoginInput } from "@/lib/schemas/login-schema";
+import { SignUpInput } from "@/lib/schemas/signup-schema";
 import { ApiError } from "@/service/api-error";
 import { ApiResponseError } from "@/types/api";
-import { LoginResponse } from "@/types/auth";
+import { User } from "@/types/auth";
 
-export const signin = async (data: LoginInput): Promise<LoginResponse> => {
-  const res = await fetch(env.NEXT_PUBLIC_BASE_URL + "/auth/signin", {
+export const signup = async (data: SignUpInput): Promise<User> => {
+  const res = await fetch(env.NEXT_PUBLIC_BASE_URL + "/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -16,5 +16,5 @@ export const signin = async (data: LoginInput): Promise<LoginResponse> => {
     throw new ApiError(data);
   }
 
-  return await res.json() as LoginResponse;
+  return await res.json() as User;
 }

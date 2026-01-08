@@ -7,17 +7,19 @@ import { AuthState, LoginResponse } from "@/types/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
-import { unknown } from "zod";
 import { createContext } from "./create-context";
 
-type AuthActions = {
+type AuthContextState = {
   authState: AuthState | null;
   isLoading: boolean;
+}
+
+type AuthActions = {
   logout: () => Promise<void>;
   login: (data: LoginResponse) => Promise<void>;
 }
 
-const { ContextProvider, useContext } = createContext<AuthActions>();
+const { ContextProvider, useContext } = createContext<AuthActions & AuthContextState>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const authStateQuery = useGetAuthState();
@@ -30,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   const login = async (data: LoginResponse) => {
-    await loginAction(unknown, data);
+    await loginAction(data);
     await authStateQuery.refetch();
     router.push("/");
   }
