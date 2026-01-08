@@ -1,17 +1,31 @@
 'use client'
 
+import { useGetAuthState } from "@/service/user/queries/use-get-current-user";
+import { AuthState } from "@/types/auth";
 import { PropsWithChildren } from "react";
 import { createContext } from "./create-context";
 
 type AuthActions = {
-  getAuthState: () => string;
+  authState: AuthState | undefined;
+  isLoading: boolean;
 }
 
 const { ContextProvider, useContext } = createContext<AuthActions>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const authStateQuery = useGetAuthState();
 
+  return (
+    <ContextProvider value={{
+      authState: authStateQuery.data,
+      isLoading: authStateQuery.isLoading
+    }}>
+      {children}
+    </ContextProvider>
+  )
 }
+
+export const useAuthContext = useContext;
 
 // Overview:
 
@@ -19,14 +33,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 // RefreshToken can only be accessed via Server components
 
 // In the Middleware, check if the accesstoken cookie is expiring.
-// If so, delete it from the cookies, get the refreshToken and refresh both tokens. 
+// If so, delete it from the cookies, get the refreshToken and refresh both tokens.
 
-// If the refresh request is successfull, update the access and refresh token cookies. 
+// If the refresh request is successfull, update the access and refresh token cookies.
 // RefreshToken should be http-only and AccessToken not.
 
 // All the verification and refresh should be done in the Middleware.
 
-// How to: 
+// How to:
 
 // 1. In the Middleware, for every route request, check if the accessToken is expiring.
 // 2. If the accessToken is expired or to be expired in 5 minutes or less, then we need to refresh it.

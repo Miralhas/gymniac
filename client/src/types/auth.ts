@@ -9,7 +9,10 @@ export type User = {
   id: number;
   username: string;
   email: string;
+  roles: string[];
 }
+
+export type UserSummary = Omit<User, "roles">
 
 export type LoginResponse = {
   refreshToken: string;
@@ -19,7 +22,17 @@ export type LoginResponse = {
 }
 
 export type AuthState = {
-  User: User;
+  user: User;
   accessToken: string;
-  isAuthenticated: boolean;
 };
+
+export type CustomJwtPayload = {
+  iss?: string;
+  sub?: string;
+  aud?: string | string[];
+  jti?: string;
+  nbf?: number;
+  exp?: number;
+  iat?: number;
+  user?: User;
+}

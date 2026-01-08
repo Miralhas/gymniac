@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { BluetoothIcon, PlusIcon } from "lucide-react"
+import { useAuthContext } from "@/contexts/auth-context"
 
 export function ComponentExample() {
   return (
@@ -59,6 +60,8 @@ export function ComponentExample() {
 }
 
 function CardExample() {
+  const { authState, isLoading } = useAuthContext();
+
   return (
     <Example title="Card" className="items-center justify-center">
       <Card className="relative w-full max-w-sm overflow-hidden pt-0">
@@ -70,7 +73,7 @@ function CardExample() {
           className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale"
         />
         <CardHeader>
-          <CardTitle>Observability Plus is replacing Monitoring</CardTitle>
+          <CardTitle>{isLoading ? "Loading..." : authState?.user.email}</CardTitle>
           <CardDescription>
             Switch to the improved way to explore your data, with natural
             language. Monitoring will no longer be available on the Pro plan in

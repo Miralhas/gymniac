@@ -8,28 +8,16 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel, FieldError } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { loginAction } from "@/service/authentication/actions/login-action";
-import { signin } from "@/service/authentication/api/login";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import { useForm } from "@tanstack/react-form"
-import { toast } from "sonner"
 import { loginSchema } from "@/lib/schemas/login-schema";
+import { loginAction } from "@/service/authentication/actions/login-action";
+import { useLoginMutation } from "@/service/authentication/mutations/use-login-mutation";
+import { useForm } from "@tanstack/react-form";
+import Link from "next/link";
 
 const LoginForm = () => {
-  const router = useRouter();
-
-  // const handleSubmit = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   if (!email || !password) return;
-  //   const tokens = await signin({ email, password });
-  //   await loginAction(undefined, tokens);
-  //   router.push("/");
-  // }
-
+  const mutation = useLoginMutation();
 
   const form = useForm({
     defaultValues: {
@@ -40,22 +28,15 @@ const LoginForm = () => {
       onSubmit: loginSchema
     },
     onSubmit: async ({ value }) => {
-      toast("You submitted the following values:", {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: "bottom-right",
-        classNames: {
-          content: "flex flex-col gap-2",
-        },
-        style: {
-          "--border-radius": "calc(var(--radius)  + 4px)",
-        } as React.CSSProperties,
+      mutation.mutate(value, {
+        onSuccess: async (tokens) => {
+          await loginAction(undefined, tokens);
+        }
       })
     },
-  })
+  });
+
+  const isPending = form.state.isSubmitting || mutation.isPending;
 
   return (
     <Card className="w-full max-w-md gap-2 pb-4 z-999 relative rounded-sm">
@@ -119,7 +100,9 @@ const LoginForm = () => {
               }}
             </form.Field>
             <Field orientation="vertical">
-              <Button type="submit" form="login-form">Sign In</Button>
+              <Button type="submit" form="login-form" disabled={isPending}>
+                {isPending ? <span className="animate-pulse">Logging in...</span> : "Login"}
+              </Button>
             </Field>
           </FieldGroup>
         </form>
@@ -128,29 +111,6 @@ const LoginForm = () => {
         </div>
       </CardContent>
     </Card>
-    // <form onSubmit={handleSubmit} className="space-y-3">
-    //   <div className="flex flex-col gap-2">
-    //     <label htmlFor="email" className="text-zinc-300 text-sm">Email</label>
-    //     <input
-    //       id="email"
-    //       type="email"
-    //       className="bg-emerald-900/30 border-emerald-900 border rounded-md placeholder:text-muted-foreground placeholder:text-xs placeholder:font-medium ps-2 h-8" placeholder="example@email.com"
-    //       onChange={(e) => setEmail(e.currentTarget.value)}
-    //     />
-    //   </div>
-    //   <div className="flex flex-col gap-2">
-    //     <label htmlFor="password" className="text-zinc-300 text-sm">Password</label>
-    //     <input
-    //       id="password"
-    //       type="password"
-    //       className="bg-emerald-900/30 border-emerald-900 border rounded-md placeholder:text-muted-foreground placeholder:text-xs placeholder:font-medium ps-2 h-8" placeholder="••••••••"
-    //       onChange={(e) => setPassword(e.currentTarget.value)}
-    //     />
-    //   </div>
-    //   <div className="grid mt-6">
-    //     <button type="submit" className="cursor-pointer border border-emerald-700 px-4 py-1 rounded-md text-sm font-medium text-zinc-300 bg-emerald-900/30 hover:text-zinc-100">Log in</button>
-    //   </div>
-    // </form>
   )
 }
 

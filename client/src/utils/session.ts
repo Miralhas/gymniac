@@ -1,28 +1,11 @@
-import { env } from "@/env";
-import { LoginResponse, User } from "@/types/auth";
-import { importSPKI, jwtVerify, JWTVerifyResult } from 'jose';
+import { LoginResponse } from "@/types/auth";
 import { cookies } from "next/headers";
-import { cache } from "react";
-import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME, SESSION_ENCRYPTION_ALGORITHM } from "./constants";
+import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "./constants";
 
 type Tokens = {
   accessToken?: string;
   refreshToken?: string;
 }
-
-type CustomJwtPayload = {
-  iss?: string;
-  sub?: string;
-  aud?: string | string[];
-  jti?: string;
-  nbf?: number;
-  exp?: number;
-  iat?: number;
-  user?: User;
-}
-
-const pubKey = env.PUBLIC_KEY.replace(/\\n/g, '\n');
-const publicKeyPromise = importSPKI(pubKey, SESSION_ENCRYPTION_ALGORITHM);
 
 export const getAuthTokens = async (): Promise<Tokens> => {
   const cookieStore = await cookies();
@@ -59,20 +42,3 @@ export async function deleteSession() {
   cookieStore.delete(ACCESS_TOKEN_COOKIE_NAME);
   cookieStore.delete(REFRESH_TOKEN_COOKIE_NAME);
 }
-
-export const decrypt = cache(async (accessToken: string | undefined = '') => {
-  if (!accessToken) return undefined;
-  try {
-    const publicKey = await publicKeyPromise;
-
-    const { payload } = await jwtVerify(accessToken, publicKey, {
-      issuer: "gymniac-server"
-    }) as JWTVerifyResult & { payload: CustomJwtPayload };
-
-    return payload;
-    // eslint-disable-next-line
-  } catch (error) {
-    console.log('Failed to verify session');
-    return undefined;
-  }
-});
