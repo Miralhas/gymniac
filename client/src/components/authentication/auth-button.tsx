@@ -9,14 +9,14 @@ const AuthButton = () => {
 
   if (!authState || isLoading) {
     return (
-      <Button variant="cool" asChild>
+      <Button variant="cool" asChild size="sm">
         <Link href="/login">Login</Link>
       </Button>
     )
   }
 
   return (
-    <Button variant="cool" onClick={async () => await logout()}>
+    <Button variant="cool" size="sm" onClick={async () => await logout()}>
       Logout
     </Button>
   )

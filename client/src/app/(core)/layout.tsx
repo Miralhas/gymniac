@@ -3,10 +3,10 @@ import { PropsWithChildren } from "react";
 
 const CoreLayout = ({ children }: PropsWithChildren) => {
   return (
-    <>
+    <main>
       <Navbar />
       {children}
-    </>
+    </main>
   )
 }
 

@@ -8,6 +8,7 @@ import AuthLinks from "./auth-links";
 import Logo from "./logo";
 import MenuButton from "./menu-button";
 import MobileMenu from "./mobile-menu";
+import Container from "../container";
 
 export type NavLink = {
   title: string;
@@ -18,7 +19,6 @@ export type NavLink = {
 export const LEFT_SIDE_NAV_LINKS: NavLink[] = [
   { title: "Workout Plans", href: "/workout-plans", icon: NotebookIcon },
   { title: "Exercises", href: "/ranking", icon: ActivityIcon },
-  // { title: "Updates", href: "/updates", icon: RefreshCcw },
 ]
 
 const Navbar = () => {
@@ -72,7 +72,7 @@ const Navbar = () => {
       transition={{ duration: 0.35, ease: "easeInOut" }}
       className="bg-card w-full border-b-4 border-secondary shadow-2xl sticky top-0 z-50"
     >
-      <nav className="mx-auto w-full max-w-[1280px] flex items-center p-2 px-6 md:py-3 gap-4 relative">
+      <Container className="flex items-center p-2 px-6 md:py-3 gap-4 relative">
         <Logo />
 
         <div className="hidden lg:flex items-center gap-4 ml-2 relative top-px">
@@ -98,7 +98,7 @@ const Navbar = () => {
           </div>
         </div>
 
-      </nav>
+      </Container>
 
       <AnimatePresence>
         {isMenuOpen ? <MobileMenu containerRef={menuRef} toggleMenu={toggleMenu} /> : null}
