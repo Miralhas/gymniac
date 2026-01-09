@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/common-utils"
 
 function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
   return (
@@ -24,3 +24,4 @@ function KbdGroup({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export { Kbd, KbdGroup }
+

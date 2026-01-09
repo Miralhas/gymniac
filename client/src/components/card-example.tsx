@@ -16,7 +16,7 @@ const CardExample = () => {
   const { authState, isLoading } = useAuthContext();
 
   return (
-    <Card className="relative w-full max-w-sm overflow-hidden mx-auto pt-0 z-50">
+    <Card className="relative w-full max-w-sm overflow-hidden mx-auto pt-0 z-10">
       <div className="bg-primary absolute inset-0 z-30 aspect-video opacity-50 mix-blend-color" />
       <img
         src="https://images.unsplash.com/photo-1604076850742-4c7221f3101b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -40,10 +40,10 @@ const CardExample = () => {
           <CardTitle>Not Authenticated</CardTitle>
         )}
       </CardHeader>
-      <CardFooter className="space-x-2.5">
+      <CardFooter className="gap-2.5 grid md:flex md:gap-x-2">
         <AuthButton />
         <Button size="sm">Default Variant</Button>
-        <Badge variant="secondary" className="ml-auto">
+        <Badge variant="secondary" className="ms-auto row-span-1 row-start-1">
           Warning
         </Badge>
       </CardFooter>

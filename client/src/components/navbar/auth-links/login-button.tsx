@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/common-utils";
 import Link from "next/link";
 
 const LoginButton = ({ isLoading = false }: { isLoading?: boolean }) => {

@@ -46,7 +46,7 @@ const LoginForm = () => {
             if (error.errors) {
               Object.entries(error.errors).map(([key, value]) => {
                 // @ts-expect-error typescript can't map the type of the errors provided by the API.
-                formApi.fieldInfo[key].instance?.setErrorMap({onSubmit: {message: value}})
+                formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
               })
             }
           } else {
