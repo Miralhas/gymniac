@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Tilt_Warp } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/providers";
 import { Toaster } from "sonner";
@@ -20,6 +20,12 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
+const tiltWarp = Tilt_Warp({
+  subsets: ["latin"],
+  variable: "--font-tilt-warp",
+  weight: "400",
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,8 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${tiltWarp.variable}`}
     >
       <body
         className={`font-inter antialiased`}

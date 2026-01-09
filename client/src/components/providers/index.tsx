@@ -1,14 +1,13 @@
 'use client'
 
 import { PropsWithChildren } from "react";
-import { ThemeProvider } from "./theme-provider";
 
+import { AuthProvider } from "@/contexts/auth-context";
 import {
   isServer,
   QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query';
-import { AuthProvider } from "@/contexts/auth-context";
 
 // SSR Documentation: https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr
 
@@ -38,14 +37,7 @@ const Providers = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {children}
       </AuthProvider>
     </QueryClientProvider>
   )
