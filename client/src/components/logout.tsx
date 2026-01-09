@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import AuthButton from "./authentication/auth-button";
-import ThemeToggler from "./theme-toggler";
 import { Button } from "./ui/button";
 
 const Logout = () => {
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black gap-x-2">
-      <ThemeToggler />
+    <div className="flex min-h-screen items-center justify-center font-sans gap-x-2">
       <AuthButton />
       <Button variant="cool" asChild>
         <Link href="/signup">Sign Up</Link>
