@@ -26,10 +26,10 @@ import Link from "next/link";
 import { useState } from "react";
 
 const defaultValues = {
-  email: 'user@user.com',
-  username: 'user',
-  password: '1234',
-  confirmPassword: '1234'
+  email: '',
+  username: '',
+  password: '',
+  confirmPassword: ''
 }
 
 const SignupForm = () => {
