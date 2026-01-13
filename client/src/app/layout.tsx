@@ -18,22 +18,26 @@ export const metadata: Metadata = {
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+  preload: false,
 });
 
 const tiltWarp = Tilt_Warp({
   subsets: ["latin"],
   variable: "--font-tilt-warp",
   weight: "400",
+  preload: false,
 });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  preload: false,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 export default function RootLayout({
