@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { Button } from "../ui/button";
 
 type Props = {
@@ -32,9 +33,11 @@ const CalendarHeader = ({ today, currentMonthFirstDay, currentMonthLastDay, hand
         </div>
       </div>
 
-      <Button variant="cool" className="items-center ml-auto w-full md:w-max">
-        <PlusIcon className="mt-px" />
-        Add Workout
+      <Button asChild variant="cool" className="ml-auto w-full md:w-max">
+        <Link href="/workouts/new" className="gap-1 flex items-center">
+          <PlusIcon className="mt-px" />
+          Add Workout
+        </Link>
       </Button>
     </div>
   )

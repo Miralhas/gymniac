@@ -10,7 +10,7 @@ const Logo = () => {
         height={25}
         className="ml-2 w-auto h-7 xs:h-8"
       /> */}
-      <p className="text-lg sm:text-2xl uppercase tracking-widest bg-linear-to-r from-emerald-500/90 to-primary/70 bg-clip-text text-transparent font-tilt-warp">
+      <p className="text-lg sm:text-2xl uppercase tracking-widest bg-linear-to-r from-accent/90 to-primary/70 bg-clip-text text-transparent font-tilt-warp">
         GYMNIAC
       </p>
     </Link>

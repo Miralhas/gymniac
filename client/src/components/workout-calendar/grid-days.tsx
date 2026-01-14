@@ -7,6 +7,7 @@ import {
 } from 'date-fns';
 import { PlusIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { useWorkoutContext } from "@/contexts/workout-context";
 
 type Props = {
   calendarDays: Date[];
@@ -14,14 +15,16 @@ type Props = {
 }
 
 const GridDays = ({ calendarDays, today }: Props) => {
+  const { setOpen } = useWorkoutContext();
   return (
     <>
       {calendarDays.map((day, index) => {
-      const isMuted = (isFuture(day) || !isSameMonth(day, today));
+        const isMuted = (isFuture(day) || !isSameMonth(day, today));
         return (
           <Button
             variant="pure"
             disabled={isFuture(day)}
+            onClick={() => setOpen(prev => !prev)}
             size="none"
             key={index}
             className={cn("rounded-none group cursor-pointer hover:bg-primary/15 transition-colors duration-50 ease-in hover:border-primary/30 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none")}
@@ -29,7 +32,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
             <span className={cn(
               `absolute top-0 left-0 text-foreground text-xs md:text-sm m-1 z-50`,
               isToday(day) && "text-accent",
-            isMuted && "text-muted-foreground/60",
+              isMuted && "text-muted-foreground/60",
             )}>
               {format(day, "d")}
             </span>

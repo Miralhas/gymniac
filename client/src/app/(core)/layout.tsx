@@ -1,11 +1,16 @@
 import Navbar from "@/components/navbar";
+import AddWorkoutModal from "@/components/workout-calendar/add-workout-modal";
+import { WorkoutProvider } from "@/contexts/workout-context";
 import { PropsWithChildren } from "react";
 
 const CoreLayout = ({ children }: PropsWithChildren) => {
   return (
     <main>
-      <Navbar />
-      {children}
+      <WorkoutProvider>
+        <Navbar />
+        {children}
+        <AddWorkoutModal />
+      </WorkoutProvider>
     </main>
   )
 }
