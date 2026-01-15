@@ -5,8 +5,10 @@ import PageHeader from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { useGetWorkoutByID } from "@/service/workout/queries/use-get-workout-by-id";
 import { WorkoutExercise } from "@/types/workout";
+import { is404 } from "@/utils/common-utils";
 import { format } from "date-fns";
 import { DumbbellIcon, PlusIcon, XIcon } from "lucide-react";
+import { notFound } from "next/navigation";
 import { useState } from "react";
 import AddExerciseForm from "../exercise-form/add-exercise-form";
 import EditMode from "./edit-mode";
@@ -16,6 +18,10 @@ const WorkoutDetail = ({ id }: { id: number }) => {
   const query = useGetWorkoutByID(id);
   const [editMode, setEditMode] = useState<WorkoutExercise["id"] | undefined>(undefined);
   const [addExercisesMode, setAddExercisesMode] = useState<boolean>(false);
+
+  if (is404(query.error)) {
+    notFound();
+  }
 
   if (query.isLoading || query.isError) {
     return <DefaultLoading />
