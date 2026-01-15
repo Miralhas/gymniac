@@ -29,7 +29,7 @@ import ExercisesCombobox from "./exercises-combobox";
 import { toast } from "sonner";
 
 const defaultValues: WorkoutInput = {
-  exercises: [{ slug: "flat-bench-press", sets: [{ reps: 0, kg: 0 }] }],
+  exercises: [{ slug: "", sets: [{ reps: 0, kg: 0 }] }],
   note: "",
 }
 
