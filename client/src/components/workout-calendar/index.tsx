@@ -5,86 +5,76 @@ import { DAYS_OF_WEEK } from '@/utils/date-utils';
 import {
   addMonths,
   eachDayOfInterval,
-  endOfMonth,
   format,
-  isFuture,
-  isSameMonth,
   isSaturday,
-  isSunday,
-  isToday,
   lastDayOfMonth,
   nextSaturday,
   parse,
   startOfToday,
-  subDays,
-  subMonths
+  subDays
 } from 'date-fns';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { Button } from '../ui/button';
+import CalendarHeader from './calendar-header';
+import GridDays from './grid-days';
 
 const WorkoutCalendar = () => {
   const today = startOfToday();
   const [currMonth, setCurrMonth] = useState(() => format(today, "MMM-yyyy"));
 
-  const handleNextMonth = () => {
+  const handleCurrentMonth = (offset: number) => {
     const currentDate = parse(currMonth, "MMM-yyyy", new Date());
-    const next = addMonths(currentDate, 1);
-    setCurrMonth(format(next, "MMM-yyyy"));
+    setCurrMonth(format(addMonths(currentDate, offset), "MMM-yyyy"));
   }
 
-  const handlePreviousMonth = () => {
-    const currentDate = parse(currMonth, "MMM-yyyy", new Date());
-    const previous = subMonths(currentDate, 1);
-    setCurrMonth(format(previous, "MMM-yyyy"));
+  const handleReset = () => {
+    setCurrMonth(format(today, "MMM-yyyy"));
   }
 
-  const monthFirstDay = parse(currMonth, "MMM-yyyy", new Date());
-  const monthLastDay = lastDayOfMonth(monthFirstDay);
+  const currentMonthFirstDay = parse(currMonth, "MMM-yyyy", new Date());
+  const currentMonthLastDay = lastDayOfMonth(currentMonthFirstDay);
 
   const daysInMonth = eachDayOfInterval({
-    start: monthFirstDay,
-    end: monthLastDay,
+    start: currentMonthFirstDay,
+    end: currentMonthLastDay,
   });
 
-  // Get last days of last month so it doesn't create a gap in the calendar.
-  const padStart = eachDayOfInterval({ start: subDays(monthFirstDay, monthFirstDay.getDay()), end: monthFirstDay }).slice(0, -1);
+  // Pad Days are similar how Windows implement it's calendar.
 
-  // Get the number of days until next Saturday so there are no gaps in the calendar. Calendar always ends on a satuday. 
+  // Get last days of last month so it doesn't create a gap in the start of the calendar.
+  // Calendar always starts on a sunday. 
+  // .getDay() returns the day of the week (0 = sunday | 6 = saturday)
+  // First day of the month minus the day of the week equals the amount of pad days needed.
+  const padStart = eachDayOfInterval({
+    start: subDays(currentMonthFirstDay, currentMonthFirstDay.getDay()),
+    end: currentMonthFirstDay
+  }).slice(0, -1);
+
+  // Get the number of days until next Saturday so there are no gaps in the end of the calendar. 
+  // Calendar always ends on a satuday. 
   // Only add end pad days if month doesn't ends on a satuday
-  const padEnd = eachDayOfInterval({ start: monthLastDay, end: isSaturday(monthLastDay) ? monthLastDay : nextSaturday(monthLastDay) }).slice(1);
+  const padEnd = eachDayOfInterval({
+    start: currentMonthLastDay,
+    end: isSaturday(currentMonthLastDay) ? currentMonthLastDay : nextSaturday(currentMonthLastDay)
+  }).slice(1);
 
   const all = [...padStart, ...daysInMonth, ...padEnd];
 
   return (
     <>
-      <p>{currMonth}</p>
-      <div className='space-x-2'>
-        <Button variant="ghost" size="icon" onClick={handlePreviousMonth}><ChevronLeft /></Button>
-        <Button variant="ghost" size="icon" onClick={handleNextMonth}><ChevronRight /></Button>
-      </div>
+      <CalendarHeader
+        currentMonthFirstDay={currentMonthFirstDay}
+        currentMonthLastDay={currentMonthLastDay}
+        handleCurrentMonth={handleCurrentMonth}
+        handleReset={handleReset}
+        today={today}
+      />
       <div className="grid grid-cols-7 grid-rows-[min-content_max-content] relative z-20 overflow-hidden">
-        {DAYS_OF_WEEK.map(day => (
+        {DAYS_OF_WEEK.map((day, index) => (
           <div key={day} className='col-span-1 border border-zinc-50/10 p-1.25'>
-            <p className='text-foreground text-center text-sm capitalize'>{day}</p>
+            <p className={cn('text-foreground text-center text-sm capitalize', today.getDay() === index && "text-accent font-semibold")}>{day}</p>
           </div>
         ))}
-
-        {all.map((day, index) => {
-          return (
-            <div key={index} className={cn("p-4 py-9 md:p-6 md:py-16 relative border border-zinc-50/10")}>
-              <span className={cn(
-                `absolute top-0 left-0 text-foreground/90 text-xs md:text-sm m-1`,
-                isToday(day) && "text-emerald-500",
-                isFuture(day) && "text-foreground/50",
-                !isSameMonth(day, today) && "text-foreground/50",
-              )}>
-                {format(day, "d")}
-              </span>
-            </div>
-          )
-        })}
-
+        <GridDays calendarDays={all} today={today} />
       </div>
     </>
   )

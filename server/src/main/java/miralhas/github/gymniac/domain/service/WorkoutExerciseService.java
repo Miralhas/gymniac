@@ -1,7 +1,10 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import miralhas.github.gymniac.api.dto.input.*;
+import miralhas.github.gymniac.api.dto.input.ExerciseSetInput;
+import miralhas.github.gymniac.api.dto.input.UpdateExerciseSetListInput;
+import miralhas.github.gymniac.api.dto.input.UpdateWorkoutExerciseInput;
+import miralhas.github.gymniac.api.dto.input.WorkoutExerciseInput;
 import miralhas.github.gymniac.api.dto_mapper.ExerciseSetMapper;
 import miralhas.github.gymniac.api.dto_mapper.WorkoutExerciseMapper;
 import miralhas.github.gymniac.domain.exception.ExerciseSetNotFoundException;
@@ -43,14 +46,14 @@ public class WorkoutExerciseService {
 
 	@Transactional
 	public List<WorkoutExercise> saveBulk(List<WorkoutExerciseInput> inputs, Workout workout) {
-		var workouts =  inputs.stream().map(input ->  {
+		var workouts = inputs.stream().map(input -> {
 			var workoutExercise = workoutExerciseMapper.fromInput(input);
 			var exercise = exerciseService.findBySlugOrException(input.slug());
 			workoutExercise.setExercise(exercise);
 			workoutExercise.setWorkout(workout);
 
 			workoutExercise.setSets(input.sets().stream().map(s ->
-				 exerciseSetMapper.fromInput(s).withWorkoutExercise(workoutExercise)
+					exerciseSetMapper.fromInput(s).withWorkoutExercise(workoutExercise)
 			).toList());
 
 			return workoutExercise;
@@ -60,25 +63,20 @@ public class WorkoutExerciseService {
 
 	@Transactional
 	public void update(UpdateWorkoutExerciseInput input, WorkoutExercise workoutExercise) {
+		workoutExerciseRepository.deleteAllSets(workoutExercise.getId());
+		workoutExerciseRepository.flush();
+
+		input.sets().forEach(setInput -> {
+			ExerciseSet set = new ExerciseSet();
+			set.setKg(setInput.kg());
+			set.setReps(setInput.reps());
+			set.setWorkoutExercise(workoutExercise);
+			exerciseSetRepository.save(set);
+		});
+
 		var exercise = exerciseService.findBySlugOrException(input.slug());
 		workoutExercise.setExercise(exercise);
 		workoutExerciseRepository.save(workoutExercise);
-	}
-
-	@Transactional
-	public void updateSetsBulk(UpdateExerciseSetListInput input, WorkoutExercise workoutExercise) {
-		input.sets().forEach(setInput -> {
-			exerciseSetRepository.findById(setInput.id()).ifPresentOrElse(set -> {
-				exerciseSetMapper.updateWithSetId(setInput, set);
-				exerciseSetRepository.save(set);
-			}, () -> {
-				ExerciseSet set = new ExerciseSet();
-				set.setKg(setInput.kg());
-				set.setReps(setInput.reps());
-				set.setWorkoutExercise(workoutExercise);
-				exerciseSetRepository.save(set);
-			});
-		});
 	}
 
 	@Transactional

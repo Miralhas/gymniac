@@ -2,7 +2,7 @@ import * as z from "zod"
 
 export const loginSchema = z.object({
   email: z
-    .string("Must be a well-formed e-mail address")
+    .email("Must be a well-formed e-mail address")
     .min(1, { message: "E-mail is required" }),
   password: z
     .string()

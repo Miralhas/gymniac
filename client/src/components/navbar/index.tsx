@@ -72,7 +72,7 @@ const Navbar = () => {
       transition={{ duration: 0.35, ease: "easeInOut" }}
       className="bg-card w-full border-b-4 border-secondary shadow-2xl sticky top-0 z-50"
     >
-      <Container className="flex items-center p-2 px-6 md:py-3 gap-4 relative">
+      <Container className="flex items-center p-2 px-4 md:py-3 gap-4 relative">
         <Logo />
 
         <div className="hidden lg:flex items-center gap-4 ml-2 relative top-px">

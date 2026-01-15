@@ -8,6 +8,7 @@ import miralhas.github.gymniac.api.dto_mapper.WorkoutMapper;
 import miralhas.github.gymniac.domain.exception.WorkoutNotFoundException;
 import miralhas.github.gymniac.domain.model.workout.ExerciseSet;
 import miralhas.github.gymniac.domain.model.workout.Workout;
+import miralhas.github.gymniac.domain.model.workout.WorkoutExercise;
 import miralhas.github.gymniac.domain.repository.WorkoutRepository;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
@@ -37,6 +38,7 @@ public class WorkoutService {
 		var workout = findByIdOrException(id);
 		workout.getExercises().forEach(ex ->
 				ex.getSets().sort(Comparator.comparing(ExerciseSet::getCreatedAt)));
+		workout.getExercises().sort(Comparator.comparing(WorkoutExercise::getId));
 		return workoutMapper.toResponse(workout);
 	}
 

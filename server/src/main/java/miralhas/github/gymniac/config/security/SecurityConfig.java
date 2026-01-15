@@ -68,7 +68,6 @@ public class SecurityConfig {
 					resourceServer.authenticationEntryPoint(customAuthenticationEntryPoint);
 				})
 				.authorizeHttpRequests(authz -> {
-//					authz.requestMatchers(HttpMethod.GET, "/api/secured").authenticated();
 					authz.requestMatchers(
 							HttpMethod.POST,
 							"/api/auth/refresh-token",
