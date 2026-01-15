@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { useGetExercises } from "@/service/exercise/query/use-get-exercises"
 import { Exercise } from "@/types/exercise"
 import { cn } from "@/utils/common-utils"
@@ -31,6 +32,7 @@ const ExercisesCombobox = ({ setValue, isInvalid, value }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | undefined>();
   const query = useGetExercises({ size: 2000 });
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!query.isLoading && query.isSuccess) {
@@ -59,7 +61,7 @@ const ExercisesCombobox = ({ setValue, isInvalid, value }: Props) => {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 " side="bottom" align="start">
+      <PopoverContent className="p-0 " side="bottom" align={isMobile ? "center" : "start"} avoidCollisions={false}>
         <Command>
           <CommandInput placeholder="Search exercise..." className="h-9" />
           <CommandList className="min-h-[120px]">

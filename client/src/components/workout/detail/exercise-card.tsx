@@ -91,7 +91,7 @@ const ExerciseCard = ({ handleMode, index, workoutExercise, workoutId }: Props) 
               {workoutExercise.sets.map((set, setIndex) => (
                 <TableRow key={set.id}>
                   <TableCell className="px-5 md:px-8 py-4 font-bold md:text-lg">{setIndex + 1}</TableCell>
-                  <TableCell className="px-4 md:px-7 py-4 font-bold md:text-lg">{set.kg} <span className="font-light text-sm text-muted-foreground">reps</span></TableCell>
+                  <TableCell className="px-4 md:px-7 py-4 font-bold md:text-lg">{set.kg} <span className="font-light text-sm text-muted-foreground">Kg</span></TableCell>
                   <TableCell className="px-4 md:px-7 py-4 font-bold md:text-lg">{set.reps} <span className="font-light text-sm text-muted-foreground">reps</span></TableCell>
                 </TableRow>
               ))}

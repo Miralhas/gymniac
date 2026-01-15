@@ -5,15 +5,15 @@ import { workoutKeys } from "../queries/query-keys";
 
 
 type Params = {
-  workoutId: Workout["id"],
-  workoutExerciseId: WorkoutExercise["id"]
+  workoutId: Workout["id"];
+  workoutExerciseId: WorkoutExercise["id"];
 }
 
 export const useDeleteWorkoutExerciseById = ({ workoutId, workoutExerciseId }: Params) => {
   const client = useQueryClient();
   return useMutation({
     mutationFn: () => deleteWorkoutExerciseById(workoutId, workoutExerciseId),
-    onSuccess: () => {
+  onSuccess: () => {
       client.invalidateQueries({ queryKey: workoutKeys.getWorkoutById(workoutId) });
     }
   });
