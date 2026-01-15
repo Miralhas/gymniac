@@ -25,29 +25,21 @@ public class WorkoutExerciseController {
 		workoutExerciseService.saveBulk(input.exercises(), workoutService.findByIdOrException(workoutId));
 	}
 
-	@PatchMapping("/{exerciseId}")
+	@PutMapping("/{exerciseId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(
 			@PathVariable Long workoutId,
 			@PathVariable Long exerciseId,
 			@RequestBody @Valid UpdateWorkoutExerciseInput input
 	) {
-		workoutExerciseService.update(input, workoutExerciseService.findByIdOrException(exerciseId));
+		var workoutExercise = workoutExerciseService.findByIdOrException(exerciseId);
+		workoutExerciseService.update(input, workoutExercise);
 	}
 
 	@DeleteMapping("/{exerciseId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long exerciseId) {
 		workoutExerciseService.delete(exerciseId);
-	}
-
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PutMapping("/{exerciseId}/sets")
-	public void updateSetsBulk(
-			@PathVariable Long exerciseId,
-			@RequestBody @Valid UpdateExerciseSetListInput input
-	) {
-		workoutExerciseService.updateSetsBulk(input, workoutExerciseService.findByIdOrException(exerciseId));
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
