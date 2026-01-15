@@ -10,39 +10,37 @@ import {
   Card,
   CardContent
 } from "@/components/ui/card";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
-import { WorkoutInput, workoutSchema } from "@/lib/schemas/workout-schema";
+import { WorkoutExerciseArrayInput, workoutExerciseSchemaArray } from "@/lib/schemas/workout-exercise-schema";
 import { ApiError } from "@/service/api-error";
-import { useCreateWorkout } from "@/service/workout/mutations/use-create-workout";
+import { useAddWorkoutExercises } from "@/service/workout/mutations/use-add-workout-exercises";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
-import ExercisesCombobox from "./exercises-combobox";
 import { toast } from "sonner";
+import ExercisesCombobox from "../exercises-combobox";
+import { Workout } from "@/types/workout";
 
-const defaultValues: WorkoutInput = {
+const defaultValues: WorkoutExerciseArrayInput = {
   exercises: [{ slug: "", sets: [{ reps: 0, kg: 0 }] }],
-  note: "",
 }
 
-const AddWorkoutForm = () => {
-  const mutation = useCreateWorkout();
+const AddExerciseForm = ({ id, handleMode }: { id: Workout["id"]; handleMode: () => void; }) => {
+  const mutation = useAddWorkoutExercises({ id });
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
 
   const form = useForm({
     defaultValues,
-    validators: { onSubmit: workoutSchema },
+    validators: { onSubmit: workoutExerciseSchemaArray },
     onSubmit: async ({ value, formApi }) => {
       mutation.mutate(value, {
-        onSuccess: () => { toast.success("Workout Created!"); form.reset() },
+        onSuccess: () => {
+          toast.success("Exercises added successfully!")
+          form.reset();
+          handleMode()
+        },
         onError: (error) => {
           if (error instanceof ApiError) {
             setErrorDetail(error.detail);
@@ -79,7 +77,7 @@ const AddWorkoutForm = () => {
         {errorDetail && (
           <Alert variant="destructive" className="my-2 bg-red-800/10 border border-red-800/70 rounded-sm text-red-600">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle className="font-semibold mb-1">Error creating workout</AlertTitle>
+            <AlertTitle className="font-semibold mb-1">Error adding exercises</AlertTitle>
             <AlertDescription className="font-light tracking-wider text-pretty">
               {errorDetail}
             </AlertDescription>
@@ -247,45 +245,6 @@ const AddWorkoutForm = () => {
             )
           }}
         </form.Field>
-        <form.Field name="note" mode="value">
-          {(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <FieldGroup>
-                <Card className="border">
-                  <CardContent>
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name} className="text-base inline-flex items-center">Workout Note <span className="relative right-1 text-xs top-px text-foreground/80 font-light">(optional)</span></FieldLabel>
-                      <InputGroup>
-                        <InputGroupTextarea
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          placeholder="How did the workout go?"
-                          className="min-h-24 resize-none"
-                          aria-invalid={isInvalid}
-                        />
-                        <InputGroupAddon align="block-end">
-                          <InputGroupText className="tabular-nums">
-                            {field.state.value?.length ?? 0} characters
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      <FieldDescription>
-                        Add any notes about your workout session.
-                      </FieldDescription>
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  </CardContent>
-                </Card>
-              </FieldGroup>
-            )
-          }}
-        </form.Field>
         <form.Subscribe
           selector={(state) => [state.isPristine]}
         >
@@ -305,4 +264,4 @@ const AddWorkoutForm = () => {
   )
 }
 
-export default AddWorkoutForm;
+export default AddExerciseForm;

@@ -1,4 +1,4 @@
-import AddWorkoutForm from "@/components/workout-calendar/form";
+import AddWorkoutForm from "@/components/workout/form";
 
 const NewWorkoutPage = () => {
   return (

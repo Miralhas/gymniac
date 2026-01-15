@@ -33,9 +33,13 @@ const ExercisesCombobox = ({ setValue, isInvalid, value }: Props) => {
   const query = useGetExercises({ size: 2000 });
 
   useEffect(() => {
-    if (!query.isLoading && query.isSuccess && value) {
-      // eslint-disable-next-line
-      setSelectedExercise(query.data?.results.find((exercise) => exercise.slug === value));
+    if (!query.isLoading && query.isSuccess) {
+      if (value) {
+        // eslint-disable-next-line
+        setSelectedExercise(query.data?.results.find((exercise) => exercise.slug === value));
+      } else {
+        setSelectedExercise(undefined);
+      }
     }
   }, [query.isLoading, query.isSuccess, value, query.data]);
 

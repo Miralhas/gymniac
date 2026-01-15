@@ -5,12 +5,17 @@ export const setSchema = z.object({
   kg: z.number("Weight must be a number").positive("Weight must be a positive number"),
 });
 
-export const exerciseSchema = z.object({
+export const workoutExerciseSchema = z.object({
   slug: z
     .string("Must be a valid exercise")
     .min(1, { message: "Exercise is required" }),
   sets: z.array(setSchema).min(1, { error: "Must have at least one set" })
 });
 
+export const workoutExerciseSchemaArray = z.object({
+  exercises: z.array(workoutExerciseSchema).min(1, "Must have at least one exercise")
+})
+
+export type WorkoutExerciseArrayInput = z.infer<typeof workoutExerciseSchemaArray>;
 export type SetInput = z.infer<typeof setSchema>;
-export type ExerciseInput = z.infer<typeof exerciseSchema>;
+export type WorkoutExerciseInput = z.infer<typeof workoutExerciseSchema>;

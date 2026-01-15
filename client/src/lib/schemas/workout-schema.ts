@@ -1,9 +1,9 @@
-import * as z from "zod"
-import { exerciseSchema } from "./exercise-schema"
+import * as z from "zod";
+import { workoutExerciseSchema } from "./workout-exercise-schema";
 
 export const workoutSchema = z.object({
   note: z.string(),
-  exercises: z.array(exerciseSchema).min(1, { error: "Must have at least one exercise" })
+  exercises: z.array(workoutExerciseSchema).min(1, { error: "Must have at least one exercise" })
 });
 
 export type WorkoutInput = z.infer<typeof workoutSchema>;

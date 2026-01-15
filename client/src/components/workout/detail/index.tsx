@@ -2,28 +2,20 @@
 
 import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { useGetWorkoutByID } from "@/service/workout/queries/use-get-workout-by-id";
+import { WorkoutExercise } from "@/types/workout";
 import { format } from "date-fns";
-import { DumbbellIcon } from "lucide-react";
+import { DumbbellIcon, PlusIcon, XIcon } from "lucide-react";
+import { useState } from "react";
+import AddExerciseForm from "../exercise-form/add-exercise-form";
+import EditMode from "./edit-mode";
+import ExerciseCard from "./exercise-card";
 
 const WorkoutDetail = ({ id }: { id: number }) => {
   const query = useGetWorkoutByID(id);
+  const [editMode, setEditMode] = useState<WorkoutExercise["id"] | undefined>(undefined);
+  const [addExercisesMode, setAddExercisesMode] = useState<boolean>(false);
 
   if (query.isLoading || query.isError) {
     return <DefaultLoading />
@@ -31,6 +23,13 @@ const WorkoutDetail = ({ id }: { id: number }) => {
 
   const totalSets = query.data?.exercises.reduce((acc, curr) => acc + curr.sets.length, 0);
   const totalExercises = query.data?.exercises.length;
+
+  const handleEditMode = (id: WorkoutExercise["id"] | undefined) => {
+    console.log(id);
+    return editMode === id ? setEditMode(undefined) : setEditMode(id);
+  };
+
+  const handleAddExerciseMode = () => setAddExercisesMode(prev => !prev);
 
   return (
     query.data && (
@@ -41,48 +40,31 @@ const WorkoutDetail = ({ id }: { id: number }) => {
           <InfoCard bold={totalSets?.toString()} description="Total Sets" />
         </div>
         {query.data.note ? (
-          <div className="border p-4 my-6 text-foreground/80 rounded-xl bg-secondary/25 border-l-primary border-l-3 italic">
+          <div className="border p-4 my-6 text-foreground/80 rounded-xl bg-secondary/25npm border-l-primary border-l-3 italic">
             <p>{query.data.note}</p>
           </div>
         ) : null}
-        {query.data.exercises.map((workoutExercise, index) => (
-          <Card key={workoutExercise.id} className="gap-0">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-1">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 text-foreground/90 items-center justify-center rounded-full bg-primary/30 border border-primary/80 text-sm font-bold">
-                    {index + 1}
-                  </span>
-                  <h2 className="text-xl font-bold text-foreground inline-flex flex-col">{workoutExercise.exercise.name}</h2>
-                </div>
-              </CardTitle>
-              <CardAction></CardAction>
-            </CardHeader>
-            <CardContent className="p-4">
-              <Table className="">
-                <TableHeader className="bg-secondary/40">
-                  <TableRow>
-                    <TableHead className="px-6 py-4">SET</TableHead>
-                    <TableHead className="px-6 py-4">WEIGHT</TableHead>
-                    <TableHead className="px-6 py-4">REPS</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {workoutExercise.sets.map((set, setIndex) => (
-                    <TableRow key={set.id}>
-                      <TableCell className="px-8 py-4 font-bold text-lg">{setIndex + 1}</TableCell>
-                      <TableCell className="px-7 py-4 font-bold text-lg">{set.kg} <span className="font-light text-sm text-muted-foreground">reps</span></TableCell>
-                      <TableCell className="px-7 py-4 font-bold text-lg">{set.reps} <span className="font-light text-sm text-muted-foreground">reps</span></TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-            <CardFooter className="mt-4">
-              <p className="text-sm text-foreground/80"> <span className="font-semibold text-foreground/90">{workoutExercise.sets.length} sets</span> completed</p>
-            </CardFooter>
-          </Card>
-        ))}
+        {query.data.exercises.map((workoutExercise, index) => {
+          return workoutExercise.id === editMode
+            ? <EditMode key={workoutExercise.id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
+            : <ExerciseCard key={workoutExercise.id} workoutId={id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
+        })}
+
+        <div className="w-full border my-6" />
+        {addExercisesMode ? (
+          <>
+            <Button variant="secondary" className="w-full" onClick={handleAddExerciseMode}>
+              <XIcon />
+              Cancel
+            </Button>
+            <AddExerciseForm id={id} handleMode={handleAddExerciseMode} />
+          </>
+        ) : (
+          <Button variant="secondary" className="w-full" onClick={handleAddExerciseMode}>
+            <PlusIcon />
+            Add Exercises
+          </Button>
+        )}
       </section>
     )
   )
@@ -91,7 +73,11 @@ const WorkoutDetail = ({ id }: { id: number }) => {
 const InfoCard = ({ bold, description }: { bold?: string, description?: string }) => {
   return (
     <div className="flex items-center justify-center px-4 w-full md:max-w-34 min-h-14 border bg-secondary/30 rounded-lg">
-      <p className="text-lg"><span className="font-bold text-xl">{bold}</span> <span className="text-foreground/70 text-sm text-[15px] relative bottom-px">{description}</span></p>
+      <p className="text-lg">
+        <span className="font-bold text-xl">{bold}</span>
+        {" "}
+        <span className="text-foreground/70 text-sm text-[15px] relative bottom-px">{description}</span>
+      </p>
     </div>
   )
 }
