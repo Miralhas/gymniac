@@ -7,17 +7,18 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { WorkoutExercise } from "@/types/workout";
+import { Workout, WorkoutExercise } from "@/types/workout";
 import { XIcon } from "lucide-react";
 import UpdateExerciseForm from "../exercise-form/update-form";
 
 type Props = {
   handleMode: (id: WorkoutExercise["id"] | undefined) => void;
   workoutExercise: WorkoutExercise;
+  workoutId: Workout["id"]
   index: number;
 }
 
-const EditMode = ({ handleMode, workoutExercise, index }: Props) => {
+const EditMode = ({ handleMode, workoutExercise, index, workoutId }: Props) => {
   return (
     <Card className="gap-0">
       <CardHeader>
@@ -41,7 +42,12 @@ const EditMode = ({ handleMode, workoutExercise, index }: Props) => {
         </CardAction>
       </CardHeader >
       <CardContent className="p-4">
-        <UpdateExerciseForm defaultValues={{ sets: workoutExercise.sets, slug: workoutExercise.exercise.slug }} />
+        <UpdateExerciseForm
+          workoutId={workoutId}
+          workoutExerciseId={workoutExercise.id}
+          defaultValues={{ sets: workoutExercise.sets, slug: workoutExercise.exercise.slug }}
+          handleMode={handleMode}
+        />
       </CardContent>
       <CardFooter className="mt-4">
         <p className="text-sm text-foreground/80"> <span className="font-semibold text-foreground/90">{workoutExercise.sets.length} sets</span> completed</p>

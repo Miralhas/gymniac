@@ -148,34 +148,6 @@ const AddExerciseForm = ({ id, handleMode }: { id: Workout["id"]; handleMode: ()
                                 {subField.state.value.map((__, subIndex) => {
                                   return (
                                     <div key={`index-sets-${index}.reps-${subIndex}`} className="flex gap-3 items-center">
-                                      <form.Field name={`exercises[${index}].sets[${subIndex}].reps`}>
-                                        {(subSubField) => {
-                                          const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
-                                          return (
-                                            <Field className="gap-1">
-                                              <FieldLabel className="text-foreground/70 text-xs">Reps</FieldLabel>
-                                              <Input
-                                                id={`workout-form-array-exercises-${index}-sets-${subIndex}-reps`}
-                                                placeholder="12"
-                                                aria-invalid={isSubSubFieldInvalid}
-                                                name={subSubField.name}
-                                                type="number"
-                                                value={isNaN(subSubField.state.value) ? 0 : subSubField.state.value}
-                                                onBlur={subSubField.handleBlur}
-                                                onChange={(e) =>
-                                                  subSubField.handleChange(isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber)
-                                                }
-                                                min={0}
-                                              />
-                                              {isSubSubFieldInvalid && (
-                                                <FieldError
-                                                  errors={subSubField.state.meta.errors}
-                                                />
-                                              )}
-                                            </Field>
-                                          )
-                                        }}
-                                      </form.Field>
                                       <form.Field name={`exercises[${index}].sets[${subIndex}].kg`}>
                                         {(subSubField) => {
                                           const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
@@ -195,6 +167,34 @@ const AddExerciseForm = ({ id, handleMode }: { id: Workout["id"]; handleMode: ()
                                                 }
                                                 min={0}
                                                 step={.5}
+                                              />
+                                              {isSubSubFieldInvalid && (
+                                                <FieldError
+                                                  errors={subSubField.state.meta.errors}
+                                                />
+                                              )}
+                                            </Field>
+                                          )
+                                        }}
+                                      </form.Field>
+                                      <form.Field name={`exercises[${index}].sets[${subIndex}].reps`}>
+                                        {(subSubField) => {
+                                          const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
+                                          return (
+                                            <Field className="gap-1">
+                                              <FieldLabel className="text-foreground/70 text-xs">Reps</FieldLabel>
+                                              <Input
+                                                id={`workout-form-array-exercises-${index}-sets-${subIndex}-reps`}
+                                                placeholder="12"
+                                                aria-invalid={isSubSubFieldInvalid}
+                                                name={subSubField.name}
+                                                type="number"
+                                                value={isNaN(subSubField.state.value) ? 0 : subSubField.state.value}
+                                                onBlur={subSubField.handleBlur}
+                                                onChange={(e) =>
+                                                  subSubField.handleChange(isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber)
+                                                }
+                                                min={0}
                                               />
                                               {isSubSubFieldInvalid && (
                                                 <FieldError

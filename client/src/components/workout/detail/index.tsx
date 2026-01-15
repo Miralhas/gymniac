@@ -46,7 +46,7 @@ const WorkoutDetail = ({ id }: { id: number }) => {
         ) : null}
         {query.data.exercises.map((workoutExercise, index) => {
           return workoutExercise.id === editMode
-            ? <EditMode key={workoutExercise.id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
+            ? <EditMode key={workoutExercise.id} workoutId={id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
             : <ExerciseCard key={workoutExercise.id} workoutId={id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
         })}
 

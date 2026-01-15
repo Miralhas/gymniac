@@ -61,12 +61,12 @@ const ExercisesCombobox = ({ setValue, isInvalid, value }: Props) => {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 " side="bottom" align={isMobile ? "center" : "start"} avoidCollisions={false}>
+      <PopoverContent className="p-0 w-(--radix-popover-trigger-width) md:w-auto" side="bottom" align={isMobile ? "center" : "start"} avoidCollisions={false}>
         <Command>
           <CommandInput placeholder="Search exercise..." className="h-9" />
-          <CommandList className="min-h-[120px]">
+          <CommandList className="h-[140px]">
             {(query.isLoading || query.isFetching || query.isPending) ? (
-              <div className="w-full min-h-[120px] flex items-center justify-center">
+              <div className="w-full h-[140px] flex items-center justify-center">
                 <DumbbellIcon className="size-8 animate-spin text-muted-foreground" />
               </div>
             ) : (
@@ -85,6 +85,7 @@ const ExercisesCombobox = ({ setValue, isInvalid, value }: Props) => {
                             setSelectedExercise(undefined);
                             return;
                           }
+                          setOpen(false);
                           setValue(exercise.slug);
                           setSelectedExercise(exercise);
                         }}

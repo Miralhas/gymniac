@@ -13,42 +13,47 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { WorkoutExerciseInput, workoutExerciseSchema } from "@/lib/schemas/workout-exercise-schema";
-import { useCreateWorkout } from "@/service/workout/mutations/use-create-workout";
+import { useUpdateWorkoutExercise } from "@/service/workout/mutations/use-update-workout-exercise";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import ExercisesCombobox from "../exercises-combobox";
+import { Workout, WorkoutExercise } from "@/types/workout";
+import { ApiError } from "@/service/api-error";
 
+type Props = {
+  defaultValues: WorkoutExerciseInput;
+  workoutId: Workout["id"],
+  workoutExerciseId: WorkoutExercise["id"];
+  handleMode: (id: WorkoutExercise["id"] | undefined) => void;
+}
 
-const UpdateExerciseForm = ({ defaultValues }: { defaultValues: WorkoutExerciseInput }) => {
-  const mutation = useCreateWorkout();
+const UpdateExerciseForm = ({ defaultValues, workoutExerciseId, workoutId, handleMode }: Props) => {
+  const mutation = useUpdateWorkoutExercise({ workoutId, workoutExerciseId });
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
 
   const form = useForm({
     defaultValues,
     validators: { onSubmit: workoutExerciseSchema },
-    onSubmit: async ({ value }) => {
-      toast.success(JSON.stringify(value, null, 2))
+    onSubmit: async ({ value, formApi }) => {
+      mutation.mutate(value, {
+        onSuccess: () => { toast.success("Exercise updated successfully!"); form.reset(); handleMode(undefined) },
+        onError: (error) => {
+          if (error instanceof ApiError) {
+            setErrorDetail(error.detail);
+            if (error.errors) {
+              Object.entries(error.errors).map(([key, value]) => {
+                // @ts-expect-error typescript can't map the type of the errors provided by the API.
+                formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
+              })
+            }
+          } else {
+            setErrorDetail(error.message);
+          }
+        }
+      });
     },
-    // onSubmit: async ({ value, formApi }) => {
-    //   mutation.mutate(value, {
-    //     onSuccess: () => { toast.success("Workout Created!"); form.reset() },
-    //     onError: (error) => {
-    //       if (error instanceof ApiError) {
-    //         setErrorDetail(error.detail);
-    //         if (error.errors) {
-    //           Object.entries(error.errors).map(([key, value]) => {
-    //             // @ts-expect-error typescript can't map the type of the errors provided by the API.
-    //             formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
-    //           })
-    //         }
-    //       } else {
-    //         setErrorDetail(error.message);
-    //       }
-    //     }
-    // });
-    // },
     onSubmitInvalid: () => {
       const InvalidInput = document.querySelector(
         '[aria-invalid="true"]',
@@ -115,34 +120,6 @@ const UpdateExerciseForm = ({ defaultValues }: { defaultValues: WorkoutExerciseI
                     {field.state.value.map((__, index) => {
                       return (
                         <div key={`index-sets.reps-${index}`} className="flex gap-3 items-center">
-                          <form.Field name={`sets[${index}].reps`}>
-                            {(subSubField) => {
-                              const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
-                              return (
-                                <Field className="gap-1">
-                                  <FieldLabel className="text-foreground/70 text-xs">Reps</FieldLabel>
-                                  <Input
-                                    id={`workout-form-array-exercises-sets-${index}-reps`}
-                                    placeholder="12"
-                                    aria-invalid={isSubSubFieldInvalid}
-                                    name={subSubField.name}
-                                    type="number"
-                                    value={isNaN(subSubField.state.value) ? 0 : subSubField.state.value}
-                                    onBlur={subSubField.handleBlur}
-                                    onChange={(e) =>
-                                      subSubField.handleChange(isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber)
-                                    }
-                                    min={0}
-                                  />
-                                  {isSubSubFieldInvalid && (
-                                    <FieldError
-                                      errors={subSubField.state.meta.errors}
-                                    />
-                                  )}
-                                </Field>
-                              )
-                            }}
-                          </form.Field>
                           <form.Field name={`sets[${index}].kg`}>
                             {(subSubField) => {
                               const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
@@ -172,6 +149,34 @@ const UpdateExerciseForm = ({ defaultValues }: { defaultValues: WorkoutExerciseI
                               )
                             }}
                           </form.Field>
+                          <form.Field name={`sets[${index}].reps`}>
+                            {(subSubField) => {
+                              const isSubSubFieldInvalid = subSubField.state.meta.isTouched && !subSubField.state.meta.isValid
+                              return (
+                                <Field className="gap-1">
+                                  <FieldLabel className="text-foreground/70 text-xs">Reps</FieldLabel>
+                                  <Input
+                                    id={`workout-form-array-exercises-sets-${index}-reps`}
+                                    placeholder="12"
+                                    aria-invalid={isSubSubFieldInvalid}
+                                    name={subSubField.name}
+                                    type="number"
+                                    value={isNaN(subSubField.state.value) ? 0 : subSubField.state.value}
+                                    onBlur={subSubField.handleBlur}
+                                    onChange={(e) =>
+                                      subSubField.handleChange(isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber)
+                                    }
+                                    min={0}
+                                  />
+                                  {isSubSubFieldInvalid && (
+                                    <FieldError
+                                      errors={subSubField.state.meta.errors}
+                                    />
+                                  )}
+                                </Field>
+                              )
+                            }}
+                          </form.Field>
                           {field.state.value.length > 1 && (
                             <Button
                               variant="ghost"
@@ -191,7 +196,7 @@ const UpdateExerciseForm = ({ defaultValues }: { defaultValues: WorkoutExerciseI
                       type="button"
                       variant="secondary"
                       className="w-full max-w-30 col-span-full mt-3"
-                      onClick={() => field.pushValue({kg: 0, reps: 0})}
+                      onClick={() => field.pushValue({ kg: 0, reps: 0 })}
                     >
                       <PlusIcon />
                       Add set
