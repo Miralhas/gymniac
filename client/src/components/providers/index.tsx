@@ -3,6 +3,7 @@
 import { PropsWithChildren } from "react";
 
 import { AuthProvider } from "@/contexts/auth-context";
+import { GlobalLoginProvider } from "@/contexts/global-login-context";
 import {
   isServer,
   QueryClient,
@@ -37,7 +38,9 @@ const Providers = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {children}
+        <GlobalLoginProvider>
+          {children}
+        </GlobalLoginProvider>
       </AuthProvider>
     </QueryClientProvider>
   )

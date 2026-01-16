@@ -16,7 +16,7 @@ type AuthContextState = {
 
 type AuthActions = {
   logout: () => Promise<void>;
-  login: (data: LoginResponse) => Promise<void>;
+  login: (data: LoginResponse, redirectUri?: string) => Promise<void>;
 }
 
 const { ContextProvider, useContext } = createContext<AuthActions & AuthContextState>();
@@ -28,13 +28,18 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = async () => {
     await logoutAction();
+    
+    // refresh to force the middleware to scan the route again. 
+    // Sometimes the current route is protected. 
+    // If there is no refresh, the unauthenticated user can still use the protected route.
+    router.refresh(); 
     await queryClient.invalidateQueries({ queryKey: userKeys.all });
   }
 
-  const login = async (data: LoginResponse) => {
+  const login = async (data: LoginResponse, redirectUri = "/") => {
     await loginAction(data);
     await authStateQuery.refetch();
-    router.push("/");
+    router.push(redirectUri);
   }
 
   return (

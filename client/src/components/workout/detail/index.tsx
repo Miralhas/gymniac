@@ -31,7 +31,6 @@ const WorkoutDetail = ({ id }: { id: number }) => {
   const totalExercises = query.data?.exercises.length;
 
   const handleEditMode = (id: WorkoutExercise["id"] | undefined) => {
-    console.log(id);
     return editMode === id ? setEditMode(undefined) : setEditMode(id);
   };
 

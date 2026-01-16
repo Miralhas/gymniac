@@ -19,12 +19,13 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { loginSchema } from "@/lib/schemas/login-schema";
 import { ApiError } from "@/service/api-error";
 import { useLoginMutation } from "@/service/authentication/mutations/use-login-mutation";
+import { cn } from "@/utils/common-utils";
 import { useForm, useStore } from "@tanstack/react-form";
 import { AlertCircle, MoveLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const LoginForm = () => {
+const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; className?: string }) => {
   const mutation = useLoginMutation();
   const { login } = useAuthContext();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
@@ -39,7 +40,7 @@ const LoginForm = () => {
     },
     onSubmit: async ({ value, formApi }) => {
       mutation.mutate(value, {
-        onSuccess: async (tokens) => await login(tokens),
+        onSuccess: async (tokens) => await login(tokens, redirectUri),
         onError: (error) => {
           if (error instanceof ApiError) {
             setErrorDetail(error.detail);
@@ -62,7 +63,7 @@ const LoginForm = () => {
   const store = useStore(form.store);
 
   return (
-    <Card className="w-full max-w-md gap-2 py-4 z-999 relative rounded-sm">
+    <Card className={cn("w-full max-w-md gap-2 py-4 z-999 relative rounded-sm", className)}>
       <CardHeader>
         <CardTitle className="">
           <Button variant="link" className="text-foreground hover:text-primary duration-200 ease-in-out transition-colors" asChild size="icon-sm">
