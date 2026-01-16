@@ -43,8 +43,8 @@ const GridDays = ({ calendarDays, today }: Props) => {
             )}>
               {format(day, "d")}
             </span>
-            <div className="size-12 rounded-full flex items-center justify-center bg-accent/10 border border-accent group-hover:opacity-0">
-              <CheckIcon className="size-8 text-accent" />
+            <div className="size-6size-12 rounded-full flex items-center justify-center bg-accent/10 border border-accent group-hover:opacity-0">
+              <CheckIcon className="size-4 md:size-8 text-accent" />
             </div>
             <div className="opacity-0 flex group-hover:opacity-100 absolute inset-0 items-center justify-center transition-opacity ease-in-out duration-200">
               <div className="px-2.5 py-1.5 text-xs border border-primary/90 rounded-md text-foreground/85 flex gap-1 items-center justify-center">
@@ -61,7 +61,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
             key={index}
             className={cn("rounded-none group cursor-pointer hover:bg-accent/15 transition-colors duration-50 ease-in hover:border-accent/70 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none")}
           >
-
+              
             <span className={cn(
               `absolute top-0 left-0 text-foreground text-xs md:text-sm m-1 z-50`,
               isToday(day) && "text-accent",

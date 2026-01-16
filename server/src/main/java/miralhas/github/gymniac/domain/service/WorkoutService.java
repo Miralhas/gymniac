@@ -37,7 +37,7 @@ public class WorkoutService {
 
 	public PageDTO<WorkoutSummaryDTO> findAllUserWorkouts(Pageable pageable) {
 		var user = authUtils.getCurrentUser();
-		Page<Workout> workoutPage = workoutRepository.findAll(pageable);
+		Page<Workout> workoutPage = workoutRepository.findAllByUserByEmail(user.getEmail(), pageable);
 		List<WorkoutSummaryDTO> workoutDTOS = workoutMapper.toSummaryCollectionResponse(workoutPage.getContent());
 		var pageImpl = new PageImpl<>(workoutDTOS, pageable, workoutPage.getTotalElements());
 		return new PageDTO<>(pageImpl);

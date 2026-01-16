@@ -1,7 +1,6 @@
 'use client'
 
 import { loginAction, logoutAction } from "@/service/authentication/actions/login-action";
-import { userKeys } from "@/service/user/queries/query-keys";
 import { useGetAuthState } from "@/service/user/queries/use-get-current-user";
 import { AuthState, LoginResponse } from "@/types/auth";
 import { useQueryClient } from "@tanstack/react-query";
@@ -33,7 +32,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     // Sometimes the current route is protected. 
     // If there is no refresh, the unauthenticated user can still use the protected route.
     router.refresh(); 
-    await queryClient.invalidateQueries({ queryKey: userKeys.all });
+    await queryClient.invalidateQueries();
   }
 
   const login = async (data: LoginResponse, redirectUri = "/") => {
