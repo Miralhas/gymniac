@@ -6,17 +6,16 @@ import {
   isToday
 } from 'date-fns';
 import { PlusIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { useWorkoutContext } from "@/contexts/workout-context";
+import { Dispatch, SetStateAction } from "react";
 import AuthenticatedButton from "../ui/authenticated-button";
 
 type Props = {
   calendarDays: Date[];
   today: Date;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const GridDays = ({ calendarDays, today }: Props) => {
-  const { setOpen } = useWorkoutContext();
+const GridDays = ({ calendarDays, today, setOpen }: Props) => {
   return (
     <>
       {calendarDays.map((day, index) => {

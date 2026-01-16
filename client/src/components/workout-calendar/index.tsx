@@ -16,9 +16,11 @@ import {
 import { useState } from 'react';
 import CalendarHeader from './calendar-header';
 import GridDays from './grid-days';
+import WorkoutModal from './workout-modal';
 
 const WorkoutCalendar = () => {
   const today = startOfToday();
+  const [open, setOpen] = useState(false);
   const [currMonth, setCurrMonth] = useState(() => format(today, "MMM-yyyy"));
 
   const handleCurrentMonth = (offset: number) => {
@@ -74,8 +76,9 @@ const WorkoutCalendar = () => {
             <p className={cn('text-foreground text-center text-sm capitalize', today.getDay() === index && "text-accent font-semibold")}>{day}</p>
           </div>
         ))}
-        <GridDays calendarDays={all} today={today} />
+        <GridDays calendarDays={all} today={today} setOpen={setOpen} />
       </div>
+      <WorkoutModal open={open} setOpen={setOpen} />
     </>
   )
 }

@@ -7,10 +7,14 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
-import { useWorkoutContext } from "@/contexts/workout-context";
+import { Dispatch, SetStateAction } from "react";
 
-const AddWorkoutModal = () => {
-  const { open, setOpen } = useWorkoutContext();
+type Props = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const WorkoutModal = ({ open, setOpen }: Props) => {
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogContent>
@@ -20,10 +24,9 @@ const AddWorkoutModal = () => {
             Log your whole workout.
           </DialogDescription>
         </DialogHeader>
-        
       </DialogContent>
     </Dialog>
   )
 }
 
-export default AddWorkoutModal;
+export default WorkoutModal;
