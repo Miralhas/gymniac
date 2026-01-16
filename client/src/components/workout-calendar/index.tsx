@@ -20,7 +20,6 @@ import WorkoutModal from './workout-modal';
 
 const WorkoutCalendar = () => {
   const today = startOfToday();
-  const [open, setOpen] = useState(false);
   const [currMonth, setCurrMonth] = useState(() => format(today, "MMM-yyyy"));
 
   const handleCurrentMonth = (offset: number) => {
@@ -76,9 +75,8 @@ const WorkoutCalendar = () => {
             <p className={cn('text-foreground text-center text-sm capitalize', today.getDay() === index && "text-accent font-semibold")}>{day}</p>
           </div>
         ))}
-        <GridDays calendarDays={all} today={today} setOpen={setOpen} />
+        <GridDays calendarDays={all} today={today} />
       </div>
-      <WorkoutModal open={open} setOpen={setOpen} />
     </>
   )
 }

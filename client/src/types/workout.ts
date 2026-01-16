@@ -1,3 +1,5 @@
+import { UserSummary } from "./auth";
+
 export type WorkoutExercise = {
   id: number;
   exercise: Exercise;
@@ -24,4 +26,8 @@ export type Workout = {
   updatedAt: string;
   exercises: WorkoutExercise[];
   note?: string;
+}
+
+export type WorkoutSummary = Omit<Workout, "note" | "exercises"> & {
+  user: UserSummary;
 }

@@ -1,7 +1,10 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
+import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
+import miralhas.github.gymniac.api.dto.filter.ExerciseFilter;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.api.dto_mapper.WorkoutMapper;
@@ -12,10 +15,14 @@ import miralhas.github.gymniac.domain.model.workout.WorkoutExercise;
 import miralhas.github.gymniac.domain.repository.WorkoutRepository;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +34,14 @@ public class WorkoutService {
 	private final WorkoutRepository workoutRepository;
 	private final WorkoutExerciseService workoutExerciseService;
 	private final ErrorMessages errorMessages;
+
+	public PageDTO<WorkoutSummaryDTO> findAllUserWorkouts(Pageable pageable) {
+		var user = authUtils.getCurrentUser();
+		Page<Workout> workoutPage = workoutRepository.findAll(pageable);
+		List<WorkoutSummaryDTO> workoutDTOS = workoutMapper.toSummaryCollectionResponse(workoutPage.getContent());
+		var pageImpl = new PageImpl<>(workoutDTOS, pageable, workoutPage.getTotalElements());
+		return new PageDTO<>(pageImpl);
+	}
 
 	public Workout findByIdOrException(Long id) {
 		return workoutRepository.findById(id).orElseThrow(() ->

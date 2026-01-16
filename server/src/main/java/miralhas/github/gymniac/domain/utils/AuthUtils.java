@@ -19,9 +19,11 @@ public class AuthUtils {
 	}
 
 	public User getCurrentUser() {
-		return  userService.findUserByEmailOrException(
-				SecurityContextHolder.getContext().getAuthentication().getName()
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) throw new AccessDeniedException(
+				errorMessages.get("AbstractAccessDecisionManager.accessDenied")
 		);
+		return userService.findUserByEmailOrException(authentication.getName());
 	}
 
 	public void validate(User resourceOwner) {

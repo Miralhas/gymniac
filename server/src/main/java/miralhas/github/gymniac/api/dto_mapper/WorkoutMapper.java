@@ -1,12 +1,15 @@
 package miralhas.github.gymniac.api.dto_mapper;
 
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
+import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.domain.model.workout.Workout;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import java.util.List;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -24,6 +27,10 @@ public interface WorkoutMapper {
 	Workout fromInput(WorkoutInput input);
 
 	WorkoutDTO toResponse(Workout workout);
+
+	List<WorkoutSummaryDTO> toSummaryCollectionResponse(List<Workout> workouts);
+
+
 
 	void update(UpdateWorkoutInput input, @MappingTarget Workout workout);
 

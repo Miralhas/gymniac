@@ -2,11 +2,17 @@ package miralhas.github.gymniac.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
+import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.domain.service.WorkoutService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 public class WorkoutController {
 
 	private final WorkoutService workoutService;
+
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
+	public PageDTO<WorkoutSummaryDTO> getAllByUser(
+			@PageableDefault(size = 35, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable
+	) {
+		return workoutService.findAllUserWorkouts(pageable);
+	}
 
 	@GetMapping("/{id}")
 	public WorkoutDTO findById(@PathVariable Long id) {
