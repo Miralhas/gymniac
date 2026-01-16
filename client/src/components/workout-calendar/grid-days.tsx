@@ -1,4 +1,3 @@
-// import { useGlobalLoginProvider } from "@/contexts/global-login-context";
 import { cn } from "@/utils/common-utils";
 import {
   format,
@@ -8,6 +7,8 @@ import {
 } from 'date-fns';
 import { PlusIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import { useWorkoutContext } from "@/contexts/workout-context";
+import AuthenticatedButton from "../ui/authenticated-button";
 
 type Props = {
   calendarDays: Date[];
@@ -15,16 +16,16 @@ type Props = {
 }
 
 const GridDays = ({ calendarDays, today }: Props) => {
-  // const { setOpen } = useGlobalLoginProvider();
+  const { setOpen } = useWorkoutContext();
   return (
     <>
       {calendarDays.map((day, index) => {
         const isMuted = (isFuture(day) || !isSameMonth(day, today));
         return (
-          <Button
+          <AuthenticatedButton
             variant="pure"
             disabled={isFuture(day)}
-            // onClick={() => setOpen(prev => !prev)}
+            onClick={() => setOpen(prev => !prev)}
             size="none"
             key={index}
             className={cn("rounded-none group cursor-pointer hover:bg-primary/15 transition-colors duration-50 ease-in hover:border-primary/30 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none")}
@@ -42,7 +43,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
                 <span className="sr-only md:not-sr-only">Add Workout</span>
               </div>
             </div>
-          </Button>
+          </AuthenticatedButton>
         )
       })}
     </>
