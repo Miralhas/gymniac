@@ -57,9 +57,7 @@ public class User implements Serializable {
 	private Set<Role> roles;
 
 	@OneToMany(
-			mappedBy = "submitter",
-			cascade = CascadeType.ALL,
-			orphanRemoval = true
+			mappedBy = "submitter"
 	)
 	private List<Exercise> exercises = new ArrayList<>();
 
