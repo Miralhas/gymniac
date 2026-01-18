@@ -38,18 +38,20 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
+} & React.ComponentProps<typeof Button> &
   React.ComponentProps<"a">
 
 function PaginationLink({
   className,
   isActive,
+  disabled,
   size = "icon",
   ...props
 }: PaginationLinkProps) {
   return (
     <Button
       asChild
+      disabled={disabled}
       variant={isActive ? "outline" : "ghost"}
       size={size}
       className={cn(className)}
@@ -109,12 +111,13 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
+        "size-9 [&_svg:not([class*='size-'])]:size-4 flex items-center justify-center",
         className
       )}
       {...props}
     >
       <MoreHorizontalIcon
+      className="text-foreground/70"
       />
       <span className="sr-only">More pages</span>
     </span>

@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 
 const ExercisesLayout = ({ children }: PropsWithChildren) => {
   return (
-    <Container className="p-4 md:py-12 relative space-y-6">
+    <Container className="p-4 md:pt-12 relative space-y-6">
       <PageHeader
         description="Browse our library of exercises"
         icon={DumbbellIcon}

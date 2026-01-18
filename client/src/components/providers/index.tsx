@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren } from "react";
-
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { AuthProvider } from "@/contexts/auth-context";
 import { GlobalLoginProvider } from "@/contexts/global-login-context";
 import {
@@ -37,11 +37,13 @@ const Providers = ({ children }: PropsWithChildren) => {
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <GlobalLoginProvider>
-          {children}
-        </GlobalLoginProvider>
-      </AuthProvider>
+      <NuqsAdapter>
+        <AuthProvider>
+          <GlobalLoginProvider>
+            {children}
+          </GlobalLoginProvider>
+        </AuthProvider>
+      </NuqsAdapter>
     </QueryClientProvider>
   )
 }

@@ -14,7 +14,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    restart: unless-stopped
     ports:
       - "5433:5432"
     networks:
@@ -61,8 +60,10 @@ services:
       - 3005:3000
     networks:
       - gymniac-network
+    depends_on:
+      server:
+        condition: service_started
     
-
 volumes:
   jwt-keys:
   api-images:
