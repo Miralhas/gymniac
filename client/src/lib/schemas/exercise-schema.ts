@@ -3,7 +3,7 @@ import * as z from "zod";
 
 export const exerciseSchema = z.object({
   name: z.string().min(1, "Name must be at least 5 characters."),
-  description: z.string().min(1, "Description must be at least 5 characters."),
+  description: z.string().optional(),
   videoHowTo: z.url({
     protocol: /^https?$/,
     hostname: z.regexes.domain,

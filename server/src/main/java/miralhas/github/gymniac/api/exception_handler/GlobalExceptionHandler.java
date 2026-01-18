@@ -3,6 +3,7 @@ package miralhas.github.gymniac.api.exception_handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import miralhas.github.gymniac.domain.exception.BusinessException;
+import miralhas.github.gymniac.domain.exception.MappedBusinessException;
 import miralhas.github.gymniac.domain.exception.ResourceNotFoundException;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
@@ -52,20 +53,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 
-	@ExceptionHandler(UserAlreadyExistsException.class)
-	public ProblemDetail handleUserAlreadyExistsException(UserAlreadyExistsException ex, WebRequest webRequest) {
-		var errors = ex.getErrors();
-		var detail = ex.getMessage();
-		var status = HttpStatus.CONFLICT;
-		var problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
-		problemDetail.setTitle("Authentication Conflict");
-		problemDetail.setType(URI.create(getBaseUrl(webRequest)+"/errors/authentication-conflict"));
-		if (Objects.nonNull(errors)) {
-			problemDetail.setProperty("errors", errors);
-		}
-		return problemDetail;
-	}
-
 	@ExceptionHandler(PropertyReferenceException.class)
 	public ProblemDetail handlePropertyReferenceException(PropertyReferenceException ex, WebRequest webRequest) {
 		var detail = ex.getMessage();
@@ -90,6 +77,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
 		problemDetail.setTitle("Resource Not Found");
 		problemDetail.setType(URI.create(getBaseUrl(webRequest)+"/errors/resource-not-found"));
+		return problemDetail;
+	}
+
+	@ExceptionHandler(MappedBusinessException.class)
+	public ProblemDetail handleMappedBusinessException(MappedBusinessException ex, WebRequest webRequest) {
+		var errors = ex.getErrors();
+		var detail = ex.getMessage();
+		var status = HttpStatus.CONFLICT;
+		var problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
+		problemDetail.setTitle("Invalid Request");
+		problemDetail.setType(URI.create(getBaseUrl(webRequest)+"/errors/invalid-request"));
+		if (Objects.nonNull(errors)) {
+			problemDetail.setProperty("errors", errors);
+		}
 		return problemDetail;
 	}
 

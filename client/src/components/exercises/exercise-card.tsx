@@ -20,7 +20,7 @@ const ExerciseCard = ({ exercise }: Props) => {
   const thumbUrl = youtubeThumbnailExtractor(exercise.videoHowTo)
   return (
     <Link href={`/exercises/${exercise.slug}`}>
-      <Card className="p-0 border border-primary/15 backdrop-blur-3xl ring-0 pb-4 group">
+      <Card className="p-0 border border-primary/15 backdrop-blur-3xl ring-0 pb-4 group ">
         <CardHeader className="flex flex-col space-y-3 px-0">
           <div className="w-full h-[150px] md:h-[200px] relative">
             <Image
@@ -38,8 +38,10 @@ const ExerciseCard = ({ exercise }: Props) => {
             <CardTitle className="line-clamp-2">{exercise.name}</CardTitle>
             <Badge variant="cool" className="justify-self-end">{exercise.muscleGroup.name}</Badge>
           </div>
-          <CardDescription className="line-clamp-2 text-foreground/80 text-sm">{exercise.description}</CardDescription>
-          <p className="text-muted-foreground text-xs font-semibold mt-4"><span className="font-light text-[11px]">Added by:</span> {exercise.submitter.username}</p>
+          <CardDescription className="line-clamp-2 text-foreground/80 text-sm h-[64px] flex flex-col">
+            <p>{exercise.description}</p>
+            <p className="text-muted-foreground text-xs font-semibold mt-4 inline-block mt-auto"><span className="font-light text-[11px]">Added by:</span> {exercise.submitter.username}</p>
+          </CardDescription>
         </CardContent>
       </Card>
     </Link>

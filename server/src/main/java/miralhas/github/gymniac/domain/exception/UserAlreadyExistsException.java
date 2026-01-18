@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class UserAlreadyExistsException extends BusinessException {
+public class UserAlreadyExistsException extends MappedBusinessException {
 
 	private Map<String, String> errors;
 

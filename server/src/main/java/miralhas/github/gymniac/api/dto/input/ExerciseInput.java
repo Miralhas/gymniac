@@ -13,11 +13,11 @@ public record ExerciseInput(
 		@Size(max = 254)
 		String name,
 
-		@NotBlank
 		@Size(max = 254)
 		String description,
 
 		@URL
+		@NotBlank
 		String videoHowTo
 ) {
 }

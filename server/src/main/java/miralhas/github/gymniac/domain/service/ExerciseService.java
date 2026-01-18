@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +63,7 @@ public class ExerciseService {
 		exercise.setSubmitter(user);
 		exercise.setMuscleGroup(muscleGroup);
 		exercise.generateSlug();
-		validateSlug(exercise.getSlug());
+		validateSlug(exercise);
 
 		return exerciseRepository.save(exercise);
 	}
@@ -92,14 +94,17 @@ public class ExerciseService {
 	private void validateSlugChange(Exercise exercise, String currentName) {
 		if (!currentName.equalsIgnoreCase(exercise.getName())) {
 			exercise.generateSlug();
-			validateSlug(exercise.getSlug());
+			validateSlug(exercise);
 		}
 	}
 
-	private void validateSlug(String slug) {
-		var exists = exerciseRepository.checkIfSlugAlreadyExists(slug);
-		if (exists) throw new ExerciseAlreadyExistsException(
-				errorMessages.get("exercise.alreadyExists.slug", slug)
-		);
+	private void validateSlug(Exercise exercise) {
+		Map<String, String> errors = new HashMap<>();
+		var exists = exerciseRepository.checkIfSlugAlreadyExists(exercise.getSlug());
+		if (exists) {
+			var message = errorMessages.get("exercise.alreadyExists.slug", exercise.getSlug());
+			errors.put("name", errorMessages.get("exercise.alreadyExists.name", exercise.getName()));
+			throw new ExerciseAlreadyExistsException(message, errors);
+		}
 	}
 }

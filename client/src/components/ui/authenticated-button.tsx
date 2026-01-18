@@ -7,6 +7,7 @@ import { type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
 import * as React from "react";
 import { buttonVariants } from "./button";
+import { toast } from "sonner";
 
 const AuthenticatedButton = ({
   onClick,
@@ -28,6 +29,7 @@ const AuthenticatedButton = ({
     if (!isAuthenticated) {
       e.preventDefault();
       handleOpen();
+      toast.error("User must be authenticated to perform this action!");
       return;
     }
     onClick?.(e);

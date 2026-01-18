@@ -10,7 +10,7 @@ import { useGetMuscleGroups } from "@/service/muscle-group/query/use-get-muscle-
 import { EMPTY_FILTER } from "@/utils/constants";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
@@ -25,7 +25,7 @@ const defaultValues: ExerciseInput = {
   videoHowTo: ""
 }
 
-const ExerciseForm = () => {
+const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
   const muscleQuery = useGetMuscleGroups();
   const mutation = useAddExercise();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
@@ -36,11 +36,12 @@ const ExerciseForm = () => {
     validators: {
       onSubmit: exerciseSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
       mutation.mutate(value, {
         onSuccess: () => {
           toast.success("Exercises added successfully!")
           form.reset();
+          handleOpen();
         },
         onError: (error) => {
           if (error instanceof ApiError) {
@@ -170,7 +171,7 @@ const ExerciseForm = () => {
             const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid} className="gap-y-1.5">
-                <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+                <FieldLabel className="inline-flex gap-1" htmlFor={field.name}>Description <span className="text-muted-foreground text-xs mt-0.5">(Optional)</span></FieldLabel>
                 <Textarea
                   id={field.name}
                   name={field.name}
