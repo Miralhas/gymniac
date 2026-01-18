@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { useGetExercises } from "@/service/exercise/query/use-get-exercises"
+import { useGetExercises } from "@/service/exercise/queries/use-get-exercises"
 import { Exercise } from "@/types/exercise"
 import { cn } from "@/utils/common-utils"
 import { useEffect, useState } from "react"

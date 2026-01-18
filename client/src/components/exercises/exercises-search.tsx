@@ -31,7 +31,7 @@ const ExercisesSearch = () => {
   }
 
   return (
-    <div className="">
+    <div className="order-1">
       <InputGroup>
         <InputGroupInput
           value={text}

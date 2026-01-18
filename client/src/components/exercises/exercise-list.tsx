@@ -1,7 +1,7 @@
 'use client'
 
 import { exerciseParamsDefaultValues, mapMuscleFilter, nuqsExerciseParams } from "@/lib/schemas/params/exercise-params-schema";
-import { useGetExercises } from "@/service/exercise/query/use-get-exercises";
+import { useGetExercises } from "@/service/exercise/queries/use-get-exercises";
 import { DumbbellIcon } from "lucide-react";
 import { useQueryStates } from 'nuqs';
 import GenericPagination from "../generic-pagination";

@@ -20,13 +20,13 @@ const ExercisesFilter = () => {
 
   if (query.isError) return null;
 
-  const handleFilter = (v: string) => {
-    setParams({ muscle: v });
+  const handleFilter = (muscle: string) => {
+    setParams({ muscle });
   }
 
   return (
     <Select onValueChange={handleFilter} value={values.muscle === EMPTY_FILTER ? "" : values.muscle}>
-      <SelectTrigger className="w-full md:w-[180px] ml-auto ">
+      <SelectTrigger className="w-full md:w-[180px] ml-auto order-1">
         <SelectValue placeholder="Muscle Group" />
       </SelectTrigger>
       {query.isLoading ? (

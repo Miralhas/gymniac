@@ -22,13 +22,13 @@ const ExerciseCard = ({ exercise }: Props) => {
     <Link href={`/exercises/${exercise.slug}`}>
       <Card className="p-0 border border-primary/15 backdrop-blur-3xl ring-0 pb-4 group">
         <CardHeader className="flex flex-col space-y-3 px-0">
-          <div className="w-full h-[200px] relative">
+          <div className="w-full h-[150px] md:h-[200px] relative">
             <Image
               fill
               src={thumbUrl}
-              sizes="(max-width: 768px) 80vw, (max-width: 1200px) 30vw, 20vw"
+              sizes="(max-width: 768px) 60vw, (max-width: 1200px) 30vw, 20vw"
               alt="exercise video"
-              className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105 opacity-90 text-transparent object-center w-full rounded-md"
+              className="object-fill transition-transform duration-500 ease-in-out group-hover:scale-105 opacity-90 text-transparent object-center w-full rounded-md"
               loader={createWsrvLoader({ default: "https://static.devilsect.com/No-Image-Placeholder.svg" })}
             />
           </div>
