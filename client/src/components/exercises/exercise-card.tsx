@@ -29,7 +29,7 @@ const ExerciseCard = ({ exercise }: Props) => {
               sizes="(max-width: 768px) 60vw, (max-width: 1200px) 30vw, 20vw"
               alt="exercise video"
               className="object-fill transition-transform duration-500 ease-in-out group-hover:scale-105 opacity-90 text-transparent object-center w-full rounded-md"
-              loader={createWsrvLoader({ default: "https://static.devilsect.com/No-Image-Placeholder.svg" })}
+              loader={createWsrvLoader({ default: "https://static.devilsect.com/no-image.webp" })}
             />
           </div>
         </CardHeader>
