@@ -3,7 +3,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { getExericses } from "../api/get-exercises";
 import { exerciseKeys } from "./query-keys";
 
-const getExercisesQueryOptions = (params: ExerciseParams) => queryOptions({
+export const getExercisesQueryOptions = (params: ExerciseParams = {}) => queryOptions({
   queryFn: () => getExericses(params),
   queryKey: exerciseKeys.getExercises(params),
 });

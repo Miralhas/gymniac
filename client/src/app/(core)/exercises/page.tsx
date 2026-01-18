@@ -1,18 +1,16 @@
-'use client'
+import ExerciseList from "@/components/exercises/exercise-list";
+import { getExercisesQueryOptions } from "@/service/exercise/query/use-get-exercises";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-import AuthenticatedButton from "@/components/ui/authenticated-button";
-import { useState } from "react";
+const ExercisesPage = async () => {
 
-const ExercisesPage = () => {
-  const [st, setSt] = useState("Not");
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(getExercisesQueryOptions({ size: 50 }));
 
   return (
-    <>
-      <h1>{st}</h1>
-      <AuthenticatedButton variant="cool" className="w-full max-w-xl" onClick={() => setSt("asdasdasd")}>
-        Submit
-      </AuthenticatedButton>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ExerciseList />
+    </HydrationBoundary>
   )
 }
 

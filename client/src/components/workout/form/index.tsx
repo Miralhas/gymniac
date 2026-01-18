@@ -24,10 +24,11 @@ import { ApiError } from "@/service/api-error";
 import { useCreateWorkout } from "@/service/workout/mutations/use-create-workout";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import ExercisesCombobox from "../exercises-combobox";
+import { startOfToday } from "date-fns";
 
 const defaultValues: WorkoutInput = {
   exercises: [{ slug: "", sets: [{ reps: 0, kg: 0 }] }],
@@ -35,10 +36,13 @@ const defaultValues: WorkoutInput = {
 }
 
 const AddWorkoutForm = () => {
+  const searchParams = useSearchParams()
   const mutation = useCreateWorkout();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const router = useRouter();
 
+  const date = new Date(searchParams.get("date") ?? startOfToday());
+  
   const form = useForm({
     defaultValues,
     validators: { onSubmit: workoutSchema },

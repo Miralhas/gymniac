@@ -62,7 +62,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
             disabled={isFuture(day)}
             className={cn("rounded-none group cursor-pointer hover:bg-accent/15 transition-colors duration-50 ease-in hover:border-accent/70 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none")}
           >
-            <Link href="/workouts/new">
+            <Link href={`/workouts/new?date=${day.toISOString()}`}>
               <span className={cn(
                 `absolute top-0 left-0 text-foreground text-xs md:text-sm m-1 z-50`,
                 isToday(day) && "text-accent",

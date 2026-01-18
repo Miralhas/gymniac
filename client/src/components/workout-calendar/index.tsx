@@ -16,7 +16,6 @@ import {
 import { useState } from 'react';
 import CalendarHeader from './calendar-header';
 import GridDays from './grid-days';
-import WorkoutModal from './workout-modal';
 
 const WorkoutCalendar = () => {
   const today = startOfToday();

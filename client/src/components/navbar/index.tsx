@@ -4,11 +4,11 @@ import { ActivityIcon, LucideIcon, NotebookIcon } from "lucide-react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import Container from "../container";
 import AuthLinks from "./auth-links";
 import Logo from "./logo";
 import MenuButton from "./menu-button";
 import MobileMenu from "./mobile-menu";
-import Container from "../container";
 
 export type NavLink = {
   title: string;
@@ -18,7 +18,7 @@ export type NavLink = {
 
 export const LEFT_SIDE_NAV_LINKS: NavLink[] = [
   { title: "Workout Plans", href: "/workout-plans", icon: NotebookIcon },
-  { title: "Exercises", href: "/ranking", icon: ActivityIcon },
+  { title: "Exercises", href: "/exercises", icon: ActivityIcon },
 ]
 
 const Navbar = () => {
