@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Select,
   SelectContent,
@@ -12,7 +14,7 @@ import { EMPTY_FILTER } from "@/utils/constants";
 import { DumbbellIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
-const ExerciseFilter = () => {
+const ExercisesFilter = () => {
   const [values, setParams] = useQueryStates(nuqsExerciseParams);
   const query = useGetMuscleGroups();
 
@@ -23,8 +25,8 @@ const ExerciseFilter = () => {
   }
 
   return (
-    <Select onValueChange={handleFilter} value={values.muscle}>
-      <SelectTrigger className="w-full md:w-[180px] ml-auto h-5!">
+    <Select onValueChange={handleFilter} value={values.muscle === EMPTY_FILTER ? "" : values.muscle}>
+      <SelectTrigger className="w-full md:w-[180px] ml-auto ">
         <SelectValue placeholder="Muscle Group" />
       </SelectTrigger>
       {query.isLoading ? (
@@ -47,4 +49,4 @@ const ExerciseFilter = () => {
   )
 }
 
-export default ExerciseFilter;
+export default ExercisesFilter;

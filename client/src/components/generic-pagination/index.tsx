@@ -88,7 +88,7 @@ const GenericPagination = <T,>({ query, className, handlePage }: Props<T>) => {
             <DisabledLink
               key={index}
               href={appendPage(page)}
-              className={cn("size-9 items-center justify-center inline-flex rounded-md border border-zinc-50/15 bg-secondary/50 text-foreground/85", isCurrentPage && "text-foreground border border-accent/70 bg-accent/20")}
+              className={cn("size-9 items-center justify-center inline-flex rounded-md border border-zinc-50/15 bg-secondary/50 text-foreground/85", isCurrentPage && "border border-accent/70 bg-accent/20 text-accent")}
               onClick={(e) => onPageChange(e, page)}
             >
               {page + 1}
