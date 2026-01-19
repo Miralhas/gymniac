@@ -38,14 +38,14 @@ const WorkoutDetail = ({ id }: { id: number }) => {
 
   return (
     query.data && (
-      <section className="space-y-4">
+      <section className="space-y-4 pb-24">
         <PageHeader description={format(new Date(query.data.createdAt), "EEEE, MMMM dd, yyyy")} icon={DumbbellIcon} title="Workout Day" />
         <div className="w-full flex gap-3">
           <InfoCard bold={totalExercises?.toString()} description="Exercises" />
           <InfoCard bold={totalSets?.toString()} description="Total Sets" />
         </div>
         {query.data.note ? (
-          <div className="border p-4 my-6 text-foreground/80 rounded-xl bg-secondary/25npm border-l-primary border-l-3 italic">
+          <div className="border p-4 my-6 text-foreground/80 rounded-xl border-l-primary border-l-3 italic">
             <p>{query.data.note}</p>
           </div>
         ) : null}

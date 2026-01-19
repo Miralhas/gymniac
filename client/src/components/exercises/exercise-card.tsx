@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Exercise } from "@/types/exercise";
 import { youtubeThumbnailExtractor } from "@/utils/common-utils";
 import Image from "next/image";
@@ -14,10 +15,18 @@ import { createWsrvLoader } from "../wsrv-loader";
 
 type Props = {
   exercise: Exercise;
+  index: number;
 }
 
-const ExerciseCard = ({ exercise }: Props) => {
-  const thumbUrl = youtubeThumbnailExtractor(exercise.videoHowTo)
+const ExerciseCard = ({ exercise, index }: Props) => {
+  const thumbUrl = youtubeThumbnailExtractor(exercise.videoHowTo);
+  const isMobile = useIsMobile();
+
+  // Nested ternary is dogshit but it works.
+  // Is Mobile? then eager fetch the first exercise image.
+  // Is Desktop? then eager fetch the first 6 exercises images.
+  const loadingState = isMobile ? index < 1 ? "eager" : "lazy" : index < 6 ? "eager" : "lazy";
+  
   return (
     <Link href={`/exercises/${exercise.slug}`}>
       <Card className="p-0 border border-primary/15 backdrop-blur-3xl ring-0 pb-4 group ">
@@ -25,6 +34,7 @@ const ExerciseCard = ({ exercise }: Props) => {
           <div className="w-full h-[150px] md:h-[200px] relative">
             <Image
               fill
+              loading={loadingState}
               src={thumbUrl}
               sizes="(max-width: 768px) 60vw, (max-width: 1200px) 30vw, 20vw"
               alt="exercise video"
@@ -40,7 +50,7 @@ const ExerciseCard = ({ exercise }: Props) => {
           </div>
           <CardDescription className="line-clamp-2 text-foreground/80 text-sm h-[64px] flex flex-col">
             <p>{exercise.description}</p>
-            <p className="text-muted-foreground text-xs font-semibold mt-4 inline-block mt-auto"><span className="font-light text-[11px]">Added by:</span> {exercise.submitter.username}</p>
+            <p className="text-muted-foreground text-xs font-semibold inline-block mt-auto"><span className="font-light text-[11px]">Added by:</span> {exercise.submitter.username}</p>
           </CardDescription>
         </CardContent>
       </Card>

@@ -6,7 +6,7 @@ import { Exercise } from "@/types/exercise";
 import { PaginatedQuery } from "@/types/paginated-query";
 import { buildQueryString } from "@/utils/string-utils";
 
-export const getExericses = async (params: ExerciseParams): Promise<PaginatedQuery<Exercise[]>> => {
+export const getExercises = async (params: ExerciseParams): Promise<PaginatedQuery<Exercise[]>> => {
   const parsed = exerciseParamsSchema.parse(params);
   const queryString = buildQueryString(parsed);
 
