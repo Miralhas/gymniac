@@ -1,4 +1,4 @@
 export const workoutPlanKeys = {
   all: ["workout-plan"],
-  getWorkoutPlanById: (id: number) => [...workoutPlanKeys.all, "detail", id],
+  getWorkoutPlanBySlug: (slug: string) => [...workoutPlanKeys.all, "detail", slug],
 }

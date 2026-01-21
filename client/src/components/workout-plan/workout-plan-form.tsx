@@ -35,8 +35,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import ExercisesCombobox from "../workout/exercises-combobox";
-
-const DAYS_OF_WEEK = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+import { DAYS_OF_WEEK } from "@/utils/date-utils";
 
 // const defaultValues: WorkoutPlanInput = {
 //   description: "",

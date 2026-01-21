@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/utils/common-utils';
-import { DAYS_OF_WEEK } from '@/utils/date-utils';
+import { DAYS_OF_WEEK_ABBREV } from '@/utils/date-utils';
 import {
   addMonths,
   eachDayOfInterval,
@@ -69,7 +69,7 @@ const WorkoutCalendar = () => {
         today={today}
       />
       <div className="grid grid-cols-7 grid-rows-[min-content_max-content] relative z-20 overflow-hidden">
-        {DAYS_OF_WEEK.map((day, index) => (
+        {DAYS_OF_WEEK_ABBREV.map((day, index) => (
           <div key={day} className='col-span-1 border border-zinc-50/10 p-1.25'>
             <p className={cn('text-foreground text-center text-sm capitalize', today.getDay() === index && "text-accent font-semibold")}>{day}</p>
           </div>

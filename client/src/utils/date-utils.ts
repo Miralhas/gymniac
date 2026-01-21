@@ -1,7 +1,8 @@
 import { format, formatDistanceToNowStrict } from "date-fns";
 import { enUS, ptBR } from 'date-fns/locale';
 
-export const DAYS_OF_WEEK = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+export const DAYS_OF_WEEK_ABBREV = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+export const DAYS_OF_WEEK = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 
 // Example: 11 days ago
 export const formatDate = (date: string) => formatDistanceToNowStrict(new Date(date).toString(), { locale: enUS, addSuffix: true });
