@@ -1,11 +1,11 @@
 import { inferParserType, parseAsIndex, parseAsString } from 'nuqs/server';
 
-import { EMPTY_FILTER } from '@/utils/constants';
+import { EMPTY_DEFAULT_SELECT } from '@/utils/constants';
 import * as z from "zod";
 import { zodPagination } from "../pagination-schema";
 
 export const mapMuscleFilter = (muscle: string) => {
-  if (muscle === EMPTY_FILTER) return undefined;
+  if (muscle === EMPTY_DEFAULT_SELECT) return undefined;
   return muscle;
 }
 
@@ -18,7 +18,7 @@ export const exerciseParamsSchema = z.object({
 export const nuqsExerciseParams = {
   q: parseAsString.withDefault("").withOptions({ clearOnDefault: true, }),
   page: parseAsIndex.withDefault(0).withOptions({ clearOnDefault: true, history: "push", scroll: true }),
-  muscle: parseAsString.withDefault(EMPTY_FILTER).withOptions({ clearOnDefault: true, })
+  muscle: parseAsString.withDefault(EMPTY_DEFAULT_SELECT).withOptions({ clearOnDefault: true, })
 }
 
 export type ExerciseParams = z.infer<typeof exerciseParamsSchema>;
