@@ -1,12 +1,15 @@
+import PageHeader from "@/components/page-header";
 import AddWorkoutForm from "@/components/workout/form";
+import { DumbbellIcon } from "lucide-react";
 
 const NewWorkoutPage = () => {
   return (
     <section className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold">Add Workout</h1>
-        <p className="text-primary">Log your exercises, sets, and reps</p>
-      </div>
+      <PageHeader
+        title="Add Workout"
+        description="Log your exercises, sets, and reps"
+        icon={DumbbellIcon}
+      />
       <AddWorkoutForm />
     </section>
   )

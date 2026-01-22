@@ -2,6 +2,7 @@
 
 import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,18 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
-import { is404 } from "@/utils/common-utils";
-import { capitalize } from "@/utils/string-utils";
-import { ArrowLeft, CalendarIcon, DumbbellIcon, ScrollText, TargetIcon } from "lucide-react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { DAYS_OF_WEEK } from "@/utils/date-utils";
+} from "@/components/ui/tooltip";
+import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
+import { is404 } from "@/utils/common-utils";
+import { capitalize } from "@/utils/string-utils";
+import { ArrowLeft, CalendarIcon, DumbbellIcon, FileDownIcon, ScrollText, TargetIcon } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { PropsWithChildren } from "react";
 
 const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
   const query = useGetWorkoutPlanBySlug(slug);
@@ -62,17 +63,24 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
         className="items-start"
       />
       <div className="flex gap-3">
-        <div className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
+        <LittleCard>
           <CalendarIcon className="size-4 mr-2 text-accent" /> {totalDays} days per week
-        </div>
-        <div className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
+        </LittleCard>
+        <LittleCard>
           <DumbbellIcon className="size-4 mr-2 text-accent" /> {totalExercises} exercises
-        </div>
-        <div className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
-          <TargetIcon className="size-4 mr-2 text-accent" /> {totalDays} total sets
-        </div>
+        </LittleCard>
+        <LittleCard>
+          <TargetIcon className="size-4 mr-2 text-accent" /> {totalSets} total sets
+        </LittleCard>
+        <Button
+          variant="pure"
+          size="none"
+          className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white ml-auto transition-all ease-in-out duration-200 hover:-translate-y-0.75 hover:translate-x-0.75 hover:text-accent"
+        >
+          <FileDownIcon className="size-4 mr-2 text-accent" /> Export to PDF
+        </Button>
       </div>
-      <section className="space-y-4 mt-6">
+      <section className="space-y-4 mt-12">
 
         <div className="grid md:grid-cols-3 gap-3">
           {query.data.routines.map(routine => (
@@ -80,14 +88,13 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
               <CardHeader className="text-center space-y-0.5">
                 <p className="text-accent/90 text-sm text-[13px] font-semibold">{capitalize(routine.desirableDayOfWeek)}</p>
                 <CardTitle>{routine.name}</CardTitle>
-                {/* <CardDescription>{routine.note}</CardDescription> */}
               </CardHeader>
-              <CardContent className="">
+              <CardContent>
                 <Table>
                   <TableCaption>{capitalize(routine.desirableDayOfWeek)} Exercises</TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="">Exercises</TableHead>
+                      <TableHead>Exercises</TableHead>
                       <TableHead className="text-right pe-3">
                         <Tooltip delayDuration={400}>
                           <TooltipTrigger>SxR</TooltipTrigger>
@@ -99,7 +106,7 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {routine.exercises.map((exercise, index) => (
+                    {routine.exercises.map((exercise) => (
                       <TableRow key={exercise.id}>
                         <TableCell className="font-medium text-sm text-foreground/80 hover:text-foreground/90">
                           <Link href={`/exercises/${exercise.exercise.slug}`}>{exercise.exercise.name}</Link>
@@ -117,6 +124,14 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
         </div>
       </section>
     </>
+  )
+}
+
+const LittleCard = ({ children }: PropsWithChildren) => {
+  return (
+    <div className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
+      {children}
+    </div>
   )
 }
 
