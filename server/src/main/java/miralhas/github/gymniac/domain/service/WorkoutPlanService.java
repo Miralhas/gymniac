@@ -7,6 +7,7 @@ import miralhas.github.gymniac.api.dto.WorkoutPlanSummaryDTO;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutPlanInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutPlanInput;
 import miralhas.github.gymniac.api.dto_mapper.WorkoutPlanMapper;
+import miralhas.github.gymniac.domain.exception.ExerciseAlreadyExistsException;
 import miralhas.github.gymniac.domain.exception.MuscleGroupAlreadyExistsException;
 import miralhas.github.gymniac.domain.exception.WorkoutPlanNotFoundException;
 import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +68,7 @@ public class WorkoutPlanService {
 		var workoutPlan = workoutPlanMapper.fromInput(input);
 		workoutPlan.setUser(user);
 		workoutPlan.generateSlug();
-		validateSlug(workoutPlan.getSlug());
+		validateSlug(workoutPlan);
 
 		workoutPlan = workoutPlanRepository.save(workoutPlan);
 		var routines = routineService.saveBulk(workoutPlan, input.routines());
@@ -101,15 +104,18 @@ public class WorkoutPlanService {
 	private void validateSlugChange(WorkoutPlan workoutPlan, String currentName) {
 		if (!currentName.equalsIgnoreCase(workoutPlan.getName())) {
 			workoutPlan.generateSlug();
-			validateSlug(workoutPlan.getSlug());
+			validateSlug(workoutPlan);
 		}
 	}
 
-	private void validateSlug(String slug) {
-		var exists = workoutPlanRepository.checkIfSlugAlreadyExists(slug);
-		if (exists) throw new MuscleGroupAlreadyExistsException(
-				errorMessages.get("workoutPlan.alreadyExists.slug", slug)
-		);
+	private void validateSlug(WorkoutPlan workoutPlan) {
+		Map<String, String> errors = new HashMap<>();
+		var exists = workoutPlanRepository.checkIfSlugAlreadyExists(workoutPlan.getSlug());
+		if (exists) {
+			var message = errorMessages.get("workoutPlan.alreadyExists.slug", workoutPlan.getSlug());
+			errors.put("name", errorMessages.get("workoutPlan.alreadyExists.name", workoutPlan.getName()));
+			throw new ExerciseAlreadyExistsException(message, errors);
+		}
 	}
 
 }
