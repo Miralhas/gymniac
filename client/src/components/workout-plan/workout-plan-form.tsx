@@ -28,14 +28,15 @@ import { WorkoutPlanInput, workoutPlanSchema } from "@/lib/schemas/workout-plan-
 import { ApiError } from "@/service/api-error";
 import { useCreateWorkoutPlan } from "@/service/workout-plan/mutations/use-create-workout-plan";
 import { EMPTY_DEFAULT_SELECT } from "@/utils/constants";
+import { DAYS_OF_WEEK } from "@/utils/date-utils";
 import { capitalize } from "@/utils/string-utils";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import ExercisesCombobox from "../workout/exercises-combobox";
-import { DAYS_OF_WEEK } from "@/utils/date-utils";
 
 // const defaultValues: WorkoutPlanInput = {
 //   description: "",
@@ -134,37 +135,51 @@ const defaultValues: WorkoutPlanInput = {
   ]
 }
 
+const invalidFocus = () => {
+  const InvalidInput = document.querySelector(
+    '[aria-invalid="true"]',
+  ) as HTMLInputElement
+
+  InvalidInput?.focus();
+}
+
 const WorkoutPlanForm = () => {
   const mutation = useCreateWorkoutPlan();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
+  const router = useRouter();
 
   const form = useForm({
     defaultValues,
     validators: {
       onSubmit: workoutPlanSchema,
     },
+    onSubmitInvalid: () => invalidFocus(),
     onSubmit: async ({ value, formApi }) => {
       mutation.mutate(value, {
-        onSuccess: () => {
+        onSuccess: (w) => {
           toast.success("Workout Plan created successfully!")
           form.reset();
+          router.push(`/workout-plans/${w.slug}`);
         },
         onError: (error) => {
           if (error instanceof ApiError) {
-            console.log();
             setErrorDetail(error.detail);
             if (error.errors) {
               Object.entries(error.errors).map(([key, value]) => {
                 // @ts-expect-error typescript can't map the type of the errors provided by the API.
                 formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
-              })
+              });
             }
+
+            // server-side focus
+            requestAnimationFrame(() => {
+              invalidFocus();
+            })
           } else {
             setErrorDetail(error.message);
           }
         }
       });
-
     },
   });
 
@@ -192,8 +207,7 @@ const WorkoutPlanForm = () => {
               name="name"
             >
               {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
+                const isInvalid = !field.state.meta.isValid
                 return (
                   <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -482,10 +496,10 @@ const WorkoutPlanForm = () => {
       >
         {([isPristine]) => (
           <Field orientation="horizontal" className="w-full grid md:grid-cols-2 gap-2">
-            <Button disabled={isPristine} type="submit" variant="cool" form="workout-plan-form">
+            <Button type="submit" variant="cool" form="workout-plan-form">
               Submit
             </Button>
-            <Button disabled={isPristine} type="button" variant="secondary" onClick={() => form.reset()}>
+            <Button type="button" variant="secondary" onClick={() => form.reset()}>
               Reset
             </Button>
           </Field>

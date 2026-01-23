@@ -3,10 +3,10 @@ import { WorkoutPlanInput } from "@/lib/schemas/workout-plan-schema";
 import { ApiError } from "@/service/api-error";
 import { getAuthState } from "@/service/user/api/get-auth-state";
 import { ApiResponseError } from "@/types/api";
-import { Workout } from "@/types/workout";
+import { WorkoutPlan } from "@/types/workout-plan";
 import { INVALID_SESSION_MESSAGE } from "@/utils/constants";
 
-export const createWorkoutPlan = async (data: WorkoutPlanInput): Promise<Workout> => {
+export const createWorkoutPlan = async (data: WorkoutPlanInput): Promise<WorkoutPlan> => {
   const url = `${env.NEXT_PUBLIC_BASE_URL}/workout-plans`;
 
   const authState = await getAuthState();
