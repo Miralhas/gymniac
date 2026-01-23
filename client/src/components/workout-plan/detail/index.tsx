@@ -26,7 +26,7 @@ import {
 import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
 import { is404 } from "@/utils/common-utils";
 import { capitalize } from "@/utils/string-utils";
-import { ArrowLeft, CalendarIcon, DumbbellIcon, FileDownIcon, ScrollText, TargetIcon } from "lucide-react";
+import { ArrowLeft, CalendarIcon, DumbbellIcon, FileDownIcon, LayersIcon, ScrollText } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
@@ -70,7 +70,7 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
           <DumbbellIcon className="size-4 mr-2 text-accent" /> {totalExercises} exercises
         </LittleCard>
         <LittleCard>
-          <TargetIcon className="size-4 mr-2 text-accent" /> {totalSets} total sets
+          <LayersIcon className="size-4 mr-2 text-accent" /> {totalSets} total sets
         </LittleCard>
         <Button
           variant="pure"

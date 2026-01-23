@@ -1,3 +1,4 @@
+import { parseAsIndex, parseAsInteger } from "nuqs/server";
 import * as z from "zod";
 
 export const zodPagination = {
@@ -9,4 +10,9 @@ export const PaginationSchema = z.object({
   ...zodPagination
 })
 
-export type PaginationSchemaParams = z.infer<typeof PaginationSchema>;
+export const nuqsPaginationParams = {
+  page: parseAsIndex.withDefault(0).withOptions({ clearOnDefault: true, history: "push", scroll: true }),
+  size: parseAsInteger.withDefault(12).withOptions({ clearOnDefault: true })
+}
+
+export type PaginationParams = z.infer<typeof PaginationSchema>;
