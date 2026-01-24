@@ -9,10 +9,11 @@ export type User = {
   id: number;
   username: string;
   email: string;
+  profilePicture: string;
   roles: string[];
 }
 
-export type UserSummary = Omit<User, "roles">
+export type UserSummary = Omit<User, "roles">;
 
 export type LoginResponse = {
   refreshToken: string;
