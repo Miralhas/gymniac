@@ -46,6 +46,9 @@ public class User implements Serializable {
 	@CreationTimestamp
 	private OffsetDateTime createdAt;
 
+	@Column(nullable = true)
+	private String profilePicture;
+
 	@ManyToMany(
 			fetch = FetchType.LAZY,
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}

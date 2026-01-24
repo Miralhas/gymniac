@@ -8,6 +8,7 @@ public record UserDTO(
 		Long id,
 		String username,
 		String email,
+		String profilePicture,
 		List<String> roles
 ) implements Serializable {
 	@Serial

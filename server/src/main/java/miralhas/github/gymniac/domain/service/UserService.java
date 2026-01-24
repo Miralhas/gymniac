@@ -1,11 +1,14 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.UserDTO;
+import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto.input.UpdateUserInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.repository.UserRepository;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +30,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserMapper userMapper;
 	private final RoleService roleService;
+	private final AuthUtils authUtils;
 
 	public User findUserByIdOrException(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> {
@@ -89,5 +93,12 @@ public class UserService {
 			var message = errorMessages.get("user.alreadyExists");
 			throw new UserAlreadyExistsException(message, errors);
 		}
+	}
+
+	@Transactional
+	public UserDTO changeProfilePicture(ProfilePictureInput input) {
+		var user = authUtils.getCurrentUser();
+		user.setProfilePicture(input.profilePicture());
+		return userMapper.toResponse(userRepository.save(user));
 	}
 }
