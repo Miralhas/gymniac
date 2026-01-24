@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { nuqsExerciseParams } from "@/lib/schemas/params/exercise-params-schema";
 import { useGetMuscleGroups } from "@/service/muscle-group/query/use-get-muscle-groups";
-import { EMPTY_FILTER } from "@/utils/constants";
+import { EMPTY_DEFAULT_SELECT } from "@/utils/constants";
 import { DumbbellIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
 
@@ -25,7 +25,7 @@ const ExercisesFilter = () => {
   }
 
   return (
-    <Select onValueChange={handleFilter} value={values.muscle === EMPTY_FILTER ? "" : values.muscle}>
+    <Select onValueChange={handleFilter} value={values.muscle === EMPTY_DEFAULT_SELECT ? "" : values.muscle}>
       <SelectTrigger className="w-full md:w-[180px] ml-auto order-1">
         <SelectValue placeholder="Muscle Group" />
       </SelectTrigger>
@@ -38,7 +38,7 @@ const ExercisesFilter = () => {
         </SelectContent>
       ) : (
         <SelectContent className="h-[300px]" position="popper">
-          <SelectItem value={EMPTY_FILTER}>None</SelectItem>
+          <SelectItem value={EMPTY_DEFAULT_SELECT}>None</SelectItem>
           <SelectSeparator />
           {query.data?.map(m => (
             <SelectItem key={m.id} value={m.slug}>{m.name}</SelectItem>

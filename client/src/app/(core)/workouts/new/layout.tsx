@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 
 const AddWorkoutLayout = ({children}: PropsWithChildren) => {
   return (
-    <Container className="max-w-[840px]">
+    <Container className="max-w-[1024px]">
       {children}
     </Container>
   )

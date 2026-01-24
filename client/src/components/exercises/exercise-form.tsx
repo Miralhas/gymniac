@@ -7,7 +7,7 @@ import { ExerciseInput, exerciseSchema } from "@/lib/schemas/exercise-schema";
 import { ApiError } from "@/service/api-error";
 import { useAddExercise } from "@/service/exercise/mutations/use-add-exercise";
 import { useGetMuscleGroups } from "@/service/muscle-group/query/use-get-muscle-groups";
-import { EMPTY_FILTER } from "@/utils/constants";
+import { EMPTY_DEFAULT_SELECT } from "@/utils/constants";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
@@ -20,7 +20,7 @@ import { Textarea } from "../ui/textarea";
 
 const defaultValues: ExerciseInput = {
   description: "",
-  muscleGroup: EMPTY_FILTER,
+  muscleGroup: EMPTY_DEFAULT_SELECT,
   name: "",
   videoHowTo: ""
 }
@@ -29,7 +29,6 @@ const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
   const muscleQuery = useGetMuscleGroups();
   const mutation = useAddExercise();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
-  // const detailRef = useRef<HTMLDivElement>(null);
 
   const form = useForm({
     defaultValues,
@@ -114,7 +113,7 @@ const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
                 <FieldLabel htmlFor={field.name}>Muscle Group</FieldLabel>
                 <Select
                   name={field.name}
-                  value={field.state.value === EMPTY_FILTER ? "" : field.state.value}
+                  value={field.state.value === EMPTY_DEFAULT_SELECT ? "" : field.state.value}
                   onValueChange={field.handleChange}
                 >
                   <SelectTrigger
@@ -125,7 +124,7 @@ const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
                     <SelectValue placeholder="Muscle Group" />
                   </SelectTrigger>
                   <SelectContent className="h-[300px]" position="popper">
-                    <SelectItem value={EMPTY_FILTER}>None</SelectItem>
+                    <SelectItem value={EMPTY_DEFAULT_SELECT}>None</SelectItem>
                     {muscleQuery.data?.map(m => (
                       <SelectItem key={m.id} value={m.slug}>{m.name}</SelectItem>
 

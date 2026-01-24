@@ -7,11 +7,12 @@ type Props = {
   description: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  className?: string;
 }
 
 const PageHeader = (props: Props) => {
   return (
-    <div className="border border-zinc-50/10 bg-secondary/10 p-7 rounded-lg flex gap-3 items-center relative">
+    <div className={cn("border border-zinc-50/10 bg-secondary/10 p-7 rounded-lg flex gap-3 items-center relative", props.className)}>
       <div className="p-3.75 bg-primary/30 border border-primary rounded-lg">
         <props.icon className="size-9 text-accent shrink-0" strokeWidth={2.5} />
       </div>

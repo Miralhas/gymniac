@@ -42,7 +42,7 @@ const AddWorkoutForm = () => {
   const router = useRouter();
 
   const date = new Date(searchParams.get("date") ?? startOfToday());
-  
+
   const form = useForm({
     defaultValues,
     validators: { onSubmit: workoutSchema },
