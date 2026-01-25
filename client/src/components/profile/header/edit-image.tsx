@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createWsrvLoader } from "@/components/wsrv-loader";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useUpdateProfilePicture } from "@/service/user/mutations/use-update-profile-picture";
 import { User } from "@/types/auth";
 import { PencilIcon } from "lucide-react";
@@ -20,6 +21,14 @@ import Image from "next/image";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from "@/components/ui/drawer";
+import UpdateImageForm from "./update-image-form";
 
 const schema = z.object({
   profilePicture: z.url("Must be a valid URL")
@@ -38,6 +47,7 @@ const EditImage = ({ user, imgURL }: { user: User; imgURL: string }) => {
   const [pfp, setPfp] = useState<string>(() => user.profilePicture ?? "");
   const [inputError, setInputError] = useState("");
   const mutation = useUpdateProfilePicture();
+  const isMobile = useIsMobile();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,6 +64,49 @@ const EditImage = ({ user, imgURL }: { user: User; imgURL: string }) => {
       },
       onError: () => toast.error("Failed to update profile picture.")
     });
+  }
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <div className="size-32 md:size-36 rounded-full relative cursor-pointer group">
+            <Image
+              src={imgURL}
+              loading="eager"
+              id="edit-image"
+              width={144}
+              height={144}
+              priority
+              quality={40}
+              sizes="(max-width: 768px) 60vw, (max-width: 1200px) 30vw, 20vw"
+              alt="User profile picture"
+              loader={createWsrvLoader({ default: `https://static.devilsect.com/yin-yang.png` })}
+              className="rounded-full size-32 md:size-36 overflow-hidden object-cover object-center shadow-2xl ring-2 ring-secondary opacity-80 z-20 text-transparent user-profile-header-image"
+            />
+            <div
+              className="absolute inset-0 z-50 transition-opacity duration-300 opacity-0 group-hover:opacity-100 bg-black/70 cursor-pointer rounded-full grid place-items-center"
+            >
+              <PencilIcon className="size-7 text-accent" />
+            </div>
+            <div
+              className="absolute flex items-center gap-1 p-1 px-2 bottom-0 right-0 z-50 transition-opacity duration-200 group-hover:opacity-0 bg-secondary cursor-pointer border border-white/20 rounded-md"
+            >
+              <PencilIcon className="size-4" />
+              <p className="tracking-wide text-xs font-semibold">Edit</p>
+            </div>
+          </div>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Profile Picture</DrawerTitle>
+          </DrawerHeader>
+          <div className="p-6">
+            <UpdateImageForm imgURL={imgURL} setOpen={setOpen} user={user} />
+          </div>
+        </DrawerContent>
+      </Drawer>
+    )
   }
 
   return (
@@ -93,31 +146,7 @@ const EditImage = ({ user, imgURL }: { user: User; imgURL: string }) => {
             Update your profile picture.
           </DialogDescription>
         </DialogHeader>
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          <div className="space-y-1">
-            <Label htmlFor="pfp" className="text-foreground/80 mb-2">
-              Profile Picture URL
-            </Label>
-            <Input
-              id="pfp"
-              name="pfp"
-              placeholder="https://github.com/miralhas.png"
-              className="placeholder:text-xs placeholder:text-foreground/40"
-              value={pfp}
-              aria-invalid={!!inputError}
-              onChange={(e) => setPfp(e.currentTarget.value)}
-            />
-            {inputError && (
-              <p className="text-sm tracking-tight font-medium text-destructive">{inputError}</p>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="cool" disabled={!pfp || user.profilePicture === pfp}>Submit</Button>
-            <DialogClose asChild onClick={() => setInputError("")}>
-              <Button variant="secondary">Cancel</Button>
-            </DialogClose>
-          </div>
-        </form>
+        <UpdateImageForm imgURL={imgURL} setOpen={setOpen} user={user} />
       </DialogContent>
     </Dialog>
   )
