@@ -97,10 +97,10 @@ public class User implements Serializable {
 		return roles.stream().anyMatch(r -> r.getName().equals(Role.Value.ADMIN));
 	}
 
-//	@JsonIgnore
-//	public boolean hasImage() {
-//		return this.image != null;
-//	}
+	@JsonIgnore
+	public boolean hasImage() {
+		return this.profilePicture != null;
+	}
 
 //	public String getImageFileName() {
 //		if (hasImage()) return this.image.getFileName();

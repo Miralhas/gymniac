@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
   images: {
     remotePatterns: [
+      new URL(`https://wsrv.nl/**`),
       new URL(`${env.NEXT_PUBLIC_BASE_URL}/**`),
       {
         protocol: "https",

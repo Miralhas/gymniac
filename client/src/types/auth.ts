@@ -9,8 +9,8 @@ export type User = {
   id: number;
   username: string;
   email: string;
-  profilePicture: string;
-  roles: string[];
+  profilePicture: string | null;
+  roles: Role[];
 }
 
 export type UserSummary = Omit<User, "roles">;

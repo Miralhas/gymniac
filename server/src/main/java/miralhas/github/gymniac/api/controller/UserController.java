@@ -7,10 +7,14 @@ import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,5 +36,14 @@ public class UserController  {
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO changeProfilePicture(@RequestBody @Valid ProfilePictureInput input) {
 		return userService.changeProfilePicture(input);
+	}
+
+	@GetMapping("/{id}/pfp")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Void> getUserProfilePicture(@PathVariable Long id) {
+		String pfp = userService.getUserProfilePicture(id);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(URI.create(pfp));
+		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 }

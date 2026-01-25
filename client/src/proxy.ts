@@ -13,7 +13,8 @@ const adminRoutes = [
 ];
 
 const protectedDynamicRoutes = [
-  "/workouts"
+  "/workouts",
+  "/profile"
 ]
 
 export default async function proxy(req: NextRequest) {

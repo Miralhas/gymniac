@@ -5,6 +5,7 @@ import miralhas.github.gymniac.api.dto.UserDTO;
 import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto.input.UpdateUserInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
+import miralhas.github.gymniac.domain.exception.ImageNotFoundException;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.repository.UserRepository;
@@ -15,10 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +42,14 @@ public class UserService {
 			var message = errorMessages.get("user.email.notFound", email);
 			return new UsernameNotFoundException(message);
 		});
+	}
+
+	public String getUserProfilePicture(Long id) {
+		var user = findUserByIdOrException(id);
+		if (!user.hasImage()) throw new ImageNotFoundException(
+				errorMessages.get("user.profilePicture.notFound", user.getEmail())
+		);
+		return user.getProfilePicture();
 	}
 
 	@Transactional

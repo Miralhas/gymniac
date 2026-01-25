@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 import { useState } from "react";
 import AddExerciseForm from "../exercise-form/add-exercise-form";
 import EditMode from "./edit-mode";
-import ExerciseCard from "./exercise-card";
+import ExerciseCard from "./exercise-table";
 
 const WorkoutDetail = ({ id }: { id: number }) => {
   const query = useGetWorkoutByID(id);
