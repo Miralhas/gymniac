@@ -11,3 +11,5 @@ export const getWorkoutPlansQueryOptions = (params: PaginationParams = {}) => qu
 export const useGetWorkoutPlans = (params: PaginationParams = {}) => (
   useQuery(getWorkoutPlansQueryOptions(params))
 );
+
+export const defaultWorkoutPlansParams: PaginationParams = {page: 0, size: 12}
