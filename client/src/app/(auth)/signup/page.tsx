@@ -1,4 +1,9 @@
 import SignupForm from "@/components/authentication/signup/signup-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up"
+};
 
 const SignupPage = () => {
   return (

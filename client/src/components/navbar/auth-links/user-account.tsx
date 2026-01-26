@@ -10,10 +10,10 @@ import {
 import Link from "next/link";
 
 import { createWsrvLoader } from "@/components/wsrv-loader";
+import { env } from "@/env";
 import { User } from "@/types/auth";
 import { LogOutIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
-import { env } from "@/env";
 
 type Props = {
   user: User;

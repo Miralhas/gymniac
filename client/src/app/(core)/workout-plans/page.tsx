@@ -5,7 +5,12 @@ import WorkoutPlanList from "@/components/workout-plan/list";
 import { getWorkoutPlansQueryOptions } from "@/service/workout-plan/queries/use-get-workout-plans";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { PlusIcon, ScrollTextIcon } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Workout Plans"
+};
 
 const WorkoutPlansPage = async () => {
   const queryClient = new QueryClient();

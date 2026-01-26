@@ -11,13 +11,13 @@ import { env } from "@/env";
 
 const ProfileHeader = async () => {
   const user = await getCurrentUser();
-  
+
   if (!user) redirect("/login");
 
   const imgURL = `${env.NEXT_PUBLIC_BASE_URL}/users/${user.id}/pfp#${new Date().getTime().toString()}`;
 
   return (
-    <section className="w-full grid grid-rows-[max-content_max-content_min-content] md:grid-rows-[max-content_max-content] grid-cols-1 md:grid-cols-[min-content_1fr] bg-card/50 backdrop-blur-xl gap-y-4 md:gap-x-6 p-6 pb-0  rounded-xl border border-zinc-50/10">
+    <section className="w-full grid grid-rows-[max-content_max-content_min-content] md:grid-rows-[max-content_max-content] grid-cols-1 md:grid-cols-[min-content_1fr] bg-card/50 backdrop-blur-xl gap-y-4 md:gap-x-6 p-6 pb-0 rounded-xl border border-zinc-50/10">
       <div className="col-span-1 flex items-center justify-center row-start-1 row-span-1">
         <EditImage user={user} imgURL={imgURL} />
       </div>
