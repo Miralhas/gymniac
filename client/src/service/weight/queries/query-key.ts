@@ -1,4 +1,6 @@
+import { PaginationParams } from "@/lib/schemas/pagination-schema";
+
 export const weightKeys = {
   all: ["weight"],
-  getUserWorkouts: () => [...weightKeys.all, "list", "user"]
+  getUserWeights: (params: PaginationParams) => [...weightKeys.all, "list", "user", params]
 }

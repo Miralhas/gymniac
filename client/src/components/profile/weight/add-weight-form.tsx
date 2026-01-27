@@ -4,24 +4,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAddWeight } from "@/service/weight/mutations/use-add-weight";
+import { useUpdateWeightById } from "@/service/weight/mutations/use-update-weight-by-id";
+import { Weight } from "@/types/weight";
 import { cn } from "@/utils/common-utils";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
 
-type Props = {
+type PostProps = {
+  mode: "POST";
   setOpen: Dispatch<SetStateAction<boolean>>;
   className?: string;
 }
+
+type PutProps = {
+  mode: "PUT",
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  className?: string;
+  weight: Weight;
+}
+
+type Props =
+  | PostProps
+  | PutProps;
 
 const schema = z.object({
   kg: z.number("Must be a valid number").positive("Must be a positive number"),
 })
 
-const AddWeightForm = ({ setOpen, className }: Props) => {
-  const [kg, setKg] = useState<number | undefined>(undefined);
+type Data = z.infer<typeof schema>;
+
+const AddWeightForm = (props: Props) => {
+  const { mode, setOpen, className } = props;
+  const isPost = mode === "POST";
+  const [kg, setKg] = useState<number | undefined>(!isPost ? props.weight.kg : undefined);
   const [inputError, setInputError] = useState("");
-  const mutation = useAddWeight();
+  const postMutation = useAddWeight();
+  const updateMutation = useUpdateWeightById();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +49,16 @@ const AddWeightForm = ({ setOpen, className }: Props) => {
     if (!res.success) {
       return setInputError(z.treeifyError(res.error).properties!.kg!.errors[0]);
     }
-    mutation.mutate(res.data, {
+
+    switch (mode) {
+      case "POST": handlePost(res.data); break;
+      case "PUT": handlePut(res.data); break;
+    }
+  }
+
+  const handlePost = (data: Data) => {
+    if (!isPost) return;
+    postMutation.mutate(data, {
       onSuccess: () => {
         toast.success("Weight added successfully!");
         setOpen(false);
@@ -38,6 +66,18 @@ const AddWeightForm = ({ setOpen, className }: Props) => {
       onError: () => toast.error("Failed to add weight.")
     });
   }
+
+  const handlePut = (data: Data) => {
+    if (isPost) return;
+    updateMutation.mutate({ data, id: props.weight.id }, {
+      onSuccess: () => {
+        toast.success("Weight updated successfully!");
+        setOpen(false);
+      },
+      onError: () => toast.error("Failed to update weight.")
+    });
+  }
+
   return (
     <form className={cn("space-y-3", className)} onSubmit={handleSubmit}>
       <div className="space-y-2">
@@ -47,9 +87,9 @@ const AddWeightForm = ({ setOpen, className }: Props) => {
         <Input
           id="kg"
           name="kg"
-          placeholder="https://github.com/miralhas.png"
+          placeholder="82.3"
           className="placeholder:text-xs placeholder:text-foreground/40"
-          value={isNaN(kg!) ? 0 : kg}
+          value={(kg === undefined || isNaN(kg)) ? "" : kg}
           type="number"
           aria-invalid={!!inputError}
           onChange={(e) => setKg(e.currentTarget.valueAsNumber)}

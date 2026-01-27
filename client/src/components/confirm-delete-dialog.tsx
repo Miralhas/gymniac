@@ -25,7 +25,7 @@ const ConfirmDeleteDialog = ({ onSubmit, open, setOpen, title = "Are you absolut
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="text-wrap">
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>

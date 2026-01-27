@@ -13,11 +13,11 @@ const WeightHeader = () => {
         Your personal weighing log.
       </p>
       <div className="w-full bg-secondary/40 mt-4 p-4 space-y-2 border rounded-sm">
-        <p className="text-muted-foreground text-sm flex items-center">
+        <p className="text-muted-foreground text-sm">
           <PlusCircleIcon className="size-3.5 inline-block mr-1.5" />
           Add your weighings.
         </p>
-        <p className="text-muted-foreground text-sm flex items-center">
+        <p className="text-muted-foreground text-sm">
           <ChartNoAxesColumn className="size-3.5 inline-block mr-1.5 text-foreground/70" />
           Check your progress with graphs.
         </p>

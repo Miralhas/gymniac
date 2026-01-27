@@ -18,12 +18,27 @@ import {
   DrawerTrigger
 } from "@/components/ui/drawer"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { cn } from "@/utils/common-utils"
-import { PlusIcon } from "lucide-react"
-import { useState } from "react"
+import { Weight } from "@/types/weight"
+import { PropsWithChildren, useState } from "react"
 import AddWeightForm from "./add-weight-form"
 
-const AddWeight = ({ className }: { className?: string }) => {
+type PostProps = {
+  mode: "POST";
+  className?: string;
+}
+
+type PutProps = {
+  mode: "PUT",
+  className?: string;
+  weight: Weight;
+}
+
+type Props =
+  | PostProps
+  | PutProps;
+
+const AddWeight = (props: PropsWithChildren<Props>) => {
+  const { children, mode } = props;
   const [open, setOpen] = useState(false)
   const isMobile = useIsMobile();
 
@@ -31,17 +46,18 @@ const AddWeight = ({ className }: { className?: string }) => {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="cool" size="sm" className={cn("rounded-sm", className)}>
-            <PlusIcon className="size-3.5" strokeWidth={3} />
-            Add Weight
-          </Button>
+          {children}
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Weight</DialogTitle>
+            <DialogTitle>{mode === "POST" ? "Add Weight" : "Update Weight"}</DialogTitle>
           </DialogHeader>
 
-          <AddWeightForm setOpen={setOpen} />
+          {mode === "PUT" ? (
+            <AddWeightForm weight={props.weight} setOpen={setOpen} mode="PUT" />
+          ) : (
+            <AddWeightForm mode="POST" setOpen={setOpen} />
+          )}
 
         </DialogContent>
       </Dialog>
@@ -51,17 +67,18 @@ const AddWeight = ({ className }: { className?: string }) => {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="cool" size="sm" className={cn("rounded-sm", className)}>
-          <PlusIcon className="size-3.5" strokeWidth={3} />
-          Add Weight
-        </Button>
+        {children}
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Add Weight</DrawerTitle>
+          <DrawerTitle>{mode === "POST" ? "Add Weight" : "Update Weight"}</DrawerTitle>
         </DrawerHeader>
 
-        <AddWeightForm className="px-4" setOpen={setOpen} />
+        {mode === "PUT" ? (
+          <AddWeightForm weight={props.weight} setOpen={setOpen} mode="PUT" />
+        ) : (
+          <AddWeightForm mode="POST" setOpen={setOpen} />
+        )}
 
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>

@@ -8,7 +8,7 @@ const ProfileStats = () => {
       />
       <StatCard
         stat="5"
-        description="Streak"
+        description="Weight Goal"
       />
       <StatCard
         stat="Cutting"
@@ -27,7 +27,7 @@ const StatCard = ({ description, stat }: { stat: string; description: string }) 
     <div className="relative p-px">
       <div className="col-span-1 bg-card rounded-xl border border-zinc-500/25 py-2.5 px-4 flex flex-col items-center md:items-start relative z-50">
         <p className="md:text-xl font-bold whitespace-nowrap">{stat}</p>
-        <p className="text-sm md:text-lg text-muted-foreground">{description}</p>
+        <p className="text-sm md:text-lg text-muted-foreground whitespace-nowrap">{description}</p>
       </div>
       <div className="w-[20%] pb-[20%] absolute bottom-0 left-0 bg-emerald-800/90 block rounded-xl"></div>
       <div className="w-[20%] pb-[20%] absolute top-0 right-0 bg-emerald-800/90 block rounded-xl"></div>

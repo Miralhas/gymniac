@@ -1,21 +1,40 @@
 'use client'
 
+import ConfirmDeleteDialog from "@/components/confirm-delete-dialog";
 import GenericPagination from "@/components/generic-pagination";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
+import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
+import { useDeleteWeight } from "@/service/weight/mutations/use-delete-weight-by-id";
 import { defaultWeightsParams, useGetUserWeights } from "@/service/weight/queries/use-get-user-weights";
+import { Weight } from "@/types/weight";
 import { formatDayMonthYear } from "@/utils/date-utils";
-import { DumbbellIcon, WeightTildeIcon } from "lucide-react";
+import { DumbbellIcon, EditIcon, TrashIcon, WeightTildeIcon } from "lucide-react";
+import { useQueryStates } from "nuqs";
+import { useState } from "react";
+import { toast } from "sonner";
+import AddWeight from "./add-weight";
 
 const WeightList = ({ accessToken }: { accessToken: string }) => {
-  const query = useGetUserWeights(defaultWeightsParams, accessToken);
+  const [open, setOpen] = useState(false);
+  const [params, setParams] = useQueryStates(nuqsPaginationParams);
+  const [selected, setSelected] = useState<Weight | undefined>(undefined);
+  const query = useGetUserWeights({ ...defaultWeightsParams, page: params.page }, accessToken);
+  const deleteMutation = useDeleteWeight();
+
+  const onDelete = (id: Weight["id"]) => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => toast.success("Weight Deleted successfully!"),
+      onError: () => toast.error("Failed to delete weight.")
+    });
+  }
 
   if (query.isLoading) {
     return (
@@ -42,29 +61,53 @@ const WeightList = ({ accessToken }: { accessToken: string }) => {
     <>
       <div className="gap-4 gap-y-8">
         <Table>
-          <TableCaption>A list of your recent weighings.</TableCaption>
           <TableHeader>
-            <TableRow className="text-lg text-[17px]">
-              <TableHead className="w-[100px]">Weight</TableHead>
+            <TableRow className="md:text-lg md:text-[17px]">
+              <TableHead className="md:w-[100px]">Weight</TableHead>
               <TableHead>Added At</TableHead>
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="text-base text-[15px] text-foreground/80 font-light">
+          <TableBody className="text-sm md:text-base md:text-[15px] text-foreground/80 font-light">
             {query.data?.results.map(weight => (
               <TableRow key={weight.id}>
                 <TableCell>{weight.kg} KG</TableCell>
                 <TableCell>{formatDayMonthYear(weight.createdAt)}</TableCell>
+                <TableCell className="flex gap-1 md:gap-2 items-center">
+                  <AddWeight weight={weight} mode="PUT">
+                    <Button variant="ghost" size="icon-xs" className="ml-auto">
+                      <EditIcon className="size-4 md:size-4.5" />
+                    </Button>
+                  </AddWeight>
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={() => {setOpen(true); setSelected(weight)}}
+                  >
+                    <TrashIcon className="size-4 md:size-4.5" />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
       {query.data && query.data?.totalPages > 1 ? (
-        <GenericPagination query={query.data}
-          // handlePage={(page) => setParams({ page })}
-          className="mt-12"
+        <GenericPagination
+          query={query.data}
+          handlePage={(page) => setParams({ page })}
+          className="mt-6"
         />
       ) : null}
+      {selected && (
+        <ConfirmDeleteDialog
+          onSubmit={() => onDelete(selected.id)}
+          open={open}
+          setOpen={setOpen}
+          description="This action cannot be undone. This will permanently delete the weight log."
+          title={`Delete Weight (${selected.kg} Kg)`}
+        />
+      )}
     </>
   )
 }

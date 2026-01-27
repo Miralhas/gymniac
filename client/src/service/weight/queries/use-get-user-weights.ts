@@ -5,11 +5,11 @@ import { weightKeys } from "./query-key";
 
 export const getUserWeightsQueryOptions = (params: PaginationParams, accessToken: string) => queryOptions({
   queryFn: () => getUserWeights(params, accessToken),
-  queryKey: weightKeys.all,
+  queryKey: weightKeys.getUserWeights(params),
 });
 
 export const useGetUserWeights = (params: PaginationParams, accessToken: string) => useQuery(
   getUserWeightsQueryOptions(params, accessToken)
 );
 
-export const defaultWeightsParams: PaginationParams = { page: 0, size: 10 }; 
+export const defaultWeightsParams: PaginationParams = { page: 0, size: 12 }; 

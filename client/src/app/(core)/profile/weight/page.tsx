@@ -30,7 +30,12 @@ const WeightPage = async () => {
       <WeightHeader />
       <Separator />
       <div className="w-full flex justify-end">
-        <AddWeight className="w-full md:w-auto" />
+        <AddWeight>
+          <Button variant="cool" size="sm" className="rounded-sm w-full md:w-auto">
+            <PlusIcon className="size-3.5" strokeWidth={3} />
+            Add Weight
+          </Button>
+        </AddWeight>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <WeightList accessToken={accessToken} />
