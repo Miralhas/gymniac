@@ -86,6 +86,8 @@ public class WorkoutExerciseService {
 
 	@Transactional
 	public void delete(Long exerciseId) {
+		var owner = findByIdOrException(exerciseId).getWorkout().getUser();
+		authUtils.validate(owner);
 		workoutExerciseRepository.deleteById(exerciseId);
 	}
 

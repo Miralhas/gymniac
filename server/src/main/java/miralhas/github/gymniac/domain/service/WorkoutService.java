@@ -75,6 +75,9 @@ public class WorkoutService {
 
 	@Transactional
 	public void update(UpdateWorkoutInput input, Workout workout) {
+		var owner = workout.getUser();
+		authUtils.validate(owner);
+
 		workoutMapper.update(input, workout);
 		workoutRepository.save(workout);
 	}

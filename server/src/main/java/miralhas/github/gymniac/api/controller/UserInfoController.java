@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/infos")
 public class UserInfoController {
 
-
 	private final UserInfoService userInfoService;
+
+	@GetMapping
+	@PreAuthorize("hasRole('USER')")
+	public void getInfo() {
+		userInfoService.getUserInfo();
+	}
 
 	@GetMapping("/weights")
 	@PreAuthorize("hasRole('USER')")
@@ -31,6 +36,11 @@ public class UserInfoController {
 	@PostMapping("/weights")
 	public WeightDTO saveWeight(@RequestBody @Valid WeightInput weightInput) {
 		return userInfoService.saveWeight(weightInput);
+	}
+
+	@PutMapping("/weights/{id}")
+	public WeightDTO updateWeight(@RequestBody @Valid WeightInput weightInput, @PathVariable Long id) {
+		return userInfoService.updateWeight(weightInput, userInfoService.findWeightByIdOrException(id));
 	}
 
 	@DeleteMapping("/weights/{id}")
