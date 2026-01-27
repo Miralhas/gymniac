@@ -37,3 +37,14 @@ export type CustomJwtPayload = {
   iat: number;
   user: User;
 }
+
+export const MODE = ["CUTTING", "BULKING"] as const;
+
+type ModeType = typeof MODE[number];
+
+export type UserInfo = {
+  mode: ModeType | null;
+  totalWorkouts: number;
+  currentWeight: number;
+  weightGoal: number;
+}

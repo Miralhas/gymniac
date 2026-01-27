@@ -1,13 +1,13 @@
+import { env } from "@/env";
 import { getCurrentUser } from "@/utils/session";
 import { mapRoles } from "@/utils/user-utils";
 import { redirect } from "next/navigation";
 import EditImage from "./edit-image";
-import EditProfileButton from "./edit-profile-button";
+import EditProfile from "./edit-profile";
 import LogoutButton from "./logout-button";
 import ProfileLinks from "./profile-links";
 import ProfileStats from "./profile-stats";
 import RoleBadge from "./role-badge";
-import { env } from "@/env";
 
 const ProfileHeader = async () => {
   const user = await getCurrentUser();
@@ -28,7 +28,7 @@ const ProfileHeader = async () => {
             <RoleBadge role={mapRoles(user.roles)} />
           </div>
           <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] gap-4">
-            <EditProfileButton />
+            <EditProfile />
             <LogoutButton />
           </div>
         </div>

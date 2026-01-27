@@ -83,7 +83,7 @@ const WeightList = ({ accessToken }: { accessToken: string }) => {
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    onClick={() => {setOpen(true); setSelected(weight)}}
+                    onClick={() => { setOpen(true); setSelected(weight) }}
                   >
                     <TrashIcon className="size-4 md:size-4.5" />
                   </Button>
