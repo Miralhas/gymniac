@@ -15,6 +15,7 @@ import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
 import { useDeleteWeight } from "@/service/weight/mutations/use-delete-weight-by-id";
 import { defaultWeightsParams, useGetUserWeights } from "@/service/weight/queries/use-get-user-weights";
 import { Weight } from "@/types/weight";
+import { cn } from "@/utils/common-utils";
 import { formatDayMonthYear } from "@/utils/date-utils";
 import { DumbbellIcon, EditIcon, TrashIcon, WeightTildeIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
@@ -69,9 +70,9 @@ const WeightList = ({ accessToken }: { accessToken: string }) => {
             </TableRow>
           </TableHeader>
           <TableBody className="text-sm md:text-base md:text-[15px] text-foreground/80 font-light">
-            {query.data?.results.map(weight => (
+            {query.data?.results.map((weight, index) => (
               <TableRow key={weight.id}>
-                <TableCell>{weight.kg} KG</TableCell>
+                <TableCell className={cn(index === 0 && "text-accent")}>{weight.kg} KG</TableCell>
                 <TableCell>{formatDayMonthYear(weight.createdAt)}</TableCell>
                 <TableCell className="flex gap-1 md:gap-2 items-center">
                   <AddWeight weight={weight} mode="PUT">

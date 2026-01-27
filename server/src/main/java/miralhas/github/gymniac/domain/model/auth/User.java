@@ -3,6 +3,7 @@ package miralhas.github.gymniac.domain.model.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import miralhas.github.gymniac.domain.model.auth.enums.Mode;
 import miralhas.github.gymniac.domain.model.user_info.Weight;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
@@ -49,6 +50,13 @@ public class User implements Serializable {
 	@Column(nullable = true)
 	private String profilePicture;
 
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private Mode mode;
+
+	@Column(nullable = true)
+	private Double weightGoal;
+
 	@ManyToMany(
 			fetch = FetchType.LAZY,
 			cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}
@@ -82,9 +90,6 @@ public class User implements Serializable {
 	)
 	private List<Weight> weights;
 
-//	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private Image image;
-
 //	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
 //	private PasswordResetToken passwordResetToken;
 
@@ -102,10 +107,6 @@ public class User implements Serializable {
 		return this.profilePicture != null;
 	}
 
-//	public String getImageFileName() {
-//		if (hasImage()) return this.image.getFileName();
-//		return null;
-//	}
 
 	@Override
 	public final boolean equals(Object o) {

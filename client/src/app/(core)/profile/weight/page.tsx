@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { defaultWeightsParams, getUserWeightsQueryOptions } from "@/service/weight/queries/use-get-user-weights";
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/utils/constants";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { PlusIcon } from "lucide-react";
+import { GoalIcon, PlusIcon } from "lucide-react";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -29,13 +29,17 @@ const WeightPage = async () => {
     <div className="space-y-4">
       <WeightHeader />
       <Separator />
-      <div className="w-full flex justify-end">
-        <AddWeight>
+      <div className="w-full flex flex-col md:justify-end md:flex-row gap-2.5">
+        <AddWeight mode="POST">
           <Button variant="cool" size="sm" className="rounded-sm w-full md:w-auto">
             <PlusIcon className="size-3.5" strokeWidth={3} />
             Add Weight
           </Button>
         </AddWeight>
+        <Button size="sm" variant="cool" className="rounded-sm w-full md:w-auto ml-auto">
+          <GoalIcon className="size-3.5" strokeWidth={2.5} />
+          Add Weight Goal
+        </Button>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <WeightList accessToken={accessToken} />

@@ -30,7 +30,7 @@ public interface UserMapper {
 
 	List<UserDTO> toCollectionResponse(List<User> users);
 
-	void update(UpdateUserInput userRequest, @MappingTarget User userEntity);
+	void update(UpdateUserInput input, @MappingTarget User user);
 
 	@Named("mapRoles")
 	default List<String> mapRoles(Set<Role> roles) {

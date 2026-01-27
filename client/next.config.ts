@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
   images: {
+    qualities: [40, 75],
     remotePatterns: [
       new URL(`https://wsrv.nl/**`),
       new URL(`${env.NEXT_PUBLIC_BASE_URL}/**`),
