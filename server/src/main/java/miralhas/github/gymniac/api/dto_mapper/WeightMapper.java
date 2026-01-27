@@ -4,6 +4,8 @@ import miralhas.github.gymniac.api.dto.WeightDTO;
 import miralhas.github.gymniac.domain.model.user_info.Weight;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
@@ -14,4 +16,5 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 )
 public interface WeightMapper {
 	WeightDTO toResponse(Weight weight);
+	List<WeightDTO> toCollectionResponse(List<Weight> weights);
 }

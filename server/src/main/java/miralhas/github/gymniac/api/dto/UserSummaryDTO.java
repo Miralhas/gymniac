@@ -6,7 +6,8 @@ import java.io.Serializable;
 public record UserSummaryDTO(
 		Long id,
 		String username,
-		String email
+		String email,
+		String profilePicture
 ) implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1L;

@@ -27,12 +27,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const logout = async () => {
     await logoutAction();
-    
+
+    // Clear all react query cache.
+    queryClient.clear();
+
     // refresh to force the middleware to scan the route again. 
     // Sometimes the current route is protected. 
     // If there is no refresh, the unauthenticated user can still use the protected route.
-    router.refresh(); 
-    await queryClient.invalidateQueries();
+    router.refresh();
   }
 
   const login = async (data: LoginResponse, redirectUri = "/") => {

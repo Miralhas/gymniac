@@ -27,12 +27,12 @@ const WorkoutPlanCard = ({ workoutPlan }: { workoutPlan: WorkoutPlanSummary }) =
 
   return (
     <Link href={`/workout-plans/${workoutPlan.slug}`} className="transition-transform hover:-translate-y-0.75 hover:translate-x-0.75 ease-in-out duration-200">
-      <Card className="p-2 pt-4 border border-accent/20 backdrop-blur-3xl ring-0 pb-4 group bg-accent/5">
+      <Card className="p-2 pt-4 border border-zinc-50/15 backdrop-blur-3xl ring-0 pb-4 group bg-card/50">
         <CardHeader className="px-2">
           <div className="grid grid-cols-[1fr_0.3fr] gap-1 w-full">
-            <CardTitle className="line-clamp-2">{workoutPlan.name}</CardTitle>
+            <CardTitle className="line-clamp-1">{workoutPlan.name}</CardTitle>
             <Badge variant="cool" className="justify-self-end">{totalDays}x per week</Badge>
-            <p className="text-foreground/60">{workoutPlan.description}</p>
+            <p className="text-foreground/60 line-clamp-1">{workoutPlan.description}</p>
           </div>
         </CardHeader>
         <CardContent className="px-2">

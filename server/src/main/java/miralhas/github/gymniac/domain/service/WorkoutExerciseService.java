@@ -14,6 +14,7 @@ import miralhas.github.gymniac.domain.model.workout.Workout;
 import miralhas.github.gymniac.domain.model.workout.WorkoutExercise;
 import miralhas.github.gymniac.domain.repository.ExerciseSetRepository;
 import miralhas.github.gymniac.domain.repository.WorkoutExerciseRepository;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class WorkoutExerciseService {
 	private final ExerciseSetMapper exerciseSetMapper;
 	private final ErrorMessages errorMessages;
 	private final ExerciseSetRepository exerciseSetRepository;
+	private final AuthUtils authUtils;
 
 	public WorkoutExercise findByIdOrException(Long id) {
 		return workoutExerciseRepository.findById(id).orElseThrow(
@@ -63,6 +65,9 @@ public class WorkoutExerciseService {
 
 	@Transactional
 	public void update(UpdateWorkoutExerciseInput input, WorkoutExercise workoutExercise) {
+		var owner = workoutExercise.getWorkout().getUser();
+		authUtils.validate(owner);
+
 		workoutExerciseRepository.deleteAllSets(workoutExercise.getId());
 		workoutExerciseRepository.flush();
 
@@ -81,6 +86,8 @@ public class WorkoutExerciseService {
 
 	@Transactional
 	public void delete(Long exerciseId) {
+		var owner = findByIdOrException(exerciseId).getWorkout().getUser();
+		authUtils.validate(owner);
 		workoutExerciseRepository.deleteById(exerciseId);
 	}
 

@@ -1,21 +1,23 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.UserDTO;
+import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto.input.UpdateUserInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
+import miralhas.github.gymniac.domain.exception.ImageNotFoundException;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.repository.UserRepository;
+import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserMapper userMapper;
 	private final RoleService roleService;
+	private final AuthUtils authUtils;
 
 	public User findUserByIdOrException(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> {
@@ -40,6 +43,14 @@ public class UserService {
 			var message = errorMessages.get("user.email.notFound", email);
 			return new UsernameNotFoundException(message);
 		});
+	}
+
+	public String getUserProfilePicture(Long id) {
+		var user = findUserByIdOrException(id);
+		if (!user.hasImage()) throw new ImageNotFoundException(
+				errorMessages.get("user.profilePicture.notFound", user.getEmail())
+		);
+		return user.getProfilePicture();
 	}
 
 	@Transactional
@@ -89,5 +100,12 @@ public class UserService {
 			var message = errorMessages.get("user.alreadyExists");
 			throw new UserAlreadyExistsException(message, errors);
 		}
+	}
+
+	@Transactional
+	public UserDTO changeProfilePicture(ProfilePictureInput input) {
+		var user = authUtils.getCurrentUser();
+		user.setProfilePicture(input.profilePicture());
+		return userMapper.toResponse(userRepository.save(user));
 	}
 }

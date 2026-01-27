@@ -62,20 +62,20 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
         descriptionClassName="text-sm md:text-base"
         className="items-start"
       />
-      <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row gap-3">
         <LittleCard>
-          <CalendarIcon className="size-4 mr-2 text-accent" /> {totalDays} days per week
+          <CalendarIcon className="size-4 mr-2 text-accent shrink-0" /> {totalDays} days per week
         </LittleCard>
         <LittleCard>
-          <DumbbellIcon className="size-4 mr-2 text-accent" /> {totalExercises} exercises
+          <DumbbellIcon className="size-4 mr-2 text-accent shrink-0" /> {totalExercises} exercises
         </LittleCard>
         <LittleCard>
-          <LayersIcon className="size-4 mr-2 text-accent" /> {totalSets} total sets
+          <LayersIcon className="size-4 mr-2 text-accent shrink-0" /> {totalSets} total sets
         </LittleCard>
         <Button
           variant="pure"
           size="none"
-          className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white ml-auto transition-all ease-in-out duration-200 hover:-translate-y-0.75 hover:translate-x-0.75 hover:text-accent"
+          className="w-full md:w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white ml-auto transition-all ease-in-out duration-200 hover:-translate-y-0.75 hover:translate-x-0.75 hover:text-accent order-0"
         >
           <FileDownIcon className="size-4 mr-2 text-accent" /> Export to PDF
         </Button>
@@ -129,7 +129,7 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
 
 const LittleCard = ({ children }: PropsWithChildren) => {
   return (
-    <div className="w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
+    <div className="md:w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white">
       {children}
     </div>
   )

@@ -9,10 +9,11 @@ export type User = {
   id: number;
   username: string;
   email: string;
-  roles: string[];
+  profilePicture: string | null;
+  roles: Role[];
 }
 
-export type UserSummary = Omit<User, "roles">
+export type UserSummary = Omit<User, "roles">;
 
 export type LoginResponse = {
   refreshToken: string;
@@ -35,4 +36,15 @@ export type CustomJwtPayload = {
   exp: number;
   iat: number;
   user: User;
+}
+
+export const MODE = ["CUTTING", "BULKING"] as const;
+
+type ModeType = typeof MODE[number];
+
+export type UserInfo = {
+  mode: ModeType | null;
+  totalWorkouts: number;
+  currentWeight: number;
+  weightGoal: number;
 }

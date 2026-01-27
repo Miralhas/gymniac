@@ -2,14 +2,17 @@
 
 import GenericPagination from "@/components/generic-pagination";
 import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
-import { useGetWorkoutPlans } from "@/service/workout-plan/queries/use-get-workout-plans";
+import { defaultWorkoutPlansParams, useGetWorkoutPlans } from "@/service/workout-plan/queries/use-get-workout-plans";
 import { DumbbellIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import WorkoutPlanCard from "./workout-plan-card";
 
 const WorkoutPlanList = () => {
   const [params, setParams] = useQueryStates(nuqsPaginationParams);
-  const query = useGetWorkoutPlans({ page: params.page, size: params.size });
+  const query = useGetWorkoutPlans({
+    ...defaultWorkoutPlansParams,
+    page: params.page, size: params.size
+  });
 
   if (query.isLoading) {
     return (

@@ -7,6 +7,11 @@ import { exerciseParamsDefaultValues } from "@/lib/schemas/params/exercise-param
 import { getExercisesQueryOptions } from "@/service/exercise/queries/use-get-exercises";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { DumbbellIcon } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Exercises"
+};
 
 const ExercisesPage = async () => {
   const queryClient = new QueryClient();

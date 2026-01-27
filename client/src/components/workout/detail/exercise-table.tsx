@@ -54,7 +54,7 @@ const ExerciseCard = ({ handleMode, index, workoutExercise, workoutId }: Props) 
               </span>
               <h2 className="text-xl font-bold text-foreground inline-flex flex-col">{workoutExercise.exercise.name}</h2>
             </div>
-          </CardTitle >
+          </CardTitle>
           <CardAction>
             <Button
               variant="ghost"
@@ -75,7 +75,6 @@ const ExerciseCard = ({ handleMode, index, workoutExercise, workoutId }: Props) 
             >
               <Trash2 />
             </Button>
-
           </CardAction>
         </CardHeader >
         <CardContent className="p-4">

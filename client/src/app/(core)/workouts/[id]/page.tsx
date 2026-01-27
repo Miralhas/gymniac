@@ -1,6 +1,11 @@
 import WorkoutDetail from "@/components/workout/detail";
 import { getWorkoutByIdQueryOptions } from "@/service/workout/queries/use-get-workout-by-id";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Workout"
+};
 
 const WorkoutPage = async ({ params }: { params: Promise<{ id: number }> }) => {
   const { id } = await params;

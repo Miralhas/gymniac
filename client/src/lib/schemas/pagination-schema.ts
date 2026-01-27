@@ -6,7 +6,7 @@ export const zodPagination = {
   size: z.number().gte(0).catch(0).optional(),
 }
 
-export const PaginationSchema = z.object({
+export const paginationParamsSchema = z.object({
   ...zodPagination
 })
 
@@ -15,4 +15,4 @@ export const nuqsPaginationParams = {
   size: parseAsInteger.withDefault(12).withOptions({ clearOnDefault: true })
 }
 
-export type PaginationParams = z.infer<typeof PaginationSchema>;
+export type PaginationParams = z.infer<typeof paginationParamsSchema>;
