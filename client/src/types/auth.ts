@@ -38,11 +38,12 @@ export type CustomJwtPayload = {
   user: User;
 }
 
-export const MODE = ["CUTTING", "BULKING"] as const;
+export const MODE = ["CUTTING", "BULKING", "MAINTAINING"] as const;
 
 type ModeType = typeof MODE[number];
 
-export type UserInfo = {
+export type UserInfo = Omit<User, "roles"> & {
+  createdAt: string;
   mode: ModeType | null;
   totalWorkouts: number;
   currentWeight: number;

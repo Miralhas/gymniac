@@ -5,7 +5,7 @@ import { roleMap } from "@/utils/user-utils";
 import { UserIcon } from "lucide-react";
 
 const ProfileInfoGrid = ({ user }: { user: User }) => {
-
+  
   return (
     <div className="space-y-2.5 md:space-y-6">
       <div className="flex items-center gap-2 w-full px-3">

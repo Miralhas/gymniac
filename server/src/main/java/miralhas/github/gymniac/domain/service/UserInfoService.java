@@ -2,6 +2,7 @@ package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.PageDTO;
+import miralhas.github.gymniac.api.dto.UserInfoDTO;
 import miralhas.github.gymniac.api.dto.WeightDTO;
 import miralhas.github.gymniac.api.dto.input.WeightInput;
 import miralhas.github.gymniac.api.dto_mapper.WeightMapper;
@@ -14,12 +15,11 @@ import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,12 +47,12 @@ public class UserInfoService {
 		));
 	}
 
-	public void getUserInfo() {
-		var user = authUtils.getCurrentUser();
-		var res = userRepository.findUserInfoById(user.getId());
-		var streaks = userRepository.findCurrentWorkoutStreak(user.getId()).reversed();
-		var startDate = streaks.getFirst();
-		var endDate = streaks.getLast();
+	public UserInfoDTO getUserInfoOrException(Long id) {
+		var infoOptional = userRepository.findUserInfoById(id).orElseThrow(() -> {
+			var message = errorMessages.get("user.info.notFound", id);
+			return new UsernameNotFoundException(message);
+		});
+		return infoOptional.getUserInfoDTO();
 	}
 
 	@Transactional

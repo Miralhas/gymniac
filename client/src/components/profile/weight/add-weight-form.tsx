@@ -91,6 +91,7 @@ const AddWeightForm = (props: Props) => {
           className="placeholder:text-xs placeholder:text-foreground/40"
           value={(kg === undefined || isNaN(kg)) ? "" : kg}
           type="number"
+          step={0.1}
           aria-invalid={!!inputError}
           onChange={(e) => setKg(e.currentTarget.valueAsNumber)}
         />

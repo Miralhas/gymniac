@@ -20,15 +20,8 @@ import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const defaultValues: UpdateUserInput = {
-  username: "",
-  confirmPassword: "",
-  password: "",
-  mode: undefined,
-  weightGoal: 0,
-}
 
-const UpdateProfileForm = ({ handleOpen }: { handleOpen: () => void; }) => {
+const UpdateProfileForm = ({ handleOpen, defaultValues }: { handleOpen: () => void; defaultValues: UpdateUserInput }) => {
   const mutation = useUpdateUser();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
 
@@ -101,52 +94,6 @@ const UpdateProfileForm = ({ handleOpen }: { handleOpen: () => void; }) => {
             )
           }}
         </form.Field>
-        <form.Field name="password">
-          {(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-            return (
-              <Field data-invalid={isInvalid} className="gap-y-1.5">
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={isInvalid}
-                  placeholder="••••••••"
-                  type="password"
-                />
-                {isInvalid && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
-              </Field>
-            )
-          }}
-        </form.Field>
-        <form.Field name="confirmPassword">
-          {(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-            return (
-              <Field data-invalid={isInvalid} className="gap-y-1.5">
-                <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={isInvalid}
-                  placeholder="••••••••"
-                  type="password"
-                />
-                {isInvalid && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
-              </Field>
-            )
-          }}
-        </form.Field>
         <form.Field name="weightGoal">
           {(field) => {
             const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
@@ -191,12 +138,57 @@ const UpdateProfileForm = ({ handleOpen }: { handleOpen: () => void; }) => {
                     <SelectValue placeholder="Diet Mode" />
                   </SelectTrigger>
                   <SelectContent position="popper">
-                    <SelectItem value={EMPTY_DEFAULT_SELECT}>None</SelectItem>
                     {MODE.map(m => (
                       <SelectItem key={m} value={m}>{capitalize(m)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {isInvalid && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
+              </Field>
+            )
+          }}
+        </form.Field>
+        <form.Field name="password">
+          {(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+            return (
+              <Field data-invalid={isInvalid} className="gap-y-1.5">
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={isInvalid}
+                  placeholder="••••••••"
+                  type="password"
+                />
+                {isInvalid && (
+                  <FieldError errors={field.state.meta.errors} />
+                )}
+              </Field>
+            )
+          }}
+        </form.Field>
+        <form.Field name="confirmPassword">
+          {(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+            return (
+              <Field data-invalid={isInvalid} className="gap-y-1.5">
+                <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  aria-invalid={isInvalid}
+                  placeholder="••••••••"
+                  type="password"
+                />
                 {isInvalid && (
                   <FieldError errors={field.state.meta.errors} />
                 )}

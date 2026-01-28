@@ -19,12 +19,23 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 import UpdateProfileForm from "./update-profile-form";
+import { useGetUserInfo } from "@/service/user/queries/use-get-user-info";
+import { UpdateUserInput } from "@/lib/schemas/update-profile-schema";
 
-const EditProfile = () => {
+const EditProfile = ({ accessToken }: { accessToken: string }) => {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
+  const query = useGetUserInfo(accessToken);
 
   const handleOpen = () => setOpen(prev => !prev);
+
+  const defaultValues: UpdateUserInput = {
+    confirmPassword: "",
+    password: "",
+    mode: query.data?.mode ?? undefined,
+    weightGoal: query.data?.weightGoal ?? 0,
+    username: query.data?.username
+  }
 
   if (isMobile) {
     return (
@@ -42,7 +53,7 @@ const EditProfile = () => {
             <DrawerTitle>Add exercise</DrawerTitle>
           </DrawerHeader>
           <div className="px-4 pb-4 overflow-y-auto max-h-[400px]">
-            <UpdateProfileForm handleOpen={handleOpen} />
+            <UpdateProfileForm handleOpen={handleOpen} defaultValues={defaultValues} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -63,7 +74,7 @@ const EditProfile = () => {
         <DialogHeader>
           <DialogTitle>Add Exercise</DialogTitle>
         </DialogHeader>
-        <UpdateProfileForm handleOpen={handleOpen} />
+        <UpdateProfileForm handleOpen={handleOpen} defaultValues={defaultValues} />
       </DialogContent>
     </Dialog>
   )

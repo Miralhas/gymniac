@@ -1,21 +1,31 @@
-const ProfileStats = () => {
+'use client'
+
+import { useGetUserInfo } from "@/service/user/queries/use-get-user-info";
+import { capitalize } from "@/utils/string-utils";
+
+const ProfileStats = ({ accessToken }: { accessToken: string }) => {
+  const query = useGetUserInfo(accessToken);
+  const info = query.data;
+
+  const mode = info?.mode ? capitalize(info?.mode) : "N/A"
+
 
   return (
     <div className="w-full grid grid-cols-2 justify-center md:grid-cols-4 gap-3 md:gap-6">
       <StatCard
-        stat="85.5"
+        stat={info?.currentWeight?.toString() ?? "N/A"}
         description="Weight"
       />
       <StatCard
-        stat="5"
+        stat={info?.weightGoal?.toString() ?? "N/A"}
         description="Weight Goal"
       />
       <StatCard
-        stat="Cutting"
+        stat={mode}
         description="Mode"
       />
       <StatCard
-        stat="40"
+        stat={info?.totalWorkouts?.toString() ?? "0"}
         description="Total"
       />
     </div>
