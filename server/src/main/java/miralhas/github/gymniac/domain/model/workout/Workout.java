@@ -33,7 +33,7 @@ public class Workout implements Serializable {
 	@Column(columnDefinition = "TEXT")
 	private String note;
 
-	@CreationTimestamp
+//	@CreationTimestamp
 	@Column(nullable = true)
 	private OffsetDateTime createdAt;
 

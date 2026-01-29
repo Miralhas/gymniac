@@ -48,4 +48,5 @@ export type UserInfo = Omit<User, "roles"> & {
   totalWorkouts: number;
   currentWeight: number;
   weightGoal: number;
+  lastActivity: string;
 }

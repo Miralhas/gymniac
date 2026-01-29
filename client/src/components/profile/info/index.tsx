@@ -1,12 +1,23 @@
+'use client'
+
+import DefaultLoading from "@/components/default-loading";
 import RoleBadge from "@/components/profile/header/role-badge";
+import { useGetUserInfo } from "@/service/user/queries/use-get-user-info";
 import { User } from "@/types/auth";
 import { formatFullDate } from "@/utils/date-utils";
 import { roleMap } from "@/utils/user-utils";
 import { UserIcon } from "lucide-react";
 
 const ProfileInfoGrid = ({ user }: { user: User }) => {
+  const query = useGetUserInfo();
   
-  return (
+  if (query.isLoading || query.isError) {
+    return <DefaultLoading />
+  }
+
+  const lastActivity = query.data?.lastActivity ? formatFullDate(query.data.lastActivity) : "N/A"
+  
+  return query.data && (
     <div className="space-y-2.5 md:space-y-6">
       <div className="flex items-center gap-2 w-full px-3">
         <div className="size-10 bg-primary/50 text-accent flex items-center justify-center border border-accent/70 rounded-md">
@@ -50,14 +61,14 @@ const ProfileInfoGrid = ({ user }: { user: User }) => {
         <div className="border-b">
           <div className="md:grid md:grid-cols-[minmax(0,0.20fr)_minmax(0,1fr)] md:gap-5 space-y-2 md:space-y-0 p-4 duration-300 ease-in-out transition-colors hover:bg-secondary/55">
             <p className="text-muted-foreground font-medium">Member Since</p>
-            <p className="text-zinc-300/90 font-medium tracking-tight">{formatFullDate(new Date().toISOString())}</p>
+            <p className="text-zinc-300/90 font-medium tracking-tight">{formatFullDate(query.data.createdAt)}</p>
           </div>
         </div>
 
         <div className="border-b">
           <div className="md:grid md:grid-cols-[minmax(0,0.20fr)_minmax(0,1fr)] md:gap-5 space-y-2 md:space-y-0 p-4 duration-300 ease-in-out transition-colors hover:bg-secondary/55">
             <p className="text-muted-foreground font-medium">Last Activity</p>
-            <p className="text-zinc-300/90 font-medium tracking-tight">{formatFullDate(new Date().toISOString())}</p>
+            <p className="text-zinc-300/90 font-medium tracking-tight">{lastActivity}</p>
           </div>
         </div>
 

@@ -6,6 +6,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent
@@ -18,30 +19,39 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { WorkoutInput, workoutSchema } from "@/lib/schemas/workout-schema";
 import { ApiError } from "@/service/api-error";
 import { useCreateWorkout } from "@/service/workout/mutations/use-create-workout";
 import { useForm } from "@tanstack/react-form";
-import { AlertCircle, PlusIcon, Trash2Icon } from "lucide-react";
+import { format, startOfToday } from "date-fns";
+import { AlertCircle, Calendar as CalendarIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import ExercisesCombobox from "../exercises-combobox";
-import { startOfToday } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-const defaultValues: WorkoutInput = {
-  exercises: [{ slug: "", sets: [{ reps: 0, kg: 0 }] }],
-  note: "",
-}
 
 const AddWorkoutForm = () => {
   const searchParams = useSearchParams()
   const mutation = useCreateWorkout();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
   const router = useRouter();
+  const [createdAt, setCreatedAt] = useState<Date>(new Date(searchParams.get("date") ?? startOfToday()));
 
-  const date = new Date(searchParams.get("date") ?? startOfToday());
+  const isMobile = useIsMobile();
+
+  const defaultValues: WorkoutInput = {
+    exercises: [{ slug: "", sets: [{ reps: 0, kg: 0 }] }],
+    note: "",
+    createdAt: createdAt.toISOString()
+  }
 
   const form = useForm({
     defaultValues,
@@ -95,6 +105,49 @@ const AddWorkoutForm = () => {
             </AlertDescription>
           </Alert>
         )}
+        <form.Field name="createdAt" mode="value">
+          {(field) => {
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            return (
+              <FieldGroup>
+                <Card className="border">
+                  <CardContent>
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name} className="text-base inline-flex items-center">Workout Date</FieldLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="secondary"
+                            data-empty={!createdAt}
+                            className="data-[empty=true]:text-muted-foreground justify-start text-left font-normal"
+                            aria-invalid={isInvalid}
+                          >
+                            <CalendarIcon />
+                            {createdAt ? format(field.state.value, "PPP") : <span>Pick a date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent side="bottom" align={isMobile ? "center" : "start"} avoidCollisions={false}>
+                          <Calendar
+                            required
+                            mode="single"
+                            selected={new Date(field.state.value)} onSelect={(d) => {
+                              setCreatedAt(d)
+                              field.handleChange(d.toISOString());
+                            }}
+                            disabled={{ after: startOfToday() }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  </CardContent>
+                </Card>
+              </FieldGroup>
+            )
+          }}
+        </form.Field>
         <form.Field
           name="exercises"
           mode="array"
