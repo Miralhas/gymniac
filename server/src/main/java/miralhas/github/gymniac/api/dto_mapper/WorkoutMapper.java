@@ -8,11 +8,8 @@ import miralhas.github.gymniac.domain.model.workout.Workout;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;

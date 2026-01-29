@@ -7,6 +7,7 @@ import miralhas.github.gymniac.api.dto.WorkoutDTO;
 import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
+import miralhas.github.gymniac.api.dto.input.WorkoutInputList;
 import miralhas.github.gymniac.domain.service.WorkoutService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,6 +15,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +33,11 @@ public class WorkoutController {
 		return workoutService.findAllUserWorkouts(pageable);
 	}
 
+	@GetMapping("/unpaginated")
+	public List<WorkoutDTO> findAllUserWorkoutsUnpaginated() {
+		return workoutService.findAllUnpaginated();
+	}
+
 	@GetMapping("/{id}")
 	public WorkoutDTO findById(@PathVariable Long id) {
 		return workoutService.findByIdSorted(id);
@@ -39,6 +47,11 @@ public class WorkoutController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public WorkoutDTO createWorkout(@RequestBody @Valid WorkoutInput input) {
 		return workoutService.save(input);
+	}
+
+	@PostMapping("/bulk")
+	public void createWorkoutsBulk(@RequestBody @Valid WorkoutInputList inputs) {
+		workoutService.saveBulk(inputs);
 	}
 
 	@PatchMapping("/{id}")

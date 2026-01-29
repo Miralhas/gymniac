@@ -7,6 +7,7 @@ import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
 import miralhas.github.gymniac.api.dto.filter.ExerciseFilter;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
+import miralhas.github.gymniac.api.dto.input.WorkoutInputList;
 import miralhas.github.gymniac.api.dto_mapper.WorkoutMapper;
 import miralhas.github.gymniac.domain.exception.WorkoutNotFoundException;
 import miralhas.github.gymniac.domain.model.workout.ExerciseSet;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +52,12 @@ public class WorkoutService {
 		);
 	}
 
+	public List<WorkoutDTO> findAllUnpaginated() {
+		var user = authUtils.getCurrentUser();
+		return workoutRepository.findAllByUserByEmail(user.getEmail())
+				.stream().map(workoutMapper::toResponse).toList();
+	}
+
 	public WorkoutDTO findByIdSorted(Long id) {
 		var workout = findByIdOrException(id);
 		workout.getExercises().forEach(ex ->
@@ -72,6 +80,11 @@ public class WorkoutService {
 
 
 		return workoutMapper.toResponse(workout);
+	}
+
+	@Transactional
+	public void saveBulk(WorkoutInputList input) {
+		input.workouts().forEach(this::save);
 	}
 
 	@Transactional

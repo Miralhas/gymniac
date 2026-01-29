@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
@@ -17,4 +18,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
 	@Query("FROM Workout w WHERE w.user.email = :email")
 	Page<Workout> findAllByUserByEmail(String email, Pageable pageable);
+
+	@Query("FROM Workout w WHERE w.user.email = :email")
+	List<Workout> findAllByUserByEmail(String email);
 }
