@@ -1,20 +1,28 @@
 'use client'
 
+import ConfirmDeleteDialog from "@/components/confirm-delete-dialog";
 import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
 import { createWsrvLoader } from "@/components/wsrv-loader";
+import { useDeleteExerciseById } from "@/service/exercise/mutations/use-delete-exercise-by-id";
 import { useGetExerciseBySlug } from "@/service/exercise/queries/use-get-exercise-by-slug";
 import { Exercise } from "@/types/exercise";
 import { is404, youtubeThumbnailExtractor } from "@/utils/common-utils";
 import { formatDayMonthYear } from "@/utils/date-utils";
-import { ArrowLeft, CalendarIcon, DumbbellIcon, LucideIcon, PlayIcon, UserIcon } from "lucide-react";
+import { ArrowLeft, CalendarIcon, DumbbellIcon, EditIcon, EllipsisVertical, LucideIcon, PlayIcon, TrashIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
   const query = useGetExerciseBySlug(slug);
+  const [openDelete, setOpenDelete] = useState(false);
+  const deleteMutation = useDeleteExerciseById();
 
   if (is404(query.error)) {
     notFound();
@@ -27,6 +35,16 @@ const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
   if (!query.data) return null;
 
   const thumbUrl = youtubeThumbnailExtractor(query.data.videoHowTo);
+
+  const handleDelete = () => {
+    if (!query.data) return;
+    deleteMutation.mutate(query.data.id, {
+      onSuccess: () => {
+        toast.success("Exercise deleted successfully!");
+      },
+      onError: () => toast.error("Failed to delete exercise. Try again later!"),
+    });
+  }
 
   return (
     <>
@@ -67,9 +85,8 @@ const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
             </div>
           </Link>
 
-          <div className="col-span-full md:col-span-2 border bg-primary/5 border-accent/15 rounded-md hover:border-accent/30 transition-colors duration-200 ease-in-out flex flex-col p-6 space-y-4">
+          <div className="col-span-full md:col-span-2 border bg-primary/5 border-accent/15 rounded-md hover:border-accent/30 transition-colors duration-200 ease-in-out flex flex-col p-6 space-y-4 relative">
             <p className="text-foreground/90 text-xl font-bold md:mb-8">{query.data?.name}</p>
-
             <InfoItem title="Muscle Group" description={query.data.muscleGroup.name} icon={DumbbellIcon} />
             <InfoItem title="Added by" description={query.data.submitter.username} icon={UserIcon} />
             <InfoItem title="Created At" description={formatDayMonthYear(query.data.createdAt)} icon={CalendarIcon} />
@@ -79,13 +96,55 @@ const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
                 Watch Video Tutorial
               </Link>
             </Button>
+
+            <div className="absolute right-0 top-0 pt-1.5 md:pr-1.5 md:pt-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="pure" size="icon-sm">
+                    <EllipsisVertical className="text-foreground/80 size-5" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="start"
+                  className="bg-background border border-zinc-50/15 flex flex-col max-w-[150px] py-3 px-3 gap-2.5"
+                >
+                  <Button
+                    className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"
+                    variant="pure"
+                    size="none"
+                    onClick={() => setOpenDelete(true)}
+                  >
+                    <EditIcon className="size-4" />
+                    <span className="text-xs">Edit Exercise</span>
+                  </Button>
+                  <Separator className="bg-zinc-50/20" />
+                  <Button
+                    className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"
+                    variant="pure"
+                    size="none"
+                    onClick={() => setOpenDelete(true)}
+                  >
+                    <TrashIcon className="size-4" />
+                    <span className="text-xs">Delete Exercise</span>
+                  </Button>
+                </PopoverContent>
+              </Popover>
+            </div>
+
           </div>
 
-          <div className="col-span-full border p-4 text-foreground/80 rounded-xl  border-l-primary border-l-3 italic">
+          <div className="col-span-full border p-4 text-foreground/80 rounded-xl border-l-primary border-l-3 italic">
             <p>{query.data.description}</p>
           </div>
         </div>
       </section>
+      <ConfirmDeleteDialog
+        onSubmit={handleDelete}
+        open={openDelete}
+        setOpen={setOpenDelete}
+        title="Delete Exercise"
+        description="Are you sure you want to delete this exercise? This action cannot be undone"
+      />
     </>
   )
 }
