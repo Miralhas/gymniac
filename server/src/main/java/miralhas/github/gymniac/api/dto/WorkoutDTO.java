@@ -9,6 +9,7 @@ public record WorkoutDTO(
 		OffsetDateTime createdAt,
 		OffsetDateTime updatedAt,
 		List<WorkoutExerciseDTO> exercises,
-		String note
+		String note,
+		UserSummaryDTO user
 ) {
 }

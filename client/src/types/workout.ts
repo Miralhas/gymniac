@@ -27,8 +27,7 @@ export type Workout = {
   updatedAt: string;
   exercises: WorkoutExercise[];
   note?: string;
-}
-
-export type WorkoutSummary = Omit<Workout, "note" | "exercises"> & {
   user: UserSummary;
 }
+
+export type WorkoutSummary = Omit<Workout, "note" | "exercises">;
