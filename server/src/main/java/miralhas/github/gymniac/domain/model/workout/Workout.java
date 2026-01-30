@@ -1,13 +1,12 @@
 package miralhas.github.gymniac.domain.model.workout;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import miralhas.github.gymniac.domain.model.auth.User;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
@@ -16,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -29,6 +29,10 @@ public class Workout implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@UuidGenerator
+	@Column(columnDefinition = "uuid", name = "uuid_key")
+	private UUID uuidKey;
 
 	@Column(columnDefinition = "TEXT")
 	private String note;

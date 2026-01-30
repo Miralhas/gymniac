@@ -5,6 +5,7 @@ import java.util.List;
 
 public record WorkoutDTO(
 		Long id,
+		String uuidKey,
 		OffsetDateTime createdAt,
 		OffsetDateTime updatedAt,
 		List<WorkoutExerciseDTO> exercises,
