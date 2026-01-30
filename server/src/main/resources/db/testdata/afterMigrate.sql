@@ -1,3 +1,33 @@
+SET session_replication_role = 'replica';
+
+delete from user_roles;
+delete from refresh_token;
+delete from role;
+delete from exercise_set;
+delete from routine_exercise;
+delete from routine;
+delete from workout;
+delete from workout_exercise;
+delete from workout_plan;
+delete from exercise;
+delete from weight;
+delete from muscle_group;
+delete from users;
+
+SET session_replication_role = 'origin';
+
+ALTER TABLE role ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE exercise_set ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE routine_exercise ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE routine ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE workout ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE workout_exercise ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE workout_plan ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE exercise ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE weight ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE muscle_group ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+
 INSERT INTO role (name) values('ADMIN'), ('USER');
 
 INSERT INTO users(email, username, created_at, password) VALUES ('admin@admin.com', 'admin', NOW() AT TIME ZONE 'UTC', '$2a$10$CNr3GCdNp8wLUGP/XbUqHOjkSA2josmmAHu38jQgP11g/P/Xulgoa');
@@ -77,7 +107,30 @@ INSERT INTO exercise (muscle_group_id, submitter_id, created_at, updated_at, des
 INSERT INTO exercise (muscle_group_id, submitter_id, created_at, updated_at, description, name, slug, video_how_to) VALUES (13, 1, NOW() AT TIME ZONE 'UTC', NOW() AT TIME ZONE 'UTC', 'Using machine', 'Standing Calf Raise', 'standing-calf-raise', 'https://www.youtube.com/watch?v=YMmgqO8Jo-k');
 INSERT INTO exercise (muscle_group_id, submitter_id, created_at, updated_at, description, name, slug, video_how_to) VALUES (13, 1, NOW() AT TIME ZONE 'UTC', NOW() AT TIME ZONE 'UTC', 'Using bodyweight', 'Seated Calf Raise', 'seated-calf-raise', 'https://www.youtube.com/watch?v=JbyjNymZOt0');
 
--- INSERT INTO workout (created_at, id, updated_at, user_id, note) VALUES ('2026-01-22 01:31:12.991946 +00:00', 1, '2026-01-24 01:31:13.051735 +00:00', 2, 'TODAY THE GYM WAS CROWDED AS HELL. IT SUCKED REALLY HARD. NOT MY BEST DAY');
--- INSERT INTO workout (created_at, id, updated_at, user_id, note) VALUES ('2026-01-25 01:31:14.425688 +00:00', 2, '2026-01-25 01:31:14.503171 +00:00', 2, 'TODAY THE GYM WAS CROWDED AS HELL. IT SUCKED REALLY HARD. NOT MY BEST DAY');
--- INSERT INTO workout (created_at, id, updated_at, user_id, note) VALUES ('2026-01-26 01:31:15.579116 +00:00', 3, '2026-01-26 01:31:15.616499 +00:00', 2, 'TODAY THE GYM WAS CROWDED AS HELL. IT SUCKED REALLY HARD. NOT MY BEST DAY');
--- INSERT INTO workout (created_at, id, updated_at, user_id, note) VALUES ('2026-01-27 01:31:15.579116 +00:00', 4, '2026-01-27 01:31:15.616499 +00:00', 2, 'TODAY THE GYM WAS CROWDED AS HELL. IT SUCKED REALLY HARD. NOT MY BEST DAY');
+-- Workout 1
+INSERT INTO workout (note, created_at, updated_at, user_id, uuid_key) VALUES ('25KG INCLINE BENCH PRESS PERSONAL RECORD. LET''S GOOOOO', '2026-01-15 15:36:23.639604 +00:00', '2026-01-30 11:34:21.702501 +00:00', 1, gen_random_uuid());
+INSERT INTO workout_exercise (workout_id, exercise_id) VALUES (1, 1);
+INSERT INTO workout_exercise (workout_id, exercise_id) VALUES (1, 2);
+INSERT INTO workout_exercise (workout_id, exercise_id) VALUES (1, 11);
+INSERT INTO workout_exercise (workout_id, exercise_id) VALUES (1, 8);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 8, '2026-01-30 11:34:21.640681 +00:00', '2026-01-30 11:34:21.640681 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (25, 7, '2026-01-30 11:34:21.644670 +00:00', '2026-01-30 11:34:21.644670 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 12, '2026-01-30 11:34:21.646305 +00:00', '2026-01-30 11:34:21.646305 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 11, '2026-01-30 11:34:21.648306 +00:00', '2026-01-30 11:34:21.648306 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 8, '2026-01-30 11:34:21.649304 +00:00', '2026-01-30 11:34:21.649304 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (15, 16, '2026-01-30 11:34:21.651302 +00:00', '2026-01-30 11:34:21.651302 +00:00', 1);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 12, '2026-01-30 11:34:21.655308 +00:00', '2026-01-30 11:34:21.655308 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 12, '2026-01-30 11:34:21.656242 +00:00', '2026-01-30 11:34:21.656242 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 11, '2026-01-30 11:34:21.657794 +00:00', '2026-01-30 11:34:21.657794 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 11, '2026-01-30 11:34:21.658795 +00:00', '2026-01-30 11:34:21.658795 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 9, '2026-01-30 11:34:21.660795 +00:00', '2026-01-30 11:34:21.660795 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (20, 8, '2026-01-30 11:34:21.661801 +00:00', '2026-01-30 11:34:21.661801 +00:00', 2);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (25, 20, '2026-01-30 11:34:21.664795 +00:00', '2026-01-30 11:34:21.664795 +00:00', 3);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (30, 13, '2026-01-30 11:34:21.665796 +00:00', '2026-01-30 11:34:21.665796 +00:00', 3);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (35, 8, '2026-01-30 11:34:21.667863 +00:00', '2026-01-30 11:34:21.667863 +00:00', 3);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (30, 9, '2026-01-30 11:34:21.669402 +00:00', '2026-01-30 11:34:21.669402 +00:00', 3);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (10, 17, '2026-01-30 11:34:21.671403 +00:00', '2026-01-30 11:34:21.671403 +00:00', 4);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 13, '2026-01-30 11:34:21.673400 +00:00', '2026-01-30 11:34:21.673400 +00:00', 4);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 10, '2026-01-30 11:34:21.674405 +00:00', '2026-01-30 11:34:21.674405 +00:00', 4);
+INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 11, '2026-01-30 11:34:21.675403 +00:00', '2026-01-30 11:34:21.675403 +00:00', 4);
+

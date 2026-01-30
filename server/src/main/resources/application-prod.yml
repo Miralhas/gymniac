@@ -4,10 +4,9 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     url: ${SPRING_DATASOURCE_URL}
   jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
+    show-sql: false
+  flyway:
+      locations: classpath:db/migration
 authentication:
   token:
     jwt:

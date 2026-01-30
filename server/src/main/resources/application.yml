@@ -2,17 +2,27 @@ server:
   port: 8081
 
 spring:
+
   servlet:
     multipart:
       max-file-size: 1MB
+
   application:
     name: server
+
   datasource:
     driver-class-name: org.postgresql.Driver
+
+  flyway:
+    baseline-version: 0
+    enabled: true
+    baselineOnMigrate: true
+    validate-on-migrate: true
+    table: flyway_schema_history
+
   jpa:
-    show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
