@@ -4,7 +4,7 @@ import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { useGetWorkoutByID } from "@/service/workout/queries/use-get-workout-by-id";
-import { WorkoutExercise } from "@/types/workout";
+import { Workout, WorkoutExercise } from "@/types/workout";
 import { is404 } from "@/utils/common-utils";
 import { format } from "date-fns";
 import { DumbbellIcon, PlusIcon, XIcon } from "lucide-react";
@@ -14,7 +14,7 @@ import AddExerciseForm from "../exercise-form/add-exercise-form";
 import EditMode from "./edit-mode";
 import ExerciseCard from "./exercise-table";
 
-const WorkoutDetail = ({ id }: { id: number }) => {
+const WorkoutDetail = ({ id }: { id: Workout["uuidKey"] }) => {
   const query = useGetWorkoutByID(id);
   const [editMode, setEditMode] = useState<WorkoutExercise["id"] | undefined>(undefined);
   const [addExercisesMode, setAddExercisesMode] = useState<boolean>(false);
@@ -51,8 +51,8 @@ const WorkoutDetail = ({ id }: { id: number }) => {
         ) : null}
         {query.data.exercises.map((workoutExercise, index) => {
           return workoutExercise.id === editMode
-            ? <EditMode key={workoutExercise.id} workoutId={id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
-            : <ExerciseCard key={workoutExercise.id} workoutId={id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
+            ? <EditMode key={workoutExercise.id} workoutId={query.data.id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
+            : <ExerciseCard key={workoutExercise.id} workoutId={query.data.id} index={index} handleMode={handleEditMode} workoutExercise={workoutExercise} />
         })}
 
         <div className="w-full border my-6" />
@@ -62,7 +62,7 @@ const WorkoutDetail = ({ id }: { id: number }) => {
               <XIcon />
               Cancel
             </Button>
-            <AddExerciseForm id={id} handleMode={handleAddExerciseMode} />
+            <AddExerciseForm id={query.data.id} handleMode={handleAddExerciseMode} />
           </>
         ) : (
           <Button variant="secondary" className="w-full" onClick={handleAddExerciseMode}>

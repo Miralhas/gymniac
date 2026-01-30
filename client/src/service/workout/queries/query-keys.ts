@@ -1,4 +1,6 @@
+import { Workout } from "@/types/workout";
+
 export const workoutKeys = {
   all: ["workout"],
-  getWorkoutById: (id: number) => [...workoutKeys.all, "detail", id],
+  getWorkoutById: (id: Workout["uuidKey"]) => [...workoutKeys.all, "detail", id],
 }

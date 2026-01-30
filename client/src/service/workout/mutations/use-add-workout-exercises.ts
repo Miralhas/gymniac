@@ -9,7 +9,7 @@ export const useAddWorkoutExercises = ({ id }: { id: Workout["id"] }) => {
   return useMutation({
     mutationFn: (data: WorkoutExerciseArrayInput) => addWorkoutExercises(id, data),
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: workoutKeys.getWorkoutById(id) });
+      client.invalidateQueries({ queryKey: workoutKeys.all });
     }
   });
 }

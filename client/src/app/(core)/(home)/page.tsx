@@ -1,9 +1,11 @@
 import WorkoutCalendar from "@/components/workout-calendar";
 
-export default async function Home() {
+const Home = async () => {
   return (
     <div className="w-full">
       <WorkoutCalendar />
     </div>
   )
 }
+
+export default Home;

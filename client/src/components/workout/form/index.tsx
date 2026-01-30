@@ -61,7 +61,7 @@ const AddWorkoutForm = () => {
         onSuccess: (w) => {
           form.reset();
           toast.success("Workout Created!");
-          router.push(`/workouts/${w.id}`);
+          router.push(`/workouts/${w.uuidKey}`);
         },
         onError: (error) => {
           if (error instanceof ApiError) {

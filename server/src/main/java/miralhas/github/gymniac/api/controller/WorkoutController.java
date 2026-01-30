@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,9 +39,9 @@ public class WorkoutController {
 		return workoutService.findAllUnpaginated();
 	}
 
-	@GetMapping("/{id}")
-	public WorkoutDTO findById(@PathVariable Long id) {
-		return workoutService.findByIdSorted(id);
+	@GetMapping("/{uuid}")
+	public WorkoutDTO findById(@PathVariable UUID uuid) {
+		return workoutService.findByUuidSorted(uuid);
 	}
 
 	@PostMapping

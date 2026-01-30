@@ -3,8 +3,8 @@ import { ApiError } from "@/service/api-error";
 import { ApiResponseError } from "@/types/api";
 import { Workout } from "@/types/workout";
 
-export const getWorkoutById = async (id: number): Promise<Workout> => {
-  const url = `${env.NEXT_PUBLIC_BASE_URL}/workouts/${id}`;
+export const getWorkoutById = async (uuidKey: Workout["uuidKey"]): Promise<Workout> => {
+  const url = `${env.NEXT_PUBLIC_BASE_URL}/workouts/${uuidKey}`;
   const res = await fetch(url);
 
   if (!res.ok) {

@@ -14,7 +14,7 @@ export const useDeleteWorkoutExerciseById = ({ workoutId, workoutExerciseId }: P
   return useMutation({
     mutationFn: () => deleteWorkoutExerciseById(workoutId, workoutExerciseId),
   onSuccess: () => {
-      client.invalidateQueries({ queryKey: workoutKeys.getWorkoutById(workoutId) });
+      client.invalidateQueries({ queryKey: workoutKeys.all });
     }
   });
 }

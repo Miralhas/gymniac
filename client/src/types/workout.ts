@@ -22,6 +22,7 @@ export type WorkoutExerciseSet = {
 
 export type Workout = {
   id: number;
+  uuidKey: string;
   createdAt: string;
   updatedAt: string;
   exercises: WorkoutExercise[];

@@ -13,6 +13,6 @@ export const useUpdateWorkoutExercise = ({ workoutId, workoutExerciseId }: Param
   const client = useQueryClient();
   return useMutation({
     mutationFn: (data: WorkoutExerciseInput) => updateWorkoutExercise(workoutId, workoutExerciseId, data),
-    onSuccess: () => client.invalidateQueries({queryKey: workoutKeys.getWorkoutById(workoutId)})
+    onSuccess: () => client.invalidateQueries({ queryKey: workoutKeys.all })
   });
 }

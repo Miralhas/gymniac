@@ -33,7 +33,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
         const workoutSummary = query.data?.results.find(w => isSameDay(new Date(w.createdAt), day));
 
         return workoutSummary ? (
-          <Link key={index} href={`/workouts/${workoutSummary.id}`}
+          <Link key={index} href={`/workouts/${workoutSummary.uuidKey}`}
             className={cn("rounded-none group cursor-pointer min-h-20 lg:min-h-40 relative border bg-accent/15 flex items-center justify-center border-accent/70")}
           >
             <span className={cn(
@@ -60,7 +60,7 @@ const GridDays = ({ calendarDays, today }: Props) => {
             key={index}
             variant="pure"
             disabled={isFuture(day)}
-            className={cn("rounded-none group cursor-pointer hover:bg-accent/15 transition-colors duration-50 ease-in hover:border-accent/70 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none")}
+            className={cn("rounded-none group cursor-pointer hover:bg-accent/15 transition-colors duration-50 ease-in hover:border-accent/70 min-h-20 lg:min-h-40 relative border border-zinc-50/10", isFuture(day) && "pointer-events-none", query.isLoading && "animate-pulse")}
           >
             <Link href={`/workouts/new?date=${day.toISOString()}`}>
               <span className={cn(

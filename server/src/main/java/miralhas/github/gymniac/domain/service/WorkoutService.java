@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
 import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
-import miralhas.github.gymniac.api.dto.filter.ExerciseFilter;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInputList;
@@ -24,8 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,14 +50,20 @@ public class WorkoutService {
 		);
 	}
 
+	public Workout findByUuidOrException(UUID uuid) {
+		return workoutRepository.findByUuid(uuid).orElseThrow(() ->
+				new WorkoutNotFoundException(errorMessages.get("workout.notFound.uuid", uuid))
+		);
+	}
+
 	public List<WorkoutDTO> findAllUnpaginated() {
 		var user = authUtils.getCurrentUser();
 		return workoutRepository.findAllByUserByEmail(user.getEmail())
 				.stream().map(workoutMapper::toResponse).toList();
 	}
 
-	public WorkoutDTO findByIdSorted(Long id) {
-		var workout = findByIdOrException(id);
+	public WorkoutDTO findByUuidSorted(UUID uuid) {
+		var workout = findByUuidOrException(uuid);
 		workout.getExercises().forEach(ex ->
 				ex.getSets().sort(Comparator.comparing(ExerciseSet::getCreatedAt)));
 		workout.getExercises().sort(Comparator.comparing(WorkoutExercise::getId));

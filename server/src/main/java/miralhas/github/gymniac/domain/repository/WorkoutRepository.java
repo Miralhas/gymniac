@@ -10,11 +10,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
 	@Override
 	Optional<Workout> findById(Long id);
+
+	@Query("FROM Workout w where w.uuidKey = :uuid")
+	Optional<Workout> findByUuid(UUID uuid);
 
 	@Query("FROM Workout w WHERE w.user.email = :email")
 	Page<Workout> findAllByUserByEmail(String email, Pageable pageable);
