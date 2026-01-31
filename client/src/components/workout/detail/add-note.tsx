@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUpdateWorkoutNote } from "@/service/workout/mutations/use-update-workout-note";
 import { Workout } from "@/types/workout";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {
@@ -22,9 +22,9 @@ const AddNote = ({ note, id }: Props) => {
 
   if (hasNote) {
     return (
-      <Button variant="pure" size="none" className="w-full text-base border border-zind-50/15 p-4  text-foreground/80 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
+      <NoteWrapper className="w-full text-base border border-zind-50/15 p-4  text-foreground/80 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
         <p>{note}</p>
-      </Button>
+      </NoteWrapper>
     )
   }
 
@@ -63,12 +63,20 @@ const AddNote = ({ note, id }: Props) => {
             </div>
           </form>
         ) : (
-          <Button variant="pure" size="none" className="w-full text-base border border-zind-50/15 p-4 text-foreground/60 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
+          <NoteWrapper className="w-full text-base border border-zind-50/15 p-4 text-foreground/60 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
             <p>Add Note</p>
-          </Button>
+          </NoteWrapper>
         )}
       </motion.div>
     </AnimatePresence>
+  )
+}
+
+const NoteWrapper = ({ children, ...props }: PropsWithChildren<React.ComponentProps<"div">>) => {
+  return (
+    <div className="focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border border-transparent bg-clip-padding text-sm font-medium focus-visible:ring-[3px] [&_svg:not([class*='size-'])]:size-4 inline-flex items-center justify-center whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none group/button select-none cursor-pointer aria-invalid:ring-red-700/20 dark:aria-invalid:ring-red-700/40 aria-invalid:border-red-700 dark:aria-invalid:border-red-700/50 aria-invalid:ring-[3px]" {...props}>
+      {children}
+    </div>
   )
 }
 
