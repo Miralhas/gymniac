@@ -1,6 +1,5 @@
-import { inferParserType, parseAsIndex, parseAsString } from 'nuqs/server';
-
 import { EMPTY_DEFAULT_SELECT } from '@/utils/constants';
+import { inferParserType, parseAsIndex, parseAsString } from 'nuqs/server';
 import * as z from "zod";
 import { zodPagination } from "../pagination-schema";
 

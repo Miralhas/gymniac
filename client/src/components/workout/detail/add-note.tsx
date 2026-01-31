@@ -63,7 +63,7 @@ const AddNote = ({ note, id }: Props) => {
             </div>
           </form>
         ) : (
-          <Button variant="pure" size="none" className="w-full text-base border border-zind-50/15 p-4 text-foreground/80 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
+          <Button variant="pure" size="none" className="w-full text-base border border-zind-50/15 p-4 text-foreground/60 rounded-xl border-l-primary border-l-3 italic cursor-pointer justify-start" onClick={onShowInput}>
             <p>Add Note</p>
           </Button>
         )}

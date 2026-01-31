@@ -70,7 +70,9 @@ public class User implements Serializable {
 
 	@OneToMany(
 			mappedBy = "submitter",
-			fetch = FetchType.LAZY
+			fetch = FetchType.LAZY,
+			orphanRemoval = false,
+			cascade = {CascadeType.DETACH}
 	)
 	private List<Exercise> exercises = new ArrayList<>();
 
@@ -88,10 +90,15 @@ public class User implements Serializable {
 			orphanRemoval = true,
 			fetch = FetchType.LAZY
 	)
-	private List<Weight> weights;
+	private List<Weight> weights = new ArrayList<>();
 
-//	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
-//	private PasswordResetToken passwordResetToken;
+	@OneToMany(
+			mappedBy = "user",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true,
+			fetch = FetchType.LAZY
+	)
+	private List<RefreshToken> refreshTokens = new ArrayList<>();
 
 	public List<? extends GrantedAuthority> getAuthorities() {
 		return roles.stream().map(r -> r.getName().getAuthority()).toList();

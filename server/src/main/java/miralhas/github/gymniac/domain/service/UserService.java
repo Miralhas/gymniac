@@ -9,6 +9,7 @@ import miralhas.github.gymniac.domain.exception.ImageNotFoundException;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.repository.UserRepository;
+import miralhas.github.gymniac.domain.repository.WorkoutRepository;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
 import miralhas.github.gymniac.domain.utils.ErrorMessages;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,6 +31,7 @@ public class UserService {
 	private final UserMapper userMapper;
 	private final RoleService roleService;
 	private final AuthUtils authUtils;
+	private final WorkoutRepository workoutRepository;
 
 	public User findUserByIdOrException(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> {
@@ -74,6 +76,11 @@ public class UserService {
 	@Transactional
 	public void deleteUser(User user) {
 		userRepository.delete(user);
+	}
+
+	@Transactional
+	public void deleteUserWorkouts(User user) {
+		workoutRepository.deleteUserWorkouts(user.getEmail());
 	}
 
 	private void checkIfCanUpdateUsername(String username, User user) {

@@ -112,7 +112,7 @@ const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
                     className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"
                     variant="pure"
                     size="none"
-                    onClick={() => setOpenDelete(true)}
+                    // onClick={() => setOpenDelete(true)}
                   >
                     <EditIcon className="size-4" />
                     <span className="text-xs">Edit Exercise</span>

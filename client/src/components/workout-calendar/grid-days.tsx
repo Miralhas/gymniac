@@ -20,11 +20,13 @@ type Props = {
 }
 
 const GridDays = ({ calendarDays, today }: Props) => {
-  const [open, setOpen] = useState(false);
+  const from = calendarDays[0].toISOString();
+  const to = calendarDays[calendarDays.length - 1].toISOString();
+  const size = calendarDays.length;
 
   const { authState } = useAuthContext();
-  const query = useGetUserWorkouts(authState?.user);
-
+  const [open, setOpen] = useState(false);
+  const query = useGetUserWorkouts(authState?.user, { size, from, to });
 
   return (
     <>

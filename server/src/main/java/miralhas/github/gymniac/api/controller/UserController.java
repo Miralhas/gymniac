@@ -48,6 +48,22 @@ public class UserController  {
 		return userService.changeProfilePicture(input);
 	}
 
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('ADMIN')")
+	public void deleteUser(@PathVariable Long id) {
+		var user = userService.findUserByIdOrException(id);
+		userService.deleteUser(user);
+	}
+
+	@DeleteMapping("/{id}/workouts")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasRole('ADMIN')")
+	public void deleteUserWorkouts(@PathVariable Long id) {
+		var user = userService.findUserByIdOrException(id);
+		userService.deleteUserWorkouts(user);
+	}
+
 	@GetMapping("/{id}/pfp")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Void> getUserProfilePicture(@PathVariable Long id) {

@@ -36,10 +36,6 @@ const WeightPage = async () => {
             Add Weight
           </Button>
         </AddWeight>
-        <Button size="sm" variant="cool" className="rounded-sm w-full md:w-auto ml-auto">
-          <GoalIcon className="size-3.5" strokeWidth={2.5} />
-          Add Weight Goal
-        </Button>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <WeightList accessToken={accessToken} />

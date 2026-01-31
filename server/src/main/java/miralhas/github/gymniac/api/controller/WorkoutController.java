@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
 import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
+import miralhas.github.gymniac.api.dto.filter.WorkoutFilter;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInputList;
@@ -29,9 +30,10 @@ public class WorkoutController {
 	@GetMapping
 	@PreAuthorize("hasRole('USER')")
 	public PageDTO<WorkoutSummaryDTO> getAllByUser(
-			@PageableDefault(size = 35, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable
+			@PageableDefault(size = 35, sort = {"createdAt", "id"}, direction = Sort.Direction.DESC) Pageable pageable,
+			@Valid WorkoutFilter filter
 	) {
-		return workoutService.findAllUserWorkouts(pageable);
+		return workoutService.findAllUserWorkouts(pageable, filter);
 	}
 
 	@GetMapping("/unpaginated")

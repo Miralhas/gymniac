@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.WorkoutDTO;
 import miralhas.github.gymniac.api.dto.WorkoutSummaryDTO;
+import miralhas.github.gymniac.api.dto.filter.WorkoutFilter;
 import miralhas.github.gymniac.api.dto.input.UpdateWorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInput;
 import miralhas.github.gymniac.api.dto.input.WorkoutInputList;
@@ -36,9 +37,9 @@ public class WorkoutService {
 	private final WorkoutExerciseService workoutExerciseService;
 	private final ErrorMessages errorMessages;
 
-	public PageDTO<WorkoutSummaryDTO> findAllUserWorkouts(Pageable pageable) {
+	public PageDTO<WorkoutSummaryDTO> findAllUserWorkouts(Pageable pageable, WorkoutFilter filter) {
 		var user = authUtils.getCurrentUser();
-		Page<Workout> workoutPage = workoutRepository.findAllByUserByEmail(user.getEmail(), pageable);
+		Page<Workout> workoutPage = workoutRepository.findAll(filter.toSpecification(user.getEmail()), pageable);
 		List<WorkoutSummaryDTO> workoutDTOS = workoutMapper.toSummaryCollectionResponse(workoutPage.getContent());
 		var pageImpl = new PageImpl<>(workoutDTOS, pageable, workoutPage.getTotalElements());
 		return new PageDTO<>(pageImpl);
