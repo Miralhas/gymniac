@@ -20,6 +20,7 @@ import { useDeleteWorkoutExerciseById } from "@/service/workout/mutations/use-de
 import { Workout, WorkoutExercise } from "@/types/workout";
 import { cn } from "@/utils/common-utils";
 import { EditIcon, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -52,7 +53,9 @@ const ExerciseCard = ({ handleMode, index, workoutExercise, workoutId }: Props) 
               <span className="flex h-8 w-8 text-foreground/90 items-center justify-center rounded-full bg-primary/30 border border-primary/80 text-sm font-bold">
                 {index + 1}
               </span>
-              <h2 className="text-xl font-bold text-foreground inline-flex flex-col">{workoutExercise.exercise.name}</h2>
+              <Link href={`/exercises/${workoutExercise.exercise.slug}`}>
+                <h2 className="text-xl font-bold text-foreground inline-flex flex-col">{workoutExercise.exercise.name}</h2>
+              </Link>
             </div>
           </CardTitle>
           <CardAction>

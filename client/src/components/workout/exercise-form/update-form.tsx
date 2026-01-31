@@ -196,7 +196,7 @@ const UpdateExerciseForm = ({ defaultValues, workoutExerciseId, workoutId, handl
                       type="button"
                       variant="secondary"
                       className="w-full max-w-30 col-span-full mt-3"
-                      onClick={() => field.pushValue({ kg: 0, reps: 0 })}
+                      onClick={() => field.pushValue(defaultValues.sets[defaultValues.sets.length - 1])}
                     >
                       <PlusIcon />
                       Add set
