@@ -3,10 +3,11 @@ import ExerciseList from "@/components/exercises/exercise-list";
 import ExercisesFilter from "@/components/exercises/exercises-filter";
 import ExercisesSearch from "@/components/exercises/exercises-search";
 import PageHeader from "@/components/page-header";
+import AuthenticatedButton from "@/components/ui/authenticated-button";
 import { exerciseParamsDefaultValues } from "@/lib/schemas/params/exercise-params-schema";
 import { getExercisesQueryOptions } from "@/service/exercise/queries/use-get-exercises";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { DumbbellIcon } from "lucide-react";
+import { DumbbellIcon, PlusIcon } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,7 +30,12 @@ const ExercisesPage = async () => {
       <div className="w-full flex flex-col md:flex-row gap-2.5">
         <ExercisesSearch />
         <ExercisesFilter />
-        <AddExerciseModal />
+        <AddExerciseModal mode="POST">
+          <AuthenticatedButton variant="cool" className="order-0 md:order-3">
+            <PlusIcon className="size-4 text-white" strokeWidth={3} />
+            Add Exercise
+          </AuthenticatedButton>
+        </AddExerciseModal>
       </div>
       <ExerciseList />
     </HydrationBoundary>

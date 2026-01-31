@@ -15,12 +15,27 @@ import {
   DrawerTrigger
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { PlusIcon } from "lucide-react";
-import { useState } from "react";
-import AuthenticatedButton from "../ui/authenticated-button";
+import { Exercise } from "@/types/exercise";
+import { PropsWithChildren, useState } from "react";
 import ExerciseForm from "./exercise-form";
 
-const AddExerciseModal = () => {
+type PostProps = {
+  mode: "POST";
+  className?: string;
+}
+
+type PutProps = {
+  mode: "PUT",
+  className?: string;
+  exercise: Exercise;
+}
+
+type Props =
+  | PostProps
+  | PutProps;
+
+const AddExerciseModal = (props: PropsWithChildren<Props>) => {
+  const { children, mode } = props;
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -30,17 +45,18 @@ const AddExerciseModal = () => {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger className="w-full" asChild>
-          <AuthenticatedButton variant="cool" className="order-0 md:order-3 w-full">
-            <PlusIcon className="size-4 text-white" strokeWidth={3} />
-            Add Exercise
-          </AuthenticatedButton>
+          {children}
         </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Add exercise</DrawerTitle>
+            <DrawerTitle>{mode === "POST" ? "Add Exercise" : "Update Exercise"}</DrawerTitle>
           </DrawerHeader>
           <div className="px-4 pb-4 overflow-y-auto max-h-[400px]">
-            <ExerciseForm handleOpen={handleOpen} />
+            {mode === "PUT" ? (
+              <ExerciseForm mode={mode} handleOpen={handleOpen} exercise={props.exercise} />
+            ) : (
+              <ExerciseForm mode={mode} handleOpen={handleOpen} />
+            )}
           </div>
         </DrawerContent>
       </Drawer>
@@ -50,16 +66,17 @@ const AddExerciseModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <AuthenticatedButton variant="cool" className="order-0 md:order-3">
-          <PlusIcon className="size-4 text-white" strokeWidth={3} />
-          Add Exercise
-        </AuthenticatedButton>
+        {children}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Exercise</DialogTitle>
+          <DialogTitle>{mode === "POST" ? "Add Exercise" : "Update Exercise"}</DialogTitle>
         </DialogHeader>
-        <ExerciseForm handleOpen={handleOpen} />
+        {mode === "PUT" ? (
+          <ExerciseForm mode={mode} handleOpen={handleOpen} exercise={props.exercise} />
+        ) : (
+          <ExerciseForm mode={mode} handleOpen={handleOpen} />
+        )}
       </DialogContent>
     </Dialog>
   )

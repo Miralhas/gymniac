@@ -18,6 +18,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import AddExerciseModal from "../add-exercise";
 
 const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
   const query = useGetExerciseBySlug(slug);
@@ -108,15 +109,16 @@ const ExerciseDetail = ({ slug }: { slug: Exercise["slug"] }) => {
                   align="start"
                   className="bg-background border border-zinc-50/15 flex flex-col max-w-[150px] py-3 px-3 gap-2.5"
                 >
-                  <Button
-                    className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"
-                    variant="pure"
-                    size="none"
-                    // onClick={() => setOpenDelete(true)}
-                  >
-                    <EditIcon className="size-4" />
-                    <span className="text-xs">Edit Exercise</span>
-                  </Button>
+                  <AddExerciseModal mode="PUT" exercise={query.data}>
+                    <Button
+                      className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"
+                      variant="pure"
+                      size="none"
+                    >
+                      <EditIcon className="size-4" />
+                      <span className="text-xs">Edit Exercise</span>
+                    </Button>
+                  </AddExerciseModal>
                   <Separator className="bg-zinc-50/20" />
                   <Button
                     className="gap-2 items-center justify-start text-foreground rounded-xs hover:opacity-80"

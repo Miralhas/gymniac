@@ -188,7 +188,7 @@ const SignupForm = () => {
             </form.Field>
             <Field orientation="vertical">
               <Button type="submit" variant="cool" form="signup-form" disabled={isPending}>
-                {isPending ? <span className="animate-pulse">Logging in...</span> : "Login"}
+                {isPending ? <span className="animate-pulse">Signin in...</span> : "Sign in"}
               </Button>
             </Field>
           </FieldGroup>

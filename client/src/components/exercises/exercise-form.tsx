@@ -17,18 +17,81 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Exercise } from "@/types/exercise";
+import { useUpdateExercise } from "@/service/exercise/mutations/use-update-exercise";
+import { useRouter } from "next/navigation";
 
-const defaultValues: ExerciseInput = {
-  description: "",
-  muscleGroup: EMPTY_DEFAULT_SELECT,
-  name: "",
-  videoHowTo: ""
+type PostProps = {
+  mode: "POST";
+  className?: string;
+  handleOpen: () => void;
 }
 
-const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
+type PutProps = {
+  mode: "PUT",
+  className?: string;
+  exercise: Exercise;
+  handleOpen: () => void;
+}
+
+type Props =
+  | PostProps
+  | PutProps;
+
+const ExerciseForm = (props: Props) => {
+  const { handleOpen, mode } = props;
+  const isPut = mode === "PUT";
   const muscleQuery = useGetMuscleGroups();
-  const mutation = useAddExercise();
+  const postMutation = useAddExercise();
+  const updateMutation = useUpdateExercise();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
+  const router = useRouter();
+
+  const defaultValues: ExerciseInput = {
+    description: isPut ? props.exercise.description : "",
+    muscleGroup: isPut ? props.exercise.muscleGroup.slug : EMPTY_DEFAULT_SELECT,
+    name: isPut ? props.exercise.name : "",
+    videoHowTo: isPut ? props.exercise.videoHowTo : "",
+  };
+
+  // eslint-disable-next-line
+  const handleError = (error: Error, formApi: any) => {
+    if (error instanceof ApiError) {
+      setErrorDetail(error.detail);
+      if (error.errors) {
+        Object.entries(error.errors).map(([key, value]) => {
+          formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
+        })
+      }
+    } else {
+      setErrorDetail(error.message);
+    }
+  }
+
+  // eslint-disable-next-line
+  const handlePost = (value: ExerciseInput, formApi: any) => {
+    if (isPut) return;
+    postMutation.mutate(value, {
+      onSuccess: () => {
+        toast.success("Exercise added successfully!");
+        form.reset();
+        handleOpen();
+      },
+      onError: (error) => handleError(error, formApi)
+    });
+  }
+
+  // eslint-disable-next-line
+  const handlePut = (value: ExerciseInput, formApi: any) => {
+    if (!isPut) return;
+    updateMutation.mutate({ value, id: props.exercise.id }, {
+      onSuccess: ({ slug }) => {
+        toast.success("Exercises added successfully!");
+        router.replace(`/exercises/${slug}`);
+      },
+      onError: (error) => handleError(error, formApi)
+    });
+  }
 
   const form = useForm({
     defaultValues,
@@ -36,27 +99,10 @@ const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
       onSubmit: exerciseSchema,
     },
     onSubmit: async ({ value, formApi }) => {
-      mutation.mutate(value, {
-        onSuccess: () => {
-          toast.success("Exercises added successfully!")
-          form.reset();
-          handleOpen();
-        },
-        onError: (error) => {
-          if (error instanceof ApiError) {
-            setErrorDetail(error.detail);
-            if (error.errors) {
-              Object.entries(error.errors).map(([key, value]) => {
-                // @ts-expect-error typescript can't map the type of the errors provided by the API.
-                formApi.fieldInfo[key].instance?.setErrorMap({ onSubmit: { message: value } })
-              })
-            }
-          } else {
-            setErrorDetail(error.message);
-          }
-        }
-      });
-
+      switch (mode) {
+        case "POST": handlePost(value, formApi); break;
+        case "PUT": handlePut(value, formApi); break;
+      }
     },
   });
 
@@ -127,7 +173,6 @@ const ExerciseForm = ({ handleOpen }: { handleOpen: () => void }) => {
                     <SelectItem value={EMPTY_DEFAULT_SELECT}>None</SelectItem>
                     {muscleQuery.data?.map(m => (
                       <SelectItem key={m.id} value={m.slug}>{m.name}</SelectItem>
-
                     ))}
                   </SelectContent>
                 </Select>
