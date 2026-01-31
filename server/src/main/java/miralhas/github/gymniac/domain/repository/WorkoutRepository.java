@@ -22,8 +22,4 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>, JpaSpec
 
 	@Query("FROM Workout w WHERE w.user.email = :email")
 	List<Workout> findAllByUserByEmail(String email);
-
-	@Modifying
-	@Query("DELETE FROM Workout w WHERE w.user.email = :email")
-	void deleteUserWorkouts(String email);
 }

@@ -32,6 +32,7 @@ public class UserService {
 	private final RoleService roleService;
 	private final AuthUtils authUtils;
 	private final WorkoutRepository workoutRepository;
+	private final WorkoutService workoutService;
 
 	public User findUserByIdOrException(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> {
@@ -80,7 +81,8 @@ public class UserService {
 
 	@Transactional
 	public void deleteUserWorkouts(User user) {
-		workoutRepository.deleteUserWorkouts(user.getEmail());
+		var workouts = workoutRepository.findAllByUserByEmail(user.getEmail());
+		workoutRepository.deleteAll(workouts);
 	}
 
 	private void checkIfCanUpdateUsername(String username, User user) {

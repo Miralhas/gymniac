@@ -7,6 +7,7 @@ import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto.input.UpdateUserInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
 import miralhas.github.gymniac.domain.model.auth.User;
+import miralhas.github.gymniac.domain.repository.UserRepository;
 import miralhas.github.gymniac.domain.service.UserService;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,6 +28,15 @@ public class UserController  {
 	private final UserService userService;
 	private final UserMapper userMapper;
 	private final AuthUtils authUtils;
+	private final UserRepository userRepository;
+
+	@GetMapping
+	@ResponseStatus(HttpStatus.OK)
+	@PreAuthorize("hasRole('ADMIN')")
+	public List<UserDTO> findAllUsers() {
+		return userRepository.findAll().stream().map(userMapper::toResponse).toList();
+	}
+
 
 	@PatchMapping
 	@ResponseStatus(HttpStatus.OK)
