@@ -30,6 +30,7 @@ import { ArrowLeft, CalendarIcon, DumbbellIcon, FileDownIcon, LayersIcon, Scroll
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
+import PdfModal from "../pdf/pdf-modal";
 
 const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
   const query = useGetWorkoutPlanBySlug(slug);
@@ -72,13 +73,7 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
         <LittleCard>
           <LayersIcon className="size-4 mr-2 text-accent shrink-0" /> {totalSets} total sets
         </LittleCard>
-        <Button
-          variant="pure"
-          size="none"
-          className="w-full md:w-[160px] flex items-center justify-center text-xs text-[13px] rounded-md h-[48px] border border-accent/30 bg-accent/10 text-white ml-auto transition-all ease-in-out duration-200 hover:-translate-y-0.75 hover:translate-x-0.75 hover:text-accent order-0"
-        >
-          <FileDownIcon className="size-4 mr-2 text-accent" /> Export to PDF
-        </Button>
+        <PdfModal workoutPlan={query.data} />
       </div>
       <section className="space-y-4 mt-12">
 
