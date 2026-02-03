@@ -59,25 +59,35 @@ public class RoutineService {
 			routine = routineRepository.save(routine);
 
 			final Routine finalRoutine = routine;
-			var routineExercises = routineInput.exercises().stream().map(rExInput -> {
-				var routineExercise = routineExerciseMapper.fromInput(rExInput);
-				var exercise = exerciseService.findBySlugOrException(rExInput.slug());
-				routineExercise.setExercise(exercise);
-				routineExercise.setRoutine(finalRoutine);
-				return routineExerciseRepository.save(routineExercise);
-			}).toList();
-
+			List<RoutineExercise> routineExercises = createRoutineExercise(routineInput, finalRoutine);
 			routine.setRoutineExercises(routineExercises);
 			return routine;
 		}).toList();
 	}
 
+	private List<RoutineExercise> createRoutineExercise(RoutineInput routineInput, Routine finalRoutine) {
+		return routineInput.exercises().stream().map(rExInput -> {
+			var routineExercise = routineExerciseMapper.fromInput(rExInput);
+			var exercise = exerciseService.findBySlugOrException(rExInput.slug());
+			routineExercise.setExercise(exercise);
+			routineExercise.setRoutine(finalRoutine);
+			return routineExerciseRepository.save(routineExercise);
+		}).toList();
+	}
+
 	@Transactional
-	public Routine update(Routine routine, UpdateRoutineInput input) {
+	public Routine update(Routine routine, RoutineInput input) {
 		authUtils.validate(routine.getWorkoutPlan().getUser());
 
+		routineRepository.deleteAllRoutineExercises(routine.getId());
+		routineRepository.flush();
+
+		createRoutineExercise(input, routine);
+
 		routineMapper.update(input, routine);
-		return routineRepository.save(routine);
+		routineRepository.saveAndFlush(routine);
+
+		return routine;
 	}
 
 	@Transactional

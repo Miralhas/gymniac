@@ -3,6 +3,7 @@ package miralhas.github.gymniac.api.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import miralhas.github.gymniac.api.dto.RoutineDTO;
+import miralhas.github.gymniac.api.dto.input.RoutineInput;
 import miralhas.github.gymniac.api.dto.input.UpdateRoutineExerciseInput;
 import miralhas.github.gymniac.api.dto.input.UpdateRoutineInput;
 import miralhas.github.gymniac.api.dto_mapper.RoutineMapper;
@@ -26,12 +27,12 @@ public class RoutineController {
 		return routineService.findRoutinesByWorkoutSlug(slug);
 	}
 
-	@PatchMapping("/{id}")
+	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public RoutineDTO updateRoutine(
 			@PathVariable Long id,
 			@PathVariable String slug,
-			@RequestBody @Valid UpdateRoutineInput input
+			@RequestBody @Valid RoutineInput input
 	) {
 		var routine = routineService.findByIdOrException(id);
 		return routineMapper.toResponse(routineService.update(routine, input));
@@ -45,7 +46,6 @@ public class RoutineController {
 	) {
 		routineService.delete(id);
 	}
-
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PatchMapping("/{routineId}/exercises/{exerciseId}")

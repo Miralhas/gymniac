@@ -8,7 +8,9 @@ import miralhas.github.gymniac.domain.model.user_info.Weight;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
@@ -50,8 +52,8 @@ public class User implements Serializable {
 	@Column(nullable = true)
 	private String profilePicture;
 
-	@Column(nullable = true)
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	@Column(nullable = true, columnDefinition = "user_mode")
 	private Mode mode;
 
 	@Column(nullable = true)

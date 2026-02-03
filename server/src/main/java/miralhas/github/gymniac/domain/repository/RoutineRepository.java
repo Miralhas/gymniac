@@ -3,6 +3,7 @@ package miralhas.github.gymniac.domain.repository;
 import miralhas.github.gymniac.domain.model.workout_plan.Routine;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
 	})
 	@Query("FROM Routine r WHERE r.workoutPlan.slug = :slug")
 	List<Routine> findRoutinesByWorkoutPlanSlug(String slug);
+
+	@Modifying
+	@Query("DELETE FROM RoutineExercise rex where rex.routine.id = :routineId")
+	void deleteAllRoutineExercises(Long routineId);
 }

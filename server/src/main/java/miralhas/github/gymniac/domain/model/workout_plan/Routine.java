@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import miralhas.github.gymniac.domain.model.workout_plan.enums.DaysOfTheWeek;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @RequiredArgsConstructor
+
 public class Routine implements Serializable {
 
 	@Serial
@@ -29,8 +32,8 @@ public class Routine implements Serializable {
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	@Column(nullable = false, columnDefinition = "day_of_week")
 	private DaysOfTheWeek desirableDayOfWeek;
 
 	@Column(nullable = true, columnDefinition = "TEXT")

@@ -2,7 +2,6 @@
 
 import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,7 +15,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import {
   Tooltip,
@@ -26,7 +25,7 @@ import {
 import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
 import { is404 } from "@/utils/common-utils";
 import { capitalize } from "@/utils/string-utils";
-import { ArrowLeft, CalendarIcon, DumbbellIcon, FileDownIcon, LayersIcon, ScrollText } from "lucide-react";
+import { ArrowLeft, CalendarIcon, DumbbellIcon, LayersIcon, ScrollText } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropsWithChildren } from "react";
