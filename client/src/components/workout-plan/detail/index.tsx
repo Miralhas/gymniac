@@ -1,38 +1,28 @@
 'use client'
 
+import ConfirmDeleteDialog from "@/components/confirm-delete-dialog";
 import DefaultLoading from "@/components/default-loading";
 import PageHeader from "@/components/page-header";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { useDeleteRoutine } from "@/service/workout-plan/mutations/use-delete-routine";
 import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
-import { is404 } from "@/utils/common-utils";
-import { capitalize } from "@/utils/string-utils";
+import { WorkoutRoutine } from "@/types/workout-plan";
+import { cn, is404 } from "@/utils/common-utils";
 import { ArrowLeft, CalendarIcon, DumbbellIcon, LayersIcon, ScrollText } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useState } from "react";
+import { toast } from "sonner";
 import PdfModal from "../pdf/pdf-modal";
+import RoutineCard from "./routine-card";
+import UpdateRoutineForm from "./update-routine-form";
 
 const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
   const query = useGetWorkoutPlanBySlug(slug);
+  const [editMode, setEditMode] = useState<WorkoutRoutine | undefined>(undefined);
+
+  const deleteMutation = useDeleteRoutine(slug);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState<WorkoutRoutine["id"] | undefined>(undefined);
 
   if (is404(query.error)) {
     notFound();
@@ -47,6 +37,13 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
   const totalDays = query.data.routines.length;
   const totalExercises = query.data.routines.reduce((acc, curr) => acc + curr.exercises.length, 0);
   const totalSets = query.data.routines.reduce((acc, curr) => acc + curr.exercises.reduce((acc2, curr2) => acc2 + curr2.desirableSets, 0), 0);
+
+  const handleSubmit = (id: WorkoutRoutine["id"]) => {
+    deleteMutation.mutate({ id }, {
+      onSuccess: () => toast.success("Routine deleted successfully!"),
+      onError: () => toast.error("Failed to delete routine. Try again later!")
+    })
+  }
 
   return (
     <>
@@ -76,47 +73,38 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
       </div>
       <section className="space-y-4 mt-12">
 
-        <div className="grid md:grid-cols-3 gap-3">
-          {query.data.routines.map(routine => (
-            <Card key={routine.id} className="col-span-1 pt-3 border border-accent/25 rounded-md gap-y-3">
-              <CardHeader className="text-center space-y-0.5">
-                <p className="text-accent/90 text-sm text-[13px] font-semibold">{capitalize(routine.desirableDayOfWeek)}</p>
-                <CardTitle>{routine.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableCaption>{capitalize(routine.desirableDayOfWeek)} Exercises</TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Exercises</TableHead>
-                      <TableHead className="text-right pe-3">
-                        <Tooltip delayDuration={400}>
-                          <TooltipTrigger>SxR</TooltipTrigger>
-                          <TooltipContent>
-                            <p>Sets x Repetitions</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {routine.exercises.map((exercise) => (
-                      <TableRow key={exercise.id}>
-                        <TableCell className="font-medium text-sm text-foreground/80 hover:text-foreground/90">
-                          <Link href={`/exercises/${exercise.exercise.slug}`}>{exercise.exercise.name}</Link>
-                        </TableCell>
-                        <TableCell className="font-medium text-sm text-foreground/80 hover:text-foreground/90 text-right">
-                          {exercise.desirableSets}x{exercise.desirableReps}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          ))}
+        <div className={cn("grid md:grid-cols-3 gap-3", editMode && "md:grid-cols-1")}>
+          {query.data.routines.map(routine => {
+            return routine.id !== editMode?.id ? (
+              <RoutineCard
+                key={routine.id}
+                owner={query.data.user}
+                routine={routine}
+                setDeleteId={setDeleteId}
+                setEditMode={setEditMode}
+                setOpenDelete={setOpenDelete}
+              />
+            ) : (
+              <div key={routine.id}>
+                <UpdateRoutineForm
+                  planSlug={query.data.slug}
+                  routine={routine}
+                  handleEditMode={() => setEditMode(undefined)}
+                />
+              </div>
+            )
+          })}
         </div>
       </section>
+      {deleteId && (
+        <ConfirmDeleteDialog
+          onSubmit={() => handleSubmit(deleteId)}
+          open={openDelete}
+          setOpen={setOpenDelete}
+          title="Delete Routine"
+          description="Are you sure you want to delete this routine? This action cannot be undone"
+        />
+      )}
     </>
   )
 }

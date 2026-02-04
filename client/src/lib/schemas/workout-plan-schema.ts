@@ -33,3 +33,4 @@ export const workoutPlanSchema = z.object({
 });
 
 export type WorkoutPlanInput = z.infer<typeof workoutPlanSchema>;
+export type WorkoutRoutineInput = z.infer<typeof workoutRoutineSchema>;

@@ -14,7 +14,7 @@ import {
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#0a0a0a",
-    padding: 40,
+    padding: 20,
     color: '#fafafa',
     fontFamily: "Helvetica",
   },
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: "#FFFFFF",
     textAlign: "center",
-    marginBottom: 30,
+    marginBottom: 16,
   },
   grid: {
     flexDirection: "row",
@@ -103,17 +103,15 @@ const styles = StyleSheet.create({
 })
 
 const WorkoutPlanPDF = ({ workoutPlan }: { workoutPlan: WorkoutPlan }) => {
-  const { routines, name, createdAt, description } = workoutPlan;
+  const { routines, name, description } = workoutPlan;
+  const formattedName = name.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <Text style={styles.title}>{name}</Text>
-        <View style={styles.descriptionBox}>
-          <Text>{description}</Text>
-        </View>
-        <View style={styles.grid} break>
+        <Text style={styles.title}>{formattedName}</Text>
+        <View style={styles.grid} >
           {routines.map((routine) => (
-            <View key={routine.id} style={styles.card}>
+            <View key={routine.id} style={styles.card} wrap={false}>
               <View style={styles.cardHeader}>
                 <Text style={styles.dayLabel}>{capitalize(routine.desirableDayOfWeek)}</Text>
                 <Text style={styles.routineName}>{routine.name}</Text>
@@ -136,6 +134,9 @@ const WorkoutPlanPDF = ({ workoutPlan }: { workoutPlan: WorkoutPlan }) => {
               <Text style={styles.tableCaption}>{capitalize(routine.desirableDayOfWeek)} Exercises</Text>
             </View>
           ))}
+        </View>
+        <View style={styles.descriptionBox} break>
+          <Text>{description}</Text>
         </View>
       </Page>
     </Document>

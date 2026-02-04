@@ -38,18 +38,6 @@ import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import ExercisesCombobox from "../workout/exercises-combobox";
 
-// const defaultValues: WorkoutPlanInput = {
-//   description: "",
-//   name: "",
-//   routines: [
-//     {
-//       name: "",
-//       desirableDayOfWeek: EMPTY_DEFAULT_SELECT,
-//       exercises: [{ reps: 0, sets: 0, slug: "" }],
-//     }
-//   ],
-// }
-
 const defaultValues: WorkoutPlanInput = {
   "description": "6 days per week workout plan (NO BETAS ALLOWED ⛔️)",
   "name": "ULTRA GIGA CHAD WORKOUT PLAN (ONLY FOR MONSTERS 😤)",
@@ -134,6 +122,18 @@ const defaultValues: WorkoutPlanInput = {
     }
   ]
 }
+
+// const defaultValues: WorkoutPlanInput = {
+//   description: "",
+//   name: "",
+//   routines: [
+//     {
+//       name: "",
+//       desirableDayOfWeek: EMPTY_DEFAULT_SELECT,
+//       exercises: [{ desirableReps: 0, desirableSets: 0, slug: "" }],
+//     }
+//   ],
+// }
 
 const invalidFocus = () => {
   const InvalidInput = document.querySelector(
