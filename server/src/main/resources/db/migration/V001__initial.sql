@@ -1,3 +1,7 @@
+DROP TYPE IF EXISTS role_type;
+DROP TYPE IF EXISTS user_mode;
+DROP TYPE IF EXISTS day_of_week;
+
 CREATE TYPE role_type AS ENUM (
     'USER',
     'ADMIN'

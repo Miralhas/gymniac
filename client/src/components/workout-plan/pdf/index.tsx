@@ -28,11 +28,10 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 12,
+    gap: 16,
   },
   card: {
-    width: "31%",
+    width: "32%",
     backgroundColor: "#212121",
     borderRadius: 8,
     border: "1px solid #086129",

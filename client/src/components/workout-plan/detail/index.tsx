@@ -7,7 +7,7 @@ import { useDeleteRoutine } from "@/service/workout-plan/mutations/use-delete-ro
 import { useGetWorkoutPlanBySlug } from "@/service/workout-plan/queries/use-get-workout-by-slug";
 import { WorkoutRoutine } from "@/types/workout-plan";
 import { cn, is404 } from "@/utils/common-utils";
-import { ArrowLeft, CalendarIcon, DumbbellIcon, LayersIcon, ScrollText } from "lucide-react";
+import { ArrowLeft, CalendarIcon, DumbbellIcon, LayersIcon, PlusIcon, ScrollText } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropsWithChildren, useState } from "react";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import PdfModal from "../pdf/pdf-modal";
 import RoutineCard from "./routine-card";
 import UpdateRoutineForm from "./update-routine-form";
+import { Button } from "@/components/ui/button";
 
 const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
   const query = useGetWorkoutPlanBySlug(slug);
@@ -54,7 +55,7 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
       <PageHeader
         title={query.data.name}
         icon={ScrollText}
-        description={query.data.description ?? ""}
+        description={`Submitted by: ${query.data.user.username}`}
         titleClassName="text-base md:text-xl lg:text-2xl"
         descriptionClassName="text-sm md:text-base"
         className="items-start"
@@ -71,8 +72,10 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
         </LittleCard>
         <PdfModal workoutPlan={query.data} />
       </div>
-      <section className="space-y-4 mt-12">
-
+      <section className="space-y-6">
+        <div className="w-full text-base border border-zind-50/15 p-4 text-foreground/80 bg-card/40 rounded-xl border-l-primary border-l-3 italic mt-5">
+          {query.data.description}
+        </div>
         <div className={cn("grid md:grid-cols-3 gap-3", editMode && "md:grid-cols-1")}>
           {query.data.routines.map(routine => {
             return routine.id !== editMode?.id ? (
@@ -94,6 +97,12 @@ const WorkoutPlanDetail = ({ slug }: { slug: string }) => {
               </div>
             )
           })}
+        </div>
+        <div className="flex justify-center mt-12">
+          <Button variant="secondary" className="w-full max-w-[992px]">
+            <PlusIcon className="size-4" />
+            Add Routine
+          </Button>
         </div>
       </section>
       {deleteId && (

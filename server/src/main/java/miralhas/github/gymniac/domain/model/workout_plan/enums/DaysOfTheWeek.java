@@ -2,8 +2,6 @@ package miralhas.github.gymniac.domain.model.workout_plan.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Getter
 @RequiredArgsConstructor
