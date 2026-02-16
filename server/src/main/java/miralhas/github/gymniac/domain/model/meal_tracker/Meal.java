@@ -2,10 +2,13 @@ package miralhas.github.gymniac.domain.model.meal_tracker;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +31,14 @@ public class Meal implements Serializable {
 
 	@Column(nullable = false)
 	private Double kcal;
+
+	@CreationTimestamp
+	@Column(nullable = true)
+	private OffsetDateTime createdAt;
+
+	@UpdateTimestamp
+	@Column(nullable = true)
+	private OffsetDateTime updatedAt;
 
 	@OneToMany(
 			mappedBy = "meal",

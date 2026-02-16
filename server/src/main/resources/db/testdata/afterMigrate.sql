@@ -12,6 +12,8 @@ delete from workout_plan;
 delete from exercise;
 delete from weight;
 delete from muscle_group;
+delete from macronutrient;
+delete from meal;
 delete from users;
 
 SET session_replication_role = 'origin';
@@ -26,6 +28,8 @@ ALTER TABLE workout_plan ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE exercise ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE weight ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE muscle_group ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE macronutrient ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE meal ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
 
 INSERT INTO role (name) values('ADMIN'), ('USER');
