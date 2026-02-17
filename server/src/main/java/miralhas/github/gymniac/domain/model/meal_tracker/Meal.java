@@ -2,6 +2,7 @@ package miralhas.github.gymniac.domain.model.meal_tracker;
 
 import jakarta.persistence.*;
 import lombok.*;
+import miralhas.github.gymniac.domain.model.auth.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
@@ -39,6 +40,9 @@ public class Meal implements Serializable {
 	@UpdateTimestamp
 	@Column(nullable = true)
 	private OffsetDateTime updatedAt;
+
+	@ManyToOne
+	private User user;
 
 	@OneToMany(
 			mappedBy = "meal",

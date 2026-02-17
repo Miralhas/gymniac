@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
@@ -21,6 +23,8 @@ public interface MealMapper {
 	Meal fromInput(MealInput input);
 
 	MealDTO toResponse(Meal meal);
+
+	List<MealDTO> toCollectionResponse(List<Meal> meals);
 
 //	@Mapping(target = "macros", ignore = true)
 	void update(MealInput input, @MappingTarget Meal meal);

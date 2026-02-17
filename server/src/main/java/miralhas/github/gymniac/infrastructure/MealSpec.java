@@ -1,7 +1,7 @@
 package miralhas.github.gymniac.infrastructure;
 
 import lombok.experimental.UtilityClass;
-import miralhas.github.gymniac.domain.model.workout.Workout;
+import miralhas.github.gymniac.domain.model.meal_tracker.Meal;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.OffsetDateTime;
@@ -10,23 +10,23 @@ import java.util.Objects;
 import static org.springframework.util.StringUtils.hasText;
 
 @UtilityClass
-public class WorkoutSpec {
+public class MealSpec {
 
-	public static Specification<Workout> fromDate(OffsetDateTime date) {
+	public static Specification<Meal> fromDate(OffsetDateTime date) {
 		return (root, query, builder) -> {
 			if (Objects.isNull(date)) return null;
 			return builder.greaterThanOrEqualTo(root.get("createdAt"), date);
 		};
 	}
 
-	public static Specification<Workout> toDate(OffsetDateTime date) {
+	public static Specification<Meal> toDate(OffsetDateTime date) {
 		return (root, query, builder) -> {
 			if (Objects.isNull(date)) return null;
 			return builder.lessThanOrEqualTo(root.get("createdAt"), date);
 		};
 	}
 
-	public static Specification<Workout> withEmail(String email) {
+	public static Specification<Meal> withEmail(String email) {
 		return (root, query, builder) -> {
 			if (!hasText(email)) return null;
 			var userJoin = root.join("user");
@@ -34,4 +34,5 @@ public class WorkoutSpec {
 			return builder.equal(predicate, email.toLowerCase());
 		};
 	}
+
 }

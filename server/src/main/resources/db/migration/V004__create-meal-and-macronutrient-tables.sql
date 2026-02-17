@@ -12,6 +12,7 @@ CREATE TABLE meal (
     kcal DOUBLE PRECISION                        NOT NULL,
     created_at TIMESTAMP(6) WITH TIME ZONE,
     updated_at TIMESTAMP(6) WITH TIME ZONE,
+    user_id    BIGINT REFERENCES users,
     CONSTRAINT pk_meal PRIMARY KEY (id)
 );
 
