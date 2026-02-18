@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 const NAV_LINKS = [
   { href: "/profile", name: "Info" },
   { href: "/profile/weight", name: "Weight" },
-  // { href: "/profile/history", name: "History" },
+  { href: "/profile/meals", name: "Meals" },
   // { href: "/profile/reviews", name: "Reviews" },
   // { href: "/profile/comments", name: "Comments" },
   // { href: "/profile/inbox", name: "Inbox" },

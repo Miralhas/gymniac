@@ -12,17 +12,12 @@ import static org.springframework.util.StringUtils.hasText;
 @UtilityClass
 public class MealSpec {
 
-	public static Specification<Meal> fromDate(OffsetDateTime date) {
+	public static Specification<Meal> fromDate(OffsetDateTime fromDate) {
 		return (root, query, builder) -> {
-			if (Objects.isNull(date)) return null;
-			return builder.greaterThanOrEqualTo(root.get("createdAt"), date);
-		};
-	}
-
-	public static Specification<Meal> toDate(OffsetDateTime date) {
-		return (root, query, builder) -> {
-			if (Objects.isNull(date)) return null;
-			return builder.lessThanOrEqualTo(root.get("createdAt"), date);
+			if (Objects.isNull(fromDate)) return null;
+			var date = fromDate.withHour(0).withMinute(0).withSecond(0).withNano(0);
+			var untilDate = fromDate.withHour(23).withMinute(59).withSecond(0).withNano(0);
+			return builder.between(root.get("createdAt"), date, untilDate);
 		};
 	}
 

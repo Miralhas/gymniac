@@ -26,6 +26,11 @@ export default async function proxy(req: NextRequest) {
   const { hasAccessToken, hasRefreshToken, refreshToken } = await getAuthTokens();
   const user = await getCurrentUser();
 
+  // Access Token expired and user has the refresh token stored in cookies.
+  if (!hasAccessToken && hasRefreshToken) {
+    await refreshTokens(refreshToken!);
+  }
+
   if (isAdminRoute && !adminCheck(user)) {
     if (!user) return NextResponse.redirect(new URL('/login', req.nextUrl));
     return NextResponse.redirect(new URL('/', req.nextUrl));
@@ -37,11 +42,6 @@ export default async function proxy(req: NextRequest) {
 
   if (!user && isProtectedDynamicRoute) {
     return NextResponse.redirect(new URL(`/login?redirect=${path}`, req.nextUrl));
-  }
-
-  // Access Token expired and user has the refresh token stored in cookies.
-  if (!hasAccessToken && hasRefreshToken) {
-    await refreshTokens(refreshToken!);
   }
 
   return NextResponse.next();

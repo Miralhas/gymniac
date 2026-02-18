@@ -52,8 +52,6 @@
 }
 
 :root {
-  color-scheme: only dark;
-
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.21 0.006 285.885);
@@ -135,7 +133,6 @@
 
 * {
   scrollbar-color: rgba(0, 255, 157, 0.3) rgb(10, 10, 10);
-  /* scrollbar-color: oklch(37.266% 0.05414 155.605) #000000; */
   scrollbar-width: thin;
   scroll-behavior: smooth;
 }

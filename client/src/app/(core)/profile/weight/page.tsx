@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { defaultWeightsParams, getUserWeightsQueryOptions } from "@/service/weight/queries/use-get-user-weights";
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/utils/constants";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import { GoalIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

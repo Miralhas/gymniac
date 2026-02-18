@@ -69,7 +69,7 @@ const AddWeight = (props: PropsWithChildren<Props>) => {
       <DrawerTrigger asChild>
         {children}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="p-6">
         <DrawerHeader className="text-left">
           <DrawerTitle>{mode === "POST" ? "Add Weight" : "Update Weight"}</DrawerTitle>
         </DrawerHeader>
@@ -80,11 +80,11 @@ const AddWeight = (props: PropsWithChildren<Props>) => {
           <AddWeightForm mode="POST" setOpen={setOpen} />
         )}
 
-        <DrawerFooter className="pt-2">
+        {/* <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
-        </DrawerFooter>
+        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   )

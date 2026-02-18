@@ -10,12 +10,9 @@ import static miralhas.github.gymniac.infrastructure.MealSpec.*;
 
 public record MealFilter(
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-		OffsetDateTime from,
-
-		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-		OffsetDateTime to
+		OffsetDateTime from
 ) {
 	public Specification<Meal> toSpecification(String email) {
-		return fromDate(from).and(toDate(to)).and(withEmail(email));
+		return fromDate(from).and(withEmail(email));
 	}
 }
