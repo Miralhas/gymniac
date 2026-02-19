@@ -1,17 +1,24 @@
 'use client'
 
+import GenericPagination from "@/components/generic-pagination";
+import { Button } from "@/components/ui/button";
+import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
 import { defaultMealsParams, useGetUserMeals } from "@/service/meals/queries/use-get-user-meals";
-import { startOfToday } from "date-fns";
+import { format } from "date-fns";
 import { HamburgerIcon, PlusIcon, UtensilsCrossedIcon } from "lucide-react";
-import { useState } from "react";
+import { useQueryStates } from "nuqs";
+import { Dispatch, SetStateAction, useState } from "react";
 import MealFilter from "./meal-filter";
 import MealItem from "./meal-item";
 import MealModal from "./meal-modal";
-import { Button } from "@/components/ui/button";
 
 const MealList = ({ accessToken }: { accessToken: string }) => {
-  const [date, setDate] = useState<Date | undefined>(() => startOfToday());
-  const query = useGetUserMeals(accessToken, { ...defaultMealsParams, from: date?.toISOString() });
+  const [date, setDate] = useState<Date | undefined>(() => new Date());
+  const [params, setParams] = useQueryStates(nuqsPaginationParams);
+  const formattedDate = date ? format(date, "yyyy-MM-dd") : undefined;
+  const query = useGetUserMeals(accessToken, { ...defaultMealsParams, from: formattedDate, page: params.page });
+
+  const handleDateReset = () => setDate(new Date());
 
   if (query.isLoading) {
     return (
@@ -25,12 +32,7 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
     return (
       <>
         <div className="flex flex-col md:flex-row md:justify-between gap-2">
-          <MealModal mode="POST">
-            <Button variant="cool" className="h-8">
-              <PlusIcon className="size-4" />
-              Add Meal
-            </Button>
-          </MealModal>
+          <AddMealModalButton handleDateReset={handleDateReset} />
           <MealFilter date={date} setDate={setDate} />
         </div>
         <div className="grid min-h-[30vh] place-items-center bg-secondary/20 border">
@@ -48,18 +50,31 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col md:flex-row md:justify-between gap-2">
-        <MealModal mode="POST">
-          <Button variant="cool" className="h-8">
-            <PlusIcon className="size-4" />
-            Add Meal
-          </Button>
-        </MealModal>
+        <AddMealModalButton handleDateReset={handleDateReset} />
         <MealFilter date={date} setDate={setDate} />
       </div>
       {query.data.results.map(meal => (
-        <MealItem key={meal.id} meal={meal} />
+        <MealItem key={meal.id} meal={meal} handleDateReset={handleDateReset} />
       ))}
+      {query.data && query.data?.totalPages > 1 ? (
+        <GenericPagination
+          query={query.data}
+          handlePage={(page) => setParams({ page })}
+          className="mt-6"
+        />
+      ) : null}
     </div>
+  )
+}
+
+const AddMealModalButton = ({ handleDateReset }: { handleDateReset: () => void; }) => {
+  return (
+    <MealModal mode="POST" handleDateReset={handleDateReset} >
+      <Button variant="cool" className="h-8">
+        <PlusIcon className="size-4" />
+        Add Meal
+      </Button>
+    </MealModal>
   )
 }
 

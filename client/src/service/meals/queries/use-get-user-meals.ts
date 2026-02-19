@@ -13,4 +13,4 @@ export const useGetUserMeals = (accessToken: string, params: MealsParams = {}) =
   getUserMealsQueryOptions(accessToken, params)
 );
 
-export const defaultMealsParams: MealsParams = { page: 0, size: 10, from: startOfToday().toISOString() }; 
+export const defaultMealsParams: MealsParams = { page: 0, size: 10, from: startOfToday().toISOString(), zoneId: Intl.DateTimeFormat().resolvedOptions().timeZone }; 

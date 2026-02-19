@@ -4,26 +4,27 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { InputGroup } from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { MacronutrientInput, MealInput, mealSchema } from "@/lib/schemas/meal-schema";
 import { ApiError } from "@/service/api-error";
 import { useAddMeal } from "@/service/meals/mutations/use-add-meal";
+import { useUpdateMeal } from "@/service/meals/mutations/use-update-meal";
 import { Meal } from "@/types/meal";
 import { useForm } from "@tanstack/react-form";
 import { AlertCircle, PlusIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { MACRO_CONFIG } from "./macro-config";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 
 type PostProps = {
+  handleDateReset: () => void;
   mode: "POST";
   handleOpen: () => void;
 }
 
 type PutProps = {
+  handleDateReset: () => void;
   mode: "PUT",
   meal: Meal;
   handleOpen: () => void;
@@ -43,8 +44,8 @@ const MealForm = (props: Props) => {
   const { handleOpen, mode } = props;
   const isPut = mode === "PUT";
   const postMutation = useAddMeal();
+  const putMutation = useUpdateMeal();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
-  const router = useRouter();
 
   const defaultValues: MealInput = {
     name: isPut ? props.meal.name : "",
@@ -71,9 +72,24 @@ const MealForm = (props: Props) => {
     if (isPut) return;
     postMutation.mutate(value, {
       onSuccess: () => {
-        toast.success("Exercise added successfully!");
+        toast.success("Meal added successfully!");
         form.reset();
         handleOpen();
+        props.handleDateReset();
+      },
+      onError: (error) => handleError(error, formApi)
+    });
+  }
+
+  // eslint-disable-next-line
+  const handlePut = (value: MealInput, formApi: any) => {
+    if (!isPut) return;
+    putMutation.mutate({ data: value, id: props.meal.id }, {
+      onSuccess: () => {
+        toast.success("Meal updated successfully!");
+        form.reset();
+        handleOpen();
+        props.handleDateReset();
       },
       onError: (error) => handleError(error, formApi)
     });
@@ -87,7 +103,7 @@ const MealForm = (props: Props) => {
     onSubmit: async ({ value, formApi }) => {
       switch (mode) {
         case "POST": handlePost(value, formApi); break;
-        // case "PUT": handlePut(value, formApi); break;
+        case "PUT": handlePut(value, formApi); break;
       }
     },
   });

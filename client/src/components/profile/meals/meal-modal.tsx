@@ -20,10 +20,12 @@ import { PropsWithChildren, useState } from "react";
 import MealForm from "./meal-form";
 
 type PostProps = {
+  handleDateReset: () => void;
   mode: "POST";
 }
 
 type PutProps = {
+  handleDateReset: () => void;
   mode: "PUT",
   meal: Meal;
 }
@@ -33,7 +35,7 @@ type Props =
   | PutProps;
 
 const MealModal = (props: PropsWithChildren<Props>) => {
-  const { children, mode } = props;
+  const { children, mode, handleDateReset } = props;
   const [open, setOpen] = useState(false)
   const isMobile = useIsMobile();
 
@@ -50,9 +52,9 @@ const MealModal = (props: PropsWithChildren<Props>) => {
             <DialogTitle>{mode === "POST" ? "Add Meal" : "Update Meal"}</DialogTitle>
           </DialogHeader>
           {mode === "PUT" ? (
-            <MealForm meal={props.meal} handleOpen={handleOpen} mode="PUT" />
+            <MealForm handleDateReset={handleDateReset} meal={props.meal} handleOpen={handleOpen} mode="PUT" />
           ) : (
-            <MealForm mode="POST" handleOpen={handleOpen} />
+            <MealForm handleDateReset={handleDateReset} mode="POST" handleOpen={handleOpen} />
           )}
         </DialogContent>
       </Dialog>
@@ -70,9 +72,9 @@ const MealModal = (props: PropsWithChildren<Props>) => {
         </DrawerHeader>
         <div className="overflow-y-auto p-3">
           {mode === "PUT" ? (
-            <MealForm meal={props.meal} handleOpen={handleOpen} mode="PUT" />
+            <MealForm handleDateReset={handleDateReset} meal={props.meal} handleOpen={handleOpen} mode="PUT" />
           ) : (
-            <MealForm mode="POST" handleOpen={handleOpen} />
+            <MealForm handleDateReset={handleDateReset} mode="POST" handleOpen={handleOpen} />
           )}
         </div>
       </DrawerContent>
