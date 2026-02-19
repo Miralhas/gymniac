@@ -24,13 +24,13 @@ const MealFilter = ({ date, setDate }: Props) => {
         <Button
           variant="outline"
           data-empty={!date}
-          className="data-[empty=true]:text-muted-foreground w-[212px] justify-between text-left font-normal"
+          className="data-[empty=true]:text-muted-foreground w-full md:w-[212px] justify-between text-left font-normal"
         >
           {date ? format(date, "PPP") : <span>Pick a date</span>}
           <ChevronDownIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="center" avoidCollisions={false}>
+      <PopoverContent className="w-auto p-0" align="center" >
         <Calendar
           required={false}
           mode="single"

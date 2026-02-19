@@ -2,10 +2,12 @@
 
 import { defaultMealsParams, useGetUserMeals } from "@/service/meals/queries/use-get-user-meals";
 import { startOfToday } from "date-fns";
-import { HamburgerIcon, UtensilsCrossedIcon } from "lucide-react";
+import { HamburgerIcon, PlusIcon, UtensilsCrossedIcon } from "lucide-react";
 import { useState } from "react";
 import MealFilter from "./meal-filter";
 import MealItem from "./meal-item";
+import MealModal from "./meal-modal";
+import { Button } from "@/components/ui/button";
 
 const MealList = ({ accessToken }: { accessToken: string }) => {
   const [date, setDate] = useState<Date | undefined>(() => startOfToday());
@@ -22,7 +24,13 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
   if (!query.data?.results.length) {
     return (
       <>
-        <div className="flex md:justify-end">
+        <div className="flex flex-col md:flex-row md:justify-between gap-2">
+          <MealModal mode="POST">
+            <Button variant="cool" className="h-8">
+              <PlusIcon className="size-4" />
+              Add Meal
+            </Button>
+          </MealModal>
           <MealFilter date={date} setDate={setDate} />
         </div>
         <div className="grid min-h-[30vh] place-items-center bg-secondary/20 border">
@@ -39,7 +47,13 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex md:justify-end">
+      <div className="flex flex-col md:flex-row md:justify-between gap-2">
+        <MealModal mode="POST">
+          <Button variant="cool" className="h-8">
+            <PlusIcon className="size-4" />
+            Add Meal
+          </Button>
+        </MealModal>
         <MealFilter date={date} setDate={setDate} />
       </div>
       {query.data.results.map(meal => (

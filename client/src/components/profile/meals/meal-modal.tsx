@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import {
   Dialog,
@@ -6,38 +6,38 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
-} from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { Weight } from "@/types/weight"
-import { PropsWithChildren, useState } from "react"
-import AddWeightForm from "./add-weight-form"
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Meal } from "@/types/meal";
+import { PropsWithChildren, useState } from "react";
+import MealForm from "./meal-form";
 
 type PostProps = {
   mode: "POST";
-  className?: string;
 }
 
 type PutProps = {
   mode: "PUT",
-  className?: string;
-  weight: Weight;
+  meal: Meal;
 }
 
 type Props =
   | PostProps
   | PutProps;
 
-const AddWeight = (props: PropsWithChildren<Props>) => {
+const MealModal = (props: PropsWithChildren<Props>) => {
   const { children, mode } = props;
   const [open, setOpen] = useState(false)
   const isMobile = useIsMobile();
+
+  const handleOpen = () => setOpen(prev => !prev);
 
   if (!isMobile) {
     return (
@@ -47,12 +47,12 @@ const AddWeight = (props: PropsWithChildren<Props>) => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{mode === "POST" ? "Add Weight" : "Update Weight"}</DialogTitle>
+            <DialogTitle>{mode === "POST" ? "Add Meal" : "Update Meal"}</DialogTitle>
           </DialogHeader>
           {mode === "PUT" ? (
-            <AddWeightForm weight={props.weight} setOpen={setOpen} mode="PUT" />
+            <MealForm meal={props.meal} handleOpen={handleOpen} mode="PUT" />
           ) : (
-            <AddWeightForm mode="POST" setOpen={setOpen} />
+            <MealForm mode="POST" handleOpen={handleOpen} />
           )}
         </DialogContent>
       </Dialog>
@@ -64,18 +64,20 @@ const AddWeight = (props: PropsWithChildren<Props>) => {
       <DrawerTrigger asChild>
         {children}
       </DrawerTrigger>
-      <DrawerContent className="p-6">
+      <DrawerContent className="p-3">
         <DrawerHeader className="text-left">
-          <DrawerTitle>{mode === "POST" ? "Add Weight" : "Update Weight"}</DrawerTitle>
+          <DrawerTitle>{mode === "POST" ? "Add Meal" : "Update Meal"}</DrawerTitle>
         </DrawerHeader>
-        {mode === "PUT" ? (
-          <AddWeightForm weight={props.weight} setOpen={setOpen} mode="PUT" />
-        ) : (
-          <AddWeightForm mode="POST" setOpen={setOpen} />
-        )}
+        <div className="overflow-y-auto p-3">
+          {mode === "PUT" ? (
+            <MealForm meal={props.meal} handleOpen={handleOpen} mode="PUT" />
+          ) : (
+            <MealForm mode="POST" handleOpen={handleOpen} />
+          )}
+        </div>
       </DrawerContent>
     </Drawer>
   )
 }
 
-export default AddWeight;
+export default MealModal;
