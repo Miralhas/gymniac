@@ -191,3 +191,7 @@ INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id)
 INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 13, '2026-01-30 11:34:21.673400 +00:00', '2026-01-30 11:34:21.673400 +00:00', 4);
 INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 10, '2026-01-30 11:34:21.674405 +00:00', '2026-01-30 11:34:21.674405 +00:00', 4);
 INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id) VALUES (12, 11, '2026-01-30 11:34:21.675403 +00:00', '2026-01-30 11:34:21.675403 +00:00', 4);
+
+INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Borgir', 600, '2026-02-18 12:43:46.401782 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
+INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Arroz, Feijao, Frango e Salada', 600, '2026-02-18 12:44:01.939524 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
+INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Chá Matte', 600, '2026-02-19 01:46:04.072215 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);

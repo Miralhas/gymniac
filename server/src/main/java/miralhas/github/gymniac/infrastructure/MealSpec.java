@@ -4,20 +4,32 @@ import lombok.experimental.UtilityClass;
 import miralhas.github.gymniac.domain.model.meal_tracker.Meal;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.OffsetDateTime;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.springframework.util.StringUtils.hasText;
 
 @UtilityClass
 public class MealSpec {
 
-	public static Specification<Meal> fromDate(OffsetDateTime fromDate) {
+	public static Specification<Meal> fromDate(LocalDate date, ZoneId userZone) {
 		return (root, query, builder) -> {
-			if (Objects.isNull(fromDate)) return null;
-			var date = fromDate.withHour(0).withMinute(0).withSecond(0).withNano(0);
-			var untilDate = fromDate.withHour(23).withMinute(59).withSecond(0).withNano(0);
-			return builder.between(root.get("createdAt"), date, untilDate);
+			if (date == null || userZone == null) return null;
+
+			ZonedDateTime startOfDay = date.atStartOfDay(userZone);
+			ZonedDateTime nextDayStart = startOfDay.plusDays(1);
+
+			return builder.and(
+					builder.greaterThanOrEqualTo(
+							root.get("createdAt"),
+							startOfDay.toOffsetDateTime()
+					),
+					builder.lessThan(
+							root.get("createdAt"),
+							nextDayStart.toOffsetDateTime()
+					)
+			);
 		};
 	}
 
