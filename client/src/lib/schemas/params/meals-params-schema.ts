@@ -8,3 +8,4 @@ export const mealsParamsSchema = z.object({
 });
 
 export type MealsParams = z.infer<typeof mealsParamsSchema>;
+export type DailyMacroParams = Pick<Required<MealsParams>, "from" | "zoneId">;

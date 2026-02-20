@@ -19,7 +19,7 @@ const MealsHeader = () => {
         </p>
         <p className="text-muted-foreground text-sm">
           <ChartNoAxesColumn className="size-3.5 inline-block mr-1.5 text-foreground/70" />
-          Check your progress with graphs.
+          Check your daily macro intake.
         </p>
       </div>
     </div>

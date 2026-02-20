@@ -53,8 +53,10 @@ public class MealService {
 
 		var macros = macronutrientRepository.getMacros(user.getEmail(), startOffset, endOffset);
 
-		var kcalTotal = macros.stream().map(m -> m.getMeal().getKcal()).reduce((double) 0, Double::sum);
-		var mealsTotal = macros.stream().map(Macronutrient::getMeal).collect(Collectors.toSet()).size();
+		var meals = macros.stream().map(Macronutrient::getMeal).collect(Collectors.toSet());
+
+		var kcalTotal = meals.stream().map(Meal::getKcal).reduce((double) 0, Double::sum);
+		var mealsTotal = meals.size();
 
 		var proteinTotal = macros.stream().filter(m -> m.getNutrient() == NutrientType.PROTEIN)
 				.map(Macronutrient::getGrams).reduce((double) 0, Double::sum);
@@ -65,7 +67,7 @@ public class MealService {
 		var carbTotal = macros.stream().filter(m -> m.getNutrient() == NutrientType.CARBOHYDRATE)
 				.map(Macronutrient::getGrams).reduce((double) 0, Double::sum);
 
-		return new DailyMacrosDTO(mealsTotal, kcalTotal, proteinTotal, fatTotal, carbTotal);
+		return new DailyMacrosDTO(mealsTotal, kcalTotal, proteinTotal, carbTotal, fatTotal);
 	}
 
 	public PageDTO<MealDTO> findAll(Pageable pageable, MealFilter filter) {

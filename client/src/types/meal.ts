@@ -13,3 +13,11 @@ export type Meal = {
   macros: Macronutrient[];
   createdAt: string;
 }
+
+export type DailyMacros = {
+  meals: number;
+  kcal: number;
+  protein: number;
+  carbohydrate: number;
+  fat: number;
+}

@@ -4,13 +4,16 @@ import GenericPagination from "@/components/generic-pagination";
 import { Button } from "@/components/ui/button";
 import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
 import { defaultMealsParams, useGetUserMeals } from "@/service/meals/queries/use-get-user-meals";
+import { NUTRIENTS } from "@/types/meal";
 import { format } from "date-fns";
 import { HamburgerIcon, PlusIcon, UtensilsCrossedIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import { MACRO_CONFIG } from "./macro-config";
 import MealFilter from "./meal-filter";
 import MealItem from "./meal-item";
 import MealModal from "./meal-modal";
+import DailyMacros from "./daily-macros";
 
 const MealList = ({ accessToken }: { accessToken: string }) => {
   const [date, setDate] = useState<Date | undefined>(() => new Date());
@@ -49,6 +52,12 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
 
   return (
     <div className="space-y-4">
+      {date && (
+        <div className="space-y-3">
+          <p className="text-foreground/90 text-sm text-[13px]">Macros <span className="text-muted-foreground">({date?.toLocaleDateString()})</span>:</p>
+          <DailyMacros from={formattedDate!} accessToken={accessToken} />
+        </div>
+      )}
       <div className="flex flex-col md:flex-row md:justify-between gap-2">
         <AddMealModalButton handleDateReset={handleDateReset} />
         <MealFilter date={date} setDate={setDate} />

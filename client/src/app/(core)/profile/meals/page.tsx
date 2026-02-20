@@ -1,6 +1,7 @@
 import MealList from "@/components/profile/meals/meal-list";
 import MealsHeader from "@/components/profile/meals/meals-header";
 import { Separator } from "@/components/ui/separator";
+import { defaultDailyMacroParams, getUserDailyMacrosQueryOptions } from "@/service/meals/queries/use-get-user-daily-macros";
 import { defaultMealsParams, getUserMealsQueryOptions } from "@/service/meals/queries/use-get-user-meals";
 import { ACCESS_TOKEN_COOKIE_NAME } from "@/utils/constants";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
@@ -21,6 +22,7 @@ const MealsPage = async () => {
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(getUserMealsQueryOptions(accessToken, defaultMealsParams));
+  await queryClient.prefetchQuery(getUserDailyMacrosQueryOptions(accessToken, defaultDailyMacroParams));
 
   return (
     <div className="space-y-4">
