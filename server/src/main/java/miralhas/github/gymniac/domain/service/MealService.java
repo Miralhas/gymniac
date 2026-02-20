@@ -1,13 +1,16 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.DailyMacrosDTO;
 import miralhas.github.gymniac.api.dto.MealDTO;
 import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.filter.MealFilter;
 import miralhas.github.gymniac.api.dto.input.MealInput;
 import miralhas.github.gymniac.api.dto_mapper.MealMapper;
 import miralhas.github.gymniac.domain.exception.MealNotFoundException;
+import miralhas.github.gymniac.domain.model.meal_tracker.Macronutrient;
 import miralhas.github.gymniac.domain.model.meal_tracker.Meal;
+import miralhas.github.gymniac.domain.model.meal_tracker.enums.NutrientType;
 import miralhas.github.gymniac.domain.repository.MacronutrientRepository;
 import miralhas.github.gymniac.domain.repository.MealRepository;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
@@ -17,7 +20,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +41,31 @@ public class MealService {
 		return mealRepository.findById(id).orElseThrow(
 				() -> new MealNotFoundException(errorMessages.get("meal.notFound.id", id))
 		);
+	}
+
+	public DailyMacrosDTO findUserDailyMacros(LocalDate from, ZoneId zoneId) {
+		var user = authUtils.getCurrentUser();
+
+		ZonedDateTime startOfDay = from.atStartOfDay(zoneId);
+		ZonedDateTime nextDayStart = startOfDay.plusDays(1);
+		var startOffset = startOfDay.toOffsetDateTime();
+		var endOffset = nextDayStart.toOffsetDateTime();
+
+		var macros = macronutrientRepository.getMacros(user.getEmail(), startOffset, endOffset);
+
+		var kcalTotal = macros.stream().map(m -> m.getMeal().getKcal()).reduce((double) 0, Double::sum);
+		var mealsTotal = macros.stream().map(Macronutrient::getMeal).collect(Collectors.toSet()).size();
+
+		var proteinTotal = macros.stream().filter(m -> m.getNutrient() == NutrientType.PROTEIN)
+				.map(Macronutrient::getGrams).reduce((double) 0, Double::sum);
+
+		var fatTotal = macros.stream().filter(m -> m.getNutrient() == NutrientType.FAT)
+				.map(Macronutrient::getGrams).reduce((double) 0, Double::sum);
+
+		var carbTotal = macros.stream().filter(m -> m.getNutrient() == NutrientType.CARBOHYDRATE)
+				.map(Macronutrient::getGrams).reduce((double) 0, Double::sum);
+
+		return new DailyMacrosDTO(mealsTotal, kcalTotal, proteinTotal, fatTotal, carbTotal);
 	}
 
 	public PageDTO<MealDTO> findAll(Pageable pageable, MealFilter filter) {

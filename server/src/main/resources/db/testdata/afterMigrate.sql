@@ -195,3 +195,9 @@ INSERT INTO exercise_set (kg, reps, created_at, updated_at, workout_exercise_id)
 INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Borgir', 600, '2026-02-18 12:43:46.401782 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
 INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Arroz, Feijao, Frango e Salada', 600, '2026-02-18 12:44:01.939524 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
 INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Chá Matte', 600, '2026-02-19 01:46:04.072215 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
+INSERT INTO meal (name, kcal, created_at, updated_at, user_id) VALUES ('Ruffles', 600, '2026-02-19 06:46:04.072215 +00:00', '2026-02-19 19:12:48.701225 +00:00', 1);
+
+INSERT INTO macronutrient (nutrient, grams, meal_id) VALUES ('PROTEIN', 30, 1);
+INSERT INTO macronutrient (nutrient, grams, meal_id) VALUES ('FAT', 60, 2);
+INSERT INTO macronutrient (nutrient, grams, meal_id) VALUES ('CARBOHYDRATE', 60, 3);
+INSERT INTO macronutrient (nutrient, grams, meal_id) VALUES ('CARBOHYDRATE', 60, 4);

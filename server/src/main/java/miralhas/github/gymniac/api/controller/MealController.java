@@ -2,8 +2,10 @@ package miralhas.github.gymniac.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.DailyMacrosDTO;
 import miralhas.github.gymniac.api.dto.MealDTO;
 import miralhas.github.gymniac.api.dto.PageDTO;
+import miralhas.github.gymniac.api.dto.filter.MacrosFilter;
 import miralhas.github.gymniac.api.dto.filter.MealFilter;
 import miralhas.github.gymniac.api.dto.input.MealInput;
 import miralhas.github.gymniac.domain.service.MealService;
@@ -28,6 +30,12 @@ public class MealController {
 			@Valid MealFilter filter
 	) {
 		return mealService.findAll(pageable, filter);
+	}
+
+	@GetMapping("/macros")
+	@PreAuthorize("hasRole('USER')")
+	public DailyMacrosDTO getUserMacros(@Valid MacrosFilter filter) {
+		return mealService.findUserDailyMacros(filter.from(), filter.zoneId());
 	}
 
 	@PostMapping
