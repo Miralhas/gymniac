@@ -13,7 +13,7 @@ const DailyMacros = ({ accessToken, from }: { from: string; accessToken: string;
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="space-y-2">
       {Object.entries(query.data!).map(([macro, value]) => {
         // @ts-expect-error: mapping from api
         const config = MACRO_CONFIG[macro.toUpperCase()];

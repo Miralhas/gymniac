@@ -4,16 +4,20 @@ import GenericPagination from "@/components/generic-pagination";
 import { Button } from "@/components/ui/button";
 import { nuqsPaginationParams } from "@/lib/schemas/pagination-schema";
 import { defaultMealsParams, useGetUserMeals } from "@/service/meals/queries/use-get-user-meals";
-import { NUTRIENTS } from "@/types/meal";
 import { format } from "date-fns";
-import { HamburgerIcon, PlusIcon, UtensilsCrossedIcon } from "lucide-react";
+import { DumbbellIcon, PlusIcon, UtensilsCrossedIcon } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { useState } from "react";
-import { MACRO_CONFIG } from "./macro-config";
+import DailyMacros from "./daily-macros";
 import MealFilter from "./meal-filter";
 import MealItem from "./meal-item";
 import MealModal from "./meal-modal";
-import DailyMacros from "./daily-macros";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const MealList = ({ accessToken }: { accessToken: string }) => {
   const [date, setDate] = useState<Date | undefined>(() => new Date());
@@ -26,7 +30,7 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
   if (query.isLoading) {
     return (
       <div className="min-h-[40vh] w-full flex items-center justify-center">
-        <HamburgerIcon className="text-muted-foreground size-12 animate-spin" />
+        <DumbbellIcon className="text-muted-foreground size-12 animate-spin" />
       </div>
     );
   }
@@ -54,8 +58,16 @@ const MealList = ({ accessToken }: { accessToken: string }) => {
     <div className="space-y-4">
       {date && (
         <div className="space-y-3">
-          <p className="text-foreground/90 text-sm text-[13px]">Macros <span className="text-muted-foreground">({date?.toLocaleDateString()})</span>:</p>
-          <DailyMacros from={formattedDate!} accessToken={accessToken} />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="cursor-pointer justify-start items-center gap-1">
+                <p className="text-foreground/90 text-sm text-[13px]">Macros <span className="text-muted-foreground">({date?.toLocaleDateString()})</span></p>
+              </AccordionTrigger>
+              <AccordionContent className="h-auto">
+                <DailyMacros from={formattedDate!} accessToken={accessToken} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       )}
       <div className="flex flex-col md:flex-row md:justify-between gap-2">

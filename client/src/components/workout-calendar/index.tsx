@@ -13,13 +13,13 @@ import {
   startOfToday,
   subDays
 } from 'date-fns';
-import { useState } from 'react';
+import { useQueryState } from 'nuqs';
 import CalendarHeader from './calendar-header';
 import GridDays from './grid-days';
 
 const WorkoutCalendar = () => {
   const today = startOfToday();
-  const [currMonth, setCurrMonth] = useState(() => format(today, "MMM-yyyy"));
+  const [currMonth, setCurrMonth] = useQueryState("month", { defaultValue: format(today, "MMM-yyyy") })
 
   const handleCurrentMonth = (offset: number) => {
     const currentDate = parse(currMonth, "MMM-yyyy", new Date());
