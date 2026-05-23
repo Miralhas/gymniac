@@ -15,3 +15,7 @@ authentication:
 
 image:
   storage-dir: ${LOCAL_IMAGE_DIRECTORY}
+
+client:
+  domain: ${CLIENT_DOMAIN}
+  url: ${CLIENT_URL}

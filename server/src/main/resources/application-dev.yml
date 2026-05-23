@@ -1,5 +1,6 @@
 server:
-  port: 8082
+  port: 8080
+
 spring:
   jpa:
     show-sql: true
@@ -15,3 +16,7 @@ authentication:
     jwt:
       private-key: classpath:private.pem
       public-key: classpath:public.pem
+
+client:
+  domain: localhost
+  url: http://localhost:3000/

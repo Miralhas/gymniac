@@ -18,6 +18,7 @@ services:
       - "5433:5432"
     networks:
       - gymniac-network
+    restart: unless-stopped
 
   server:
     build:
@@ -26,7 +27,7 @@ services:
     container_name: server
     image: gymniac-server:latest
     ports:
-      - "8081:8081"
+      - "8081:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,6 +36,10 @@ services:
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - SPRING_PROFILES_ACTIVE=prod
+      - CLIENT_URL=${CLIENT_URL}
+      - CLIENT_DOMAIN=${CLIENT_DOMAIN}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - LOCAL_IMAGE_DIRECTORY=/app/images
       - JWT_PRIVATE_KEY_PATH=/keys/private.pem
       - JWT_PUBLIC_KEY_PATH=/keys/public.pem
@@ -43,6 +48,7 @@ services:
       - jwt-keys:/keys
     networks:
       - gymniac-network
+    restart: unless-stopped
   
   client:
     container_name: client
@@ -63,7 +69,8 @@ services:
     depends_on:
       server:
         condition: service_started
-    
+    restart: unless-stopped
+
 volumes:
   jwt-keys:
   api-images:

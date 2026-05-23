@@ -40,7 +40,11 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+	public SecurityFilterChain securityFilterChain(
+			HttpSecurity httpSecurity,
+			CustomOAuth2SuccessHandler customOAuth2SuccessHandler,
+			CustomOAuth2FailureHandler customOauth2FailureHandler
+	) throws Exception {
 		return httpSecurity
 				.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> {
@@ -67,6 +71,10 @@ public class SecurityConfig {
 					resourceServer.accessDeniedHandler(customAccessDeniedHandlerImpl);
 					resourceServer.authenticationEntryPoint(customAuthenticationEntryPoint);
 				})
+				.oauth2Login(oauth2 -> oauth2
+						.successHandler(customOAuth2SuccessHandler)
+						.failureHandler((customOauth2FailureHandler))
+				)
 				.authorizeHttpRequests(authz -> {
 					authz.requestMatchers(
 							HttpMethod.POST,

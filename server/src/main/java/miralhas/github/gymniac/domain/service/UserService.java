@@ -57,6 +57,13 @@ public class UserService {
 	}
 
 	@Transactional
+	public User findOrCreateNewUser(User user) {
+		return userRepository
+				.findUserByEmail(user.getEmail())
+				.orElseGet(() -> create(user));
+	}
+
+	@Transactional
 	public User create(User user) {
 		checkIfUsernameOrEmailAreAvailiable(user);
 		var userRole = roleService.getUserRole();
