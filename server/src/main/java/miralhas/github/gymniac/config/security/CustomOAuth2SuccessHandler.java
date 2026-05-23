@@ -63,8 +63,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 		cookie.setAttribute("SameSite", "Lax");
 
 		if (!isDev) {
-			// Example -> .miralhas.com
-			cookie.setDomain(".%s".formatted(domain));
+			cookie.setDomain(domain);
 			cookie.setAttribute("SameSite", "None");
 		}
 

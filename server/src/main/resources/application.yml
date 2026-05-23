@@ -18,6 +18,7 @@ spring:
 
   application:
     name: server
+    forward-headers-strategy: framework
 
   datasource:
     driver-class-name: org.postgresql.Driver
