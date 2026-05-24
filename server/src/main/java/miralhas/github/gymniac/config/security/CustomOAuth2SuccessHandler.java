@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Objects;
 
 @Component
@@ -61,6 +60,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 		cookie.setSecure(true);
 		cookie.setPath("/");
 		cookie.setAttribute("SameSite", "Lax");
+		cookie.setMaxAge(60); // 1 Min
 
 		if (!isDev) {
 			cookie.setDomain(domain);
@@ -71,6 +71,5 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
 		response.setStatus(HttpServletResponse.SC_FOUND);
 		response.sendRedirect(clientUrl);
-		response.setCharacterEncoding("UTF-8");
 	}
 }
