@@ -24,6 +24,7 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { AlertCircle, MoveLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import GoogleAuthButton from "../google-auth-button";
 
 const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; className?: string }) => {
   const mutation = useLoginMutation();
@@ -144,6 +145,15 @@ const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; cla
             </Field>
           </FieldGroup>
         </form>
+        
+        <div className="flex justify-center items-center text-xs text-muted-foreground uppercase font-roboto leading-none tracking-wide">
+          <span>Or continue with</span>
+        </div>
+
+        <div className="grid">
+          <GoogleAuthButton />
+        </div>
+
         <div className="flex justify-center text-sm gap-1 font-medium leading-relaxed">
           Don&apos;t have an account? <Link href="/signup" className="transition-colors duration-200 hover:text-primary underline">Sign up</Link>
         </div>

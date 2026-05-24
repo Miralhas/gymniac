@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Tilt_Warp } from "next/font/google";
-import "./globals.css";
 import Providers from "@/components/providers";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Inter, Roboto, Tilt_Warp } from "next/font/google";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
@@ -28,6 +28,12 @@ const tiltWarp = Tilt_Warp({
   preload: false,
 });
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  preload: false
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -48,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${tiltWarp.variable}`}
+      className={`${geistSans.variable} ${roboto.variable} ${geistMono.variable} ${inter.variable} ${tiltWarp.variable}`}
     >
       <body
         className={`font-inter antialiased`}
