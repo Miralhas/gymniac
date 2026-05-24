@@ -16,4 +16,4 @@ authentication:
 
 client:
   domain: localhost
-  url: http://localhost:3000/
+  oauth2RedirectAfter: http://localhost:3000/login/google/success

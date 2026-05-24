@@ -21,4 +21,4 @@ image:
 
 client:
   domain: ${CLIENT_DOMAIN}
-  url: ${CLIENT_URL}
+  oauth2RedirectAfter: ${CLIENT_OAUTH2_REDIRECT_AFTER}

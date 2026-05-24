@@ -25,12 +25,11 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 	@Value("${spring.profiles.active:default}")
 	private String activeProfiles;
 
-	@Value("${client.url}")
-	private String clientUrl;
+	@Value("${client.oauth2RedirectAfter}")
+	private String oauth2RedirectAfter;
 
 	@Value("${client.domain}")
 	private String domain;
-
 
 	private final UserService userService;
 	private final AuthenticationService authenticationService;
@@ -70,6 +69,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 		response.addCookie(cookie);
 
 		response.setStatus(HttpServletResponse.SC_FOUND);
-		response.sendRedirect(clientUrl);
+		response.sendRedirect(oauth2RedirectAfter);
 	}
 }

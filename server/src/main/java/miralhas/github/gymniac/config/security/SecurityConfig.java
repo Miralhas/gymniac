@@ -73,7 +73,7 @@ public class SecurityConfig {
 				})
 				.oauth2Login(oauth2 -> oauth2
 						.successHandler(customOAuth2SuccessHandler)
-						.failureHandler((customOauth2FailureHandler))
+						.failureHandler(customOauth2FailureHandler)
 				)
 				.authorizeHttpRequests(authz -> {
 					authz.requestMatchers(

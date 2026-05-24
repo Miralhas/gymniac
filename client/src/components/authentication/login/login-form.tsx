@@ -26,7 +26,7 @@ import Link from "next/link";
 import { useState } from "react";
 import GoogleAuthButton from "../google-auth-button";
 
-const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; className?: string }) => {
+const LoginForm = ({ className, redirectAfter = "/" }: { redirectAfter?: string; className?: string }) => {
   const mutation = useLoginMutation();
   const { login } = useAuthContext();
   const [errorDetail, setErrorDetail] = useState<string | undefined>(undefined);
@@ -41,7 +41,7 @@ const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; cla
     },
     onSubmit: async ({ value, formApi }) => {
       mutation.mutate(value, {
-        onSuccess: async (tokens) => await login(tokens, redirectUri),
+        onSuccess: async (tokens) => await login(tokens, redirectAfter),
         onError: (error) => {
           if (error instanceof ApiError) {
             setErrorDetail(error.detail);
@@ -151,7 +151,7 @@ const LoginForm = ({ className, redirectUri = "/" }: { redirectUri?: string; cla
         </div>
 
         <div className="grid">
-          <GoogleAuthButton />
+          <GoogleAuthButton redirectAfter={redirectAfter} />
         </div>
 
         <div className="flex justify-center text-sm gap-1 font-medium leading-relaxed">
