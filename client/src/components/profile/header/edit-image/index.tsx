@@ -70,14 +70,13 @@ const EditImage = () => {
   }
 
   const fileName = query.data?.image?.fileName;
-  const imgUrl = fileName ? `${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}` : DEFAULT_IMG;
 
   return (
     <>
       <ImageCropper imageFile={file} open={open} setOpen={setOpen} onSubmit={onSubmit} isPending={mutation.isPending} />
       <div className="size-32 md:size-36 rounded-full relative cursor-pointer group" onClick={onAvatarClick}>
         <Image
-          src={imgUrl}
+          src={`${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}`}
           loading="eager"
           id="edit-image"
           width={144}

@@ -25,14 +25,13 @@ const DEFAULT_IMG = `https://static.devilsect.com/yin-yang-48x48.png`;
 const UserAccount = ({ logout, accessToken }: Props) => {
   const query = useGetUserInfo(accessToken);
 
-  const fileName = query.data?.image?.fileName
-  const imgUrl = fileName ? `${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}` : DEFAULT_IMG;
+  const fileName = query.data?.image?.fileName;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
         <Image
-          src={imgUrl}
+          src={`${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}`}
           width={32}
           height={32}
           quality={40}
