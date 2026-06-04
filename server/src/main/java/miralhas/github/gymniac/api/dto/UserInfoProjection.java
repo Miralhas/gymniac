@@ -16,7 +16,7 @@ public interface UserInfoProjection {
 	Integer getTotalWorkouts();
 	LocalDateTime getLastActivity();
 
-	default UserInfoDTO getUserInfoDTO() {
+	default UserInfoDTO getUserInfoDTO(ImageSummaryDTO image) {
 		var lastActivity = Objects.isNull(getLastActivity()) ? null :
 				getLastActivity().atZone(TimeZone.getDefault().toZoneId()).toOffsetDateTime();
 
@@ -33,7 +33,8 @@ public interface UserInfoProjection {
 				this.getWeightGoal(),
 				this.getCurrentWeight(),
 				this.getTotalWorkouts(),
-				lastActivity
+				lastActivity,
+				image
 		);
 	}
 }

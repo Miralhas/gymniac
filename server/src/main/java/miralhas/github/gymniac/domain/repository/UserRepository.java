@@ -6,7 +6,6 @@ import miralhas.github.gymniac.domain.model.image.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,4 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT i from User b LEFT JOIN b.image i where b.id = :id")
 	List<Image> findAllImagesById(Long id);
+
+	@Query("SELECT i from User u LEFT JOIN u.image i where u.id = :id")
+	Optional<Image> findImageByUserId(Long id);
 }

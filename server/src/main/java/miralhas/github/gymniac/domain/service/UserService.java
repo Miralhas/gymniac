@@ -6,7 +6,6 @@ import miralhas.github.gymniac.api.dto.UserDTO;
 import miralhas.github.gymniac.api.dto.input.ProfilePictureInput;
 import miralhas.github.gymniac.api.dto.input.UpdateUserInput;
 import miralhas.github.gymniac.api.dto_mapper.UserMapper;
-import miralhas.github.gymniac.domain.exception.ImageNotFoundException;
 import miralhas.github.gymniac.domain.exception.UserAlreadyExistsException;
 import miralhas.github.gymniac.domain.model.auth.User;
 import miralhas.github.gymniac.domain.model.image.Image;
@@ -91,13 +90,11 @@ public class UserService {
 
 	@Transactional
 	public Image saveImage(User user, NewImage newImage) {
-		if (!Objects.isNull(user.getImage())) {
-			imageService.delete(user.getImage().getId());
-		}
-		var images = imageService.save(newImage);
-		user.setImage(images);
-		userRepository.save(user);
-		return images;
+		authUtils.validate(user);
+		if (user.hasImageEntity()) imageService.delete(user.getImage().getId());
+		var image = imageService.save(newImage);
+		userRepository.save(user.withImage(image));
+		return image;
 	}
 
 	private void checkIfCanUpdateUsername(String username, User user) {

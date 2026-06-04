@@ -12,6 +12,7 @@ public record UserInfoDTO(
 		Double weightGoal,
 		Double currentWeight,
 		Integer totalWorkouts,
-		OffsetDateTime lastActivity
+		OffsetDateTime lastActivity,
+		ImageSummaryDTO image
 ) {
 }

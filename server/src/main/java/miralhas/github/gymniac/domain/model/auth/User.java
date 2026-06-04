@@ -120,6 +120,10 @@ public class User implements Serializable {
 		return roles.stream().anyMatch(r -> r.getName().equals(Role.Value.ADMIN));
 	}
 
+	public boolean hasImageEntity() {
+		return Objects.nonNull(image);
+	}
+
 	@Override
 	public final boolean equals(Object o) {
 		if (this == o) return true;

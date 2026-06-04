@@ -41,6 +41,8 @@ public abstract class ImageMapper {
 
 	public abstract List<ImageSummaryDTO> toSummaryCollectionResponse(List<Image> images);
 
+	public abstract ImageSummaryDTO toSummaryResponse(Image image);
+
 	public abstract List<ImageDTO> toResponseCollection(List<Image> image);
 
 	@Mapping(target = "relativeFolder", source = "relativeFolder", qualifiedByName = "getRelativeFolder")

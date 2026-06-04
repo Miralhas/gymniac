@@ -5,6 +5,7 @@ import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.UserInfoDTO;
 import miralhas.github.gymniac.api.dto.WeightDTO;
 import miralhas.github.gymniac.api.dto.input.WeightInput;
+import miralhas.github.gymniac.api.dto_mapper.ImageMapper;
 import miralhas.github.gymniac.api.dto_mapper.WeightMapper;
 import miralhas.github.gymniac.domain.exception.WeightNotFoundException;
 import miralhas.github.gymniac.domain.model.user_info.Weight;
@@ -31,6 +32,7 @@ public class UserInfoService {
 	private final WeightMapper weightMapper;
 	private final UserRepository userRepository;
 	private final ErrorMessages errorMessages;
+	private final ImageMapper imageMapper;
 
 	public PageDTO<WeightDTO> getAllWeights(Pageable pageable) {
 		var user = authUtils.getCurrentUser();
@@ -52,7 +54,8 @@ public class UserInfoService {
 			var message = errorMessages.get("user.info.notFound", id);
 			return new UsernameNotFoundException(message);
 		});
-		return infoOptional.getUserInfoDTO();
+		var imageOptional = userRepository.findImageByUserId(id);
+		return infoOptional.getUserInfoDTO(imageOptional.map(imageMapper::toSummaryResponse).orElse(null));
 	}
 
 	@Transactional
