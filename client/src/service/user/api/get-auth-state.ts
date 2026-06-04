@@ -6,6 +6,7 @@ import { decryptUser } from '@/utils/decrypt-jwt';
 import Cookies from 'js-cookie';
 
 export const getAuthState = async (): Promise<AuthState | null> => {
+  await fetch("/api/trigger"); // Trigger middleware so it refresh the tokens if necessary
   const accessToken = Cookies.get(ACCESS_TOKEN_COOKIE_NAME);
   if (!accessToken) return null;
   

@@ -16,7 +16,7 @@ const WorkoutPlanList = () => {
 
   if (query.isLoading) {
     return (
-      <div className="min-h-[60vh] w-full flex items-center justify-center">
+      <div className="min-h-[60vh] w-full flex items-center justify-center bg-secondary/20 border">
         <DumbbellIcon className="text-muted-foreground size-20 animate-spin" />
       </div>
     );

@@ -1,3 +1,5 @@
+import { ImageSummary } from "./image";
+
 export type RoleStatus = "Admin" | "Member";
 
 export enum Role {
@@ -49,4 +51,5 @@ export type UserInfo = Omit<User, "roles"> & {
   currentWeight: number;
   weightGoal: number;
   lastActivity: string;
+  image: ImageSummary
 }

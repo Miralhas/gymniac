@@ -9,7 +9,7 @@ const AuthLinks = () => {
     return <LoginButton isLoading={isLoading} />
   }
 
-  return <UserAccount user={authState.user} logout={logout} />
+  return <UserAccount logout={logout} accessToken={authState.accessToken} />
 
 }
 

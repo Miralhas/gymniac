@@ -58,7 +58,6 @@ function DrawerContent({
         )}
         {...props}
       >
-        <div className="bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block bg-muted mx-auto hidden shrink-0 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -98,6 +97,19 @@ function DrawerTitle({
   )
 }
 
+function DrawerHandle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Handle>) {
+  return (
+    <DrawerPrimitive.Handle
+      data-slot="drawer-handle"
+      className={cn("bg-muted! mx-auto! mt-4! hidden! h-1.5! w-25! shrink-0! rounded-full! group-data-[vaul-drawer-direction=bottom]/drawer-content:block!", className)}
+      {...props}
+    />
+  )
+}
+
 function DrawerDescription({
   className,
   ...props
@@ -113,6 +125,6 @@ function DrawerDescription({
 
 export {
   Drawer, DrawerClose,
-  DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger
+  DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger, DrawerHandle
 }
 
