@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/drawer";
 import { useImageCropper } from "@/hooks/use-image-cropper";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/utils/common-utils";
 import { Dispatch, SetStateAction } from "react";
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -61,7 +62,7 @@ const ImageCropper = ({ imageFile, open, setOpen, onSubmit, isPending }: Props) 
           <DrawerHeader className="sr-only">
             <DrawerTitle>Usar Avatar</DrawerTitle>
           </DrawerHeader>
-          <div className='overflow-y-auto space-y-6 p-3'>
+          <div className={cn('overflow-y-auto space-y-6 p-3', isPending && "animate-pulse")}>
             {!!imgSrc ? (
               <ReactCrop
                 crop={crop}
@@ -115,7 +116,7 @@ const ImageCropper = ({ imageFile, open, setOpen, onSubmit, isPending }: Props) 
             Image may take a while to update.
           </DialogDescription>
         </DialogHeader>
-        <div className='grid grid-cols-2 w-full gap-4'>
+        <div className={cn('grid grid-cols-2 w-full gap-4', isPending && "animate-pulse")}>
           {!!imgSrc ? (
             <ReactCrop
               crop={crop}
