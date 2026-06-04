@@ -19,7 +19,8 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper(
 		componentModel = "spring",
 		nullValuePropertyMappingStrategy = IGNORE,
-		nullValueCheckStrategy = ALWAYS
+		nullValueCheckStrategy = ALWAYS,
+		uses = {ImageMapper.class}
 )
 public interface UserMapper {
 

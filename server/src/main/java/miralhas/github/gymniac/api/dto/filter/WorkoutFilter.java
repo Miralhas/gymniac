@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
 
-import static miralhas.github.gymniac.infrastructure.WorkoutSpec.*;
+import static miralhas.github.gymniac.infrastructure.repository.WorkoutSpec.*;
 
 public record WorkoutFilter(
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

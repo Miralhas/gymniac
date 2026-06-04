@@ -2,6 +2,7 @@ package miralhas.github.gymniac.domain.repository;
 
 import miralhas.github.gymniac.api.dto.UserInfoProjection;
 import miralhas.github.gymniac.domain.model.auth.User;
+import miralhas.github.gymniac.domain.model.image.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,4 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	)
 	Optional<UserInfoProjection> findUserInfoById(Long id);
 
+	@Query("SELECT i from User b LEFT JOIN b.image i where b.id = :id")
+	List<Image> findAllImagesById(Long id);
 }

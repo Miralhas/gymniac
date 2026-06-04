@@ -7,8 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import static miralhas.github.gymniac.infrastructure.MealSpec.fromDate;
-import static miralhas.github.gymniac.infrastructure.MealSpec.withEmail;
+import static miralhas.github.gymniac.infrastructure.repository.MealSpec.fromDate;
+import static miralhas.github.gymniac.infrastructure.repository.MealSpec.withEmail;
 
 public record MealFilter(
 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

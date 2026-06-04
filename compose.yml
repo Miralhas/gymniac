@@ -15,7 +15,7 @@ services:
       retries: 5
       start_period: 10s
     ports:
-      - "5433:5432"
+      - "6932:5432"
     networks:
       - gymniac-network
     restart: unless-stopped
@@ -40,9 +40,13 @@ services:
       - CLIENT_DOMAIN=${CLIENT_DOMAIN}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - LOCAL_IMAGE_DIRECTORY=/app/images
       - JWT_PRIVATE_KEY_PATH=/keys/private.pem
       - JWT_PUBLIC_KEY_PATH=/keys/public.pem
+      - STORAGE_LOCAL_IMAGE_DIRECTORY=/app/images
+      - STORAGE_R2_ENDPOINT=${STORAGE_R2_ENDPOINT}
+      - STORAGE_R2_ACCESS_KEY=${STORAGE_R2_ACCESS_KEY}
+      - STORAGE_R2_SECRET_KEY=${STORAGE_R2_SECRET_KEY}
+      - STORAGE_R2_BUCKET=${STORAGE_R2_BUCKET}
     volumes:
       - api-images:/app/images
       - jwt-keys:/keys

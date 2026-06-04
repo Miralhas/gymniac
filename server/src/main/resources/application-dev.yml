@@ -17,3 +17,14 @@ authentication:
 client:
   domain: localhost
   oauth2RedirectAfter: http://localhost:3000/login/google/success
+
+storage:
+  current-provider: LOCAL
+  multipart-max-file-size: ${spring.servlet.multipart.max-file-size}
+  local:
+    directory: C:\\Users\\bob\\Pictures\\gymniac
+  r2:
+    endpoint: ${R2_ENDPOINT}
+    access-key: ${R2_ACCESS_KEY}
+    secret-key: ${R2_SECRET_KEY}
+    bucket: ${R2_BUCKET}

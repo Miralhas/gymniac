@@ -16,9 +16,17 @@ authentication:
       private-key: file:${JWT_PRIVATE_KEY_PATH}
       public-key: file:${JWT_PUBLIC_KEY_PATH}
 
-image:
-  storage-dir: ${LOCAL_IMAGE_DIRECTORY}
-
 client:
   domain: ${CLIENT_DOMAIN}
   oauth2RedirectAfter: ${CLIENT_OAUTH2_REDIRECT_AFTER}
+
+storage:
+  current-provider: R2
+  multipart-max-file-size: ${spring.servlet.multipart.max-file-size}
+  local:
+    directory: ${STORAGE_LOCAL_IMAGE_DIRECTORY}
+  r2:
+    endpoint: ${STORAGE_R2_ENDPOINT}
+    access-key: ${STORAGE_R2_ACCESS_KEY}
+    secret-key: ${STORAGE_R2_SECRET_KEY}
+    bucket: ${STORAGE_R2_BUCKET}

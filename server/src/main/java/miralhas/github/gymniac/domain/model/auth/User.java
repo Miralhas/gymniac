@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import miralhas.github.gymniac.domain.model.auth.enums.Mode;
+import miralhas.github.gymniac.domain.model.image.Image;
 import miralhas.github.gymniac.domain.model.user_info.Weight;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;
 import miralhas.github.gymniac.domain.model.workout_plan.WorkoutPlan;
@@ -15,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,16 +108,17 @@ public class User implements Serializable {
 		return roles.stream().map(r -> r.getName().getAuthority()).toList();
 	}
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private Image image;
+
+	public Path getImageRelativePath() {
+		return Path.of(this.getClass().getSimpleName(), "%d-%s".formatted(id, username));
+	}
+
 	@JsonIgnore
 	public boolean isAdmin() {
 		return roles.stream().anyMatch(r -> r.getName().equals(Role.Value.ADMIN));
 	}
-
-	@JsonIgnore
-	public boolean hasImage() {
-		return this.profilePicture != null;
-	}
-
 
 	@Override
 	public final boolean equals(Object o) {

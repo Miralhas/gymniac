@@ -1,4 +1,4 @@
-package miralhas.github.gymniac.infrastructure;
+package miralhas.github.gymniac.infrastructure.repository;
 
 import lombok.experimental.UtilityClass;
 import miralhas.github.gymniac.domain.model.workout_plan.Exercise;

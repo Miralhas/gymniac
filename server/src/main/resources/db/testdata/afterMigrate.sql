@@ -15,6 +15,7 @@ delete from muscle_group;
 delete from macronutrient;
 delete from meal;
 delete from users;
+delete from image;
 
 SET session_replication_role = 'origin';
 
