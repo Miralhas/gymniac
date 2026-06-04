@@ -13,6 +13,8 @@ import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import ImageCropper from "./image-cropper";
 
+const DEFAULT_IMG = `https://static.devilsect.com/yin-yang.png`;
+
 const updateSrc = (img: HTMLImageElement, url: string) => {
   img.src = url;
   img.srcset = "";
@@ -67,12 +69,15 @@ const EditImage = () => {
     }
   }
 
+  const fileName = query.data?.image?.fileName;
+  const imgUrl = fileName ? `${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}` : DEFAULT_IMG;
+
   return (
     <>
       <ImageCropper imageFile={file} open={open} setOpen={setOpen} onSubmit={onSubmit} isPending={mutation.isPending} />
       <div className="size-32 md:size-36 rounded-full relative cursor-pointer group" onClick={onAvatarClick}>
         <Image
-          src={`${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${query.data?.image.fileName}`}
+          src={imgUrl}
           loading="eager"
           id="edit-image"
           width={144}
@@ -82,7 +87,7 @@ const EditImage = () => {
           ref={imageRef}
           sizes="(max-width: 768px) 60vw, (max-width: 1200px) 30vw, 20vw"
           alt="User profile picture"
-          loader={createWsrvLoader({ default: `https://static.devilsect.com/yin-yang.png` })}
+          loader={createWsrvLoader({ default: DEFAULT_IMG })}
           className="rounded-full size-32 md:size-36 overflow-hidden object-cover object-center shadow-2xl ring-2 ring-secondary opacity-80 z-20 text-transparent user-profile-header-image"
         />
         <div

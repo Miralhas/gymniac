@@ -20,20 +20,25 @@ type Props = {
   accessToken: string;
 }
 
+const DEFAULT_IMG = `https://static.devilsect.com/yin-yang-48x48.png`;
+
 const UserAccount = ({ logout, accessToken }: Props) => {
   const query = useGetUserInfo(accessToken);
+
+  const fileName = query.data?.image?.fileName
+  const imgUrl = fileName ? `${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${fileName}` : DEFAULT_IMG;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
         <Image
-          src={`${env.NEXT_PUBLIC_BASE_URL}/images?fileName=${query.data?.image.fileName}`}
+          src={imgUrl}
           width={32}
           height={32}
           quality={40}
           id="user-account"
           alt="User profile picture"
-          loader={createWsrvLoader({ default: `https://static.devilsect.com/yin-yang-48x48.png` })}
+          loader={createWsrvLoader({ default: DEFAULT_IMG })}
           className="rounded-full size-6 md:size-8 overflow-hidden object-cover object-center shadow-2xl ring-2 ring-secondary user-profile-header-image"
         />
       </DropdownMenuTrigger>

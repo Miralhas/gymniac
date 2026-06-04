@@ -51,5 +51,5 @@ export type UserInfo = Omit<User, "roles"> & {
   currentWeight: number;
   weightGoal: number;
   lastActivity: string;
-  image: ImageSummary
+  image: ImageSummary | null;
 }
