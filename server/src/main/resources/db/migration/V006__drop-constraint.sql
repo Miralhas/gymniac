@@ -1,4 +1,4 @@
 ALTER TABLE image
-    DROP CONSTRAINT fk_image_on_user;
+    DROP CONSTRAINT IF EXISTS fk_image_on_user;
 ALTER TABLE image
-    DROP COLUMN user_id;
+    DROP COLUMN IF EXISTS user_id;
