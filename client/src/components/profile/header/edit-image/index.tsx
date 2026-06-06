@@ -2,7 +2,6 @@
 
 import { createWsrvLoader } from "@/components/wsrv-loader";
 import { env } from "@/env";
-import { ApiError } from "@/service/api-error";
 import { useUpdateUserImage } from "@/service/user/mutations/use-update-user-image";
 import { useGetUserInfo } from "@/service/user/queries/use-get-user-info";
 import { isApiError } from "@/utils/common-utils";

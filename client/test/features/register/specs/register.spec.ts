@@ -1,5 +1,5 @@
+import { adminData } from "../../../shared/auth/data";
 import { expect, test } from "../../../shared/fixture";
-import { adminData } from "../data";
 import { RegisterFactory } from "../factory";
 
 test.describe("User registration", () => {
@@ -7,7 +7,7 @@ test.describe("User registration", () => {
     await registerPage.goto();
   });
 
-  test("registers a new user", async ({ registerPage, page }) => {
+  test("registers a new user", async ({ registerPage, homePage }) => {
     const account = RegisterFactory.newAccount();
 
     await expect(registerPage.heading).toContainText('Create your account');
@@ -15,11 +15,11 @@ test.describe("User registration", () => {
     await registerPage.fillForm(account);
     await registerPage.submitForm();
 
-    await expect(page.getByRole('button', { name: 'User profile picture' })).toBeVisible();
+    await expect(homePage.navbar.userProfileButton).toBeVisible();
   });
 
   test("prevents registration with an existing email and username", async ({ registerPage }) => {
-    const account = RegisterFactory.newAccount(adminData);
+    const account = RegisterFactory.newAccount({ email: adminData.email, username: adminData.username });
 
     await expect(registerPage.heading).toContainText('Create your account');
 

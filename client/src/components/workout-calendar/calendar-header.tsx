@@ -20,6 +20,7 @@ const CalendarHeader = ({ today, currentMonthFirstDay, currentMonthLastDay, hand
         variant="pure"
         onClick={handleReset}
         className="w-16 border flex flex-col justify-center items-center transition-all hover:scale-105 duration-200 ease-in-out"
+        aria-label="Reset calendar to current month"
       >
         <div className="w-full bg-foreground/90 py-1 text-black text-xs font-bold text-center">{format(today, "MMM")}</div>
         <div className="w-full text-center py-1.5 border bg-foreground/15 font-semibold">{today.getDate()}</div>
