@@ -2,10 +2,13 @@ package miralhas.github.gymniac.api.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import miralhas.github.gymniac.api.dto.ImageDTO;
 import miralhas.github.gymniac.api.dto.PageDTO;
 import miralhas.github.gymniac.api.dto.UserInfoDTO;
 import miralhas.github.gymniac.api.dto.WeightDTO;
+import miralhas.github.gymniac.api.dto.input.ImageInput;
 import miralhas.github.gymniac.api.dto.input.WeightInput;
+import miralhas.github.gymniac.api.dto_mapper.ImageMapper;
 import miralhas.github.gymniac.domain.service.UserInfoService;
 import miralhas.github.gymniac.domain.utils.AuthUtils;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +17,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/infos")
@@ -21,6 +27,7 @@ public class UserInfoController {
 
 	private final UserInfoService userInfoService;
 	private final AuthUtils authUtils;
+	private final ImageMapper imageMapper;
 
 	@GetMapping
 	@PreAuthorize("hasRole('USER')")
@@ -44,6 +51,13 @@ public class UserInfoController {
 	@PutMapping("/weights/{id}")
 	public WeightDTO updateWeight(@RequestBody @Valid WeightInput weightInput, @PathVariable Long id) {
 		return userInfoService.updateWeight(weightInput, userInfoService.findWeightByIdOrException(id));
+	}
+
+	@PostMapping("/weights/{id}/images")
+	public List<ImageDTO> putWeightImages(@PathVariable Long id, @Valid ImageInput imageInput) throws IOException {
+		var weight = userInfoService.getWeightByIdOrException(id);
+		var images = imageMapper.fromInput(imageInput, weight.getImageRelativePath());
+		return imageMapper.toResponseCollection(userInfoService.addWeightImages(weight, images));
 	}
 
 	@DeleteMapping("/weights/{id}")

@@ -1,13 +1,12 @@
 package miralhas.github.gymniac.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import miralhas.github.gymniac.api.dto.PageDTO;
-import miralhas.github.gymniac.api.dto.UserInfoDTO;
-import miralhas.github.gymniac.api.dto.WeightDTO;
+import miralhas.github.gymniac.api.dto.*;
 import miralhas.github.gymniac.api.dto.input.WeightInput;
 import miralhas.github.gymniac.api.dto_mapper.ImageMapper;
 import miralhas.github.gymniac.api.dto_mapper.WeightMapper;
 import miralhas.github.gymniac.domain.exception.WeightNotFoundException;
+import miralhas.github.gymniac.domain.model.image.Image;
 import miralhas.github.gymniac.domain.model.user_info.Weight;
 import miralhas.github.gymniac.domain.repository.UserRepository;
 import miralhas.github.gymniac.domain.repository.WeightRepository;
@@ -33,6 +32,7 @@ public class UserInfoService {
 	private final UserRepository userRepository;
 	private final ErrorMessages errorMessages;
 	private final ImageMapper imageMapper;
+	private final ImageService imageService;
 
 	public PageDTO<WeightDTO> getAllWeights(Pageable pageable) {
 		var user = authUtils.getCurrentUser();
@@ -40,6 +40,12 @@ public class UserInfoService {
 		List<WeightDTO> weightDTOS = weightMapper.toCollectionResponse(allUserWeights.getContent());
 		var pageImpl = new PageImpl<>(weightDTOS, pageable, allUserWeights.getTotalElements());
 		return new PageDTO<>(pageImpl);
+	}
+
+	public Weight getWeightByIdOrException(Long id) {
+		return weightRepository.findById(id).orElseThrow(() -> new WeightNotFoundException(
+				errorMessages.get("weight.notFound.id", id)
+		));
 	}
 
 
@@ -67,6 +73,14 @@ public class UserInfoService {
 		weight.setUser(user);
 
 		return weightMapper.toResponse(weightRepository.save(weight));
+	}
+
+	@Transactional
+	public List<Image> addWeightImages(Weight weight, List<NewImage> newImages) {
+		var images = imageService.saveAll(newImages);
+		weight.addImages(images);
+		weightRepository.save(weight);
+		return images;
 	}
 
 	@Transactional
